@@ -1,9 +1,9 @@
 package com.jp.bike.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.jp.bike.model.Journey;
 
-public interface JourneyRepository extends JpaRepository<Journey, Long> {
+public interface JourneyRepository extends PagingAndSortingRepository<Journey, Integer> {
 }
 
