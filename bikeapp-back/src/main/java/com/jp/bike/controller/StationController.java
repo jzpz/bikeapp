@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,19 +24,22 @@ public class StationController {
 	@Autowired
 	StationRepository repository;
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/stations")
 	public ResponseEntity<List<Station>> getPaginated(
 			@RequestParam(defaultValue = "0") Integer page, 
 			@RequestParam(defaultValue = "20") Integer size,
 			@RequestParam(defaultValue = "fid") String sortBy,
 			@RequestParam(defaultValue = "false") Boolean descending) {
-		 
+		
+		if(size > 100) size = 100; // Keep the max page size at 100
+
 		Pageable pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
 		
 		if(descending == true) {
 			pageRequest = PageRequest.of(page, size, Sort.by(sortBy).descending());
 		}
-		
+
 		Page<Station> stations = repository.findAll(pageRequest);
 
 		if(stations.hasContent()) {

@@ -4,14 +4,16 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bikeapp_journeys")
 public class Journey {
-
-	private @Id @GeneratedValue int id;
+	
+	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	private @Id int id;
 	private Date departureDate;
 	private Date returnDate;
 	private int departureStationId;
@@ -22,6 +24,8 @@ public class Journey {
 	private int distanceCoveredInMeters;
 	@Column(name = "duration")
 	private int durationInSeconds;
+
+	public Journey() {}
 
 	public Journey(
 			Date departureDate, Date returnDate, int departureStationId, 
@@ -38,6 +42,9 @@ public class Journey {
 		this.durationInSeconds = durationInSeconds;
 	}
 
+	public int getId() {
+		return id;
+	}
 
 	public Date getDepartureDate() {
 		return departureDate;
