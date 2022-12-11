@@ -1,8 +1,54 @@
-.list-item:hover {
-    background-color:rgb(210, 236, 250);
-    cursor: pointer;
+.App {
+    text-align: center;
+    height: 100%;
+    width: 100%;
 }
 
-hr {
-    margin:0;
+.secondary {
+    color: gray;
+}
+
+.list-item {
+    border-top: 1px solid silver;
+    padding: 5px;
+}
+
+.list-item.station {
+    border-top: 1px solid silver;
+    padding: 15px;
+}
+
+.list-item:hover {
+    background-color: rgb(235, 235, 235);
+    cursor: pointer;
+}
+  
+.app-label{
+    width: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    background: white;
+    pointer-events: none;
+}
+
+.map-container{
+    height: 100vh;
+    width: 100%;
+}
+
+.clicked-coord-label{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: white;
+    border-radius: 5px;
+}
+
+.clicked-coord-label p {
+    margin: 10px;
 }

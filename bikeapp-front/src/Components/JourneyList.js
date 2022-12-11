@@ -31,6 +31,7 @@ export default function JourneyList({offCanvas, setOffCanvas}) {
         getJourneys()
     }, [])
 
+    // Make JSX list from array
     function List() {
         const list = journeys.map((journey, index) => {
             return(
@@ -43,7 +44,6 @@ export default function JourneyList({offCanvas, setOffCanvas}) {
                     <br/>
                     <span>Duration: {formatDuration(journey.durationInSeconds)} </span>
                     <span>Length: {formatDistance(journey.distanceCoveredInMeters)}</span>
-                    <hr/>
                 </div>
             )
         });
