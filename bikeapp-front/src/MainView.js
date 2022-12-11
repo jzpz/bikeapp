@@ -2,8 +2,10 @@ import { useState, useEffect, useMemo } from 'react';
 import JourneyList from './Components/JourneyList';
 import StationList from './Components/StationList';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import './app.css';
 import CityMap from './Components/CityMap';
@@ -14,7 +16,8 @@ export default function MainView() {
     const [stations, setStations] = useState([]);
     const [descending, setDescending] = useState(false);
     const [offCanvas, setOffCanvas] = useState({journeys: false, stations: false});
-    const [mapFeatures, setMapFeatures ] = useState([])
+    const [showReturns, setShowReturns] = useState(false);
+    const [mapFeatures, setMapFeatures ] = useState([]);
     const [station, setStation] = useState([]);
     let urlParams = new URLSearchParams(window.location.search)
     
@@ -44,8 +47,8 @@ export default function MainView() {
     }, [])
 
     return(
-        <>
-            <div>
+        <div className="main-view">
+            <div className="station-info">
                 <h1>{station.nameLocaleFi}&nbsp;</h1>
                 <h3 className="secondary">
                     {station.nameLocaleSe}
@@ -55,18 +58,32 @@ export default function MainView() {
                     }
                 </h3>
                 <hr/>
-                <p>
-                    {station.addressLocaleFi} -&nbsp;
-                    {station.addressLocaleSe}
-                </p>
-                <CityMap 
-                    stations={stations} 
-                    setStation={setStation}
-                />
+                <Button className="overlay" variant="primary" onClick={() => setOffCanvas({...offCanvas, stations: true})}>
+                    Change station
+                </Button>
+                <Button className="overlay" variant="primary" 
+                    onClick={() => {
+                        setShowReturns(false);
+                        setOffCanvas({...offCanvas, journeys: true})}}>
+                    View Departures
+                </Button>
+                <Button className="overlay" variant="primary" 
+                    onClick={() => {
+                        setShowReturns(true);
+                        setOffCanvas({...offCanvas, journeys: true})}}>
+                    View Returns
+                </Button>
             </div>
+            <CityMap 
+                stations={stations} 
+                currentStation={station}
+                setStation={setStation}
+            />
             <JourneyList className="overlay"
                 offCanvas={offCanvas}
                 setOffCanvas={setOffCanvas}
+                departureStation={showReturns ? null : station}
+                returnStation={showReturns ? station : null}
             />
             <StationList className="overlay"
                 stations={stations}
@@ -74,9 +91,6 @@ export default function MainView() {
                 setOffCanvas={setOffCanvas}
                 setStation={setStation}
             />
-            <Button className="overlay" variant="primary" onClick={() => setOffCanvas({...offCanvas, stations: true})}>
-                Change station
-            </Button>
-        </>
+        </div>
     )
 }

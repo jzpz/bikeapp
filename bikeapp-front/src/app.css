@@ -4,8 +4,24 @@
     width: 100%;
 }
 
+.station-info {
+    top: 0;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    height: 200px;
+    z-index: 1;
+    background-color: white;
+    position:absolute;
+}
+
 .secondary {
     color: gray;
+}
+
+body {
+    overflow: hidden;
 }
 
 .list-item {
@@ -21,4 +37,9 @@
 .list-item:hover {
     background-color: rgb(235, 235, 235);
     cursor: pointer;
+}
+
+/* Currently selected station marker */
+.pigeon-click-block.active {
+    z-index:2;
 }

@@ -18,7 +18,6 @@ export default function StationList({stations, offCanvas, setOffCanvas, setStati
             el.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase()) ||
             el.nameLocaleSe.toLowerCase().includes(filterWord.toLowerCase())
         )
-
     }
 
     // Make JSX list from array
@@ -26,7 +25,10 @@ export default function StationList({stations, offCanvas, setOffCanvas, setStati
         const list = filteredList(stations).map((station, index) => {
             return(
                 <div 
-                    onClick={() => setStation(station)}
+                    onClick={() => {
+                        setStation(station)
+                        setOffCanvas({...offCanvas, stations: false})
+                    }}
                     key={station.fid} 
                     className="list-item station">
                     <span>{station.nameLocaleFi} </span>

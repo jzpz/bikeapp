@@ -65,7 +65,7 @@ public class JourneyController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/journey/{id}")
+	@GetMapping("/journeys/{id}")
 	public ResponseEntity<Journey> getByFid(@PathVariable("id") int id) {
 		Journey journey = repository.findById(id);
 

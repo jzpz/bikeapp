@@ -5,14 +5,21 @@ import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
 // An offcanvas view that contains all journeys
-export default function JourneyList({offCanvas, setOffCanvas}) {
+export default function JourneyList({offCanvas, setOffCanvas, returnStation, departureStation}) {
     const [journeys, setJourneys] = useState([]);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(25);
     const [descending, setDescending] = useState(false);
 
-    function getJourneys(_page = page, _pageSize = pageSize) {
-        fetch(`http://localhost:8080/journeys?page=${_page}&size=${_pageSize}`)
+    function getJourneys(_page = page) {
+        // pass empty string params if value not set
+        let _departureStationId = "";
+        let _returnStationId = "";
+
+        if(returnStation) _returnStationId = returnStation.id
+        if(departureStation) _departureStationId = departureStation.id
+
+        fetch(`http://localhost:8080/journeys?page=${_page}&size=${pageSize}&departureStationId=${_departureStationId}&returnStationId=${_returnStationId}`)
         .then((response) => response.json())
         .then((data) => setJourneys(data));
     }
@@ -29,7 +36,7 @@ export default function JourneyList({offCanvas, setOffCanvas}) {
     // Initialize list on start
     useEffect(() => {
         getJourneys()
-    }, [])
+    }, [departureStation, returnStation])
 
     // Make JSX list from array
     function List() {
