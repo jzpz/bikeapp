@@ -26,11 +26,6 @@ export default function StationList({stations, offCanvas, setOffCanvas, setStati
         const list = filteredList(stations).map((station, index) => {
             return(
                 <div 
-                    /* redirect
-                    onClick={() => { 
-                        window.location.href = // Set the station id to url params
-                            window.location.pathname + "?station=" + station.fid
-                    }} */
                     onClick={() => setStation(station)}
                     key={station.fid} 
                     className="list-item station">
