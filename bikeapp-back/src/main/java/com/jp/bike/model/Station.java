@@ -21,15 +21,15 @@
 	private String operator;
 	private String capacity;
 	@Column(name = "coordinate_x")
-	private Long coordinateX;
+	private Double coordinateX;
 	@Column(name = "coordinate_y")
-	private Long coordinateY;
+	private Double coordinateY;
 
 	public Station() {}
 
 	public Station(int fid, int id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, String addressLocaleFi,
 			String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, String operator, String capacity,
-			Long coordinateX, Long coordinateY) {
+			Double coordinateX, Double coordinateY) {
 		this.fid = fid;
 		this.id = id;
 		this.nameLocaleFi = nameLocaleFi;
@@ -89,11 +89,11 @@
 		return capacity;
 	}
 
-	public Long getCoordinateX() {
+	public Double getCoordinateX() {
 		return coordinateX;
 	}
 
-	public Long getCoordinateY() {
+	public Double getCoordinateY() {
 		return coordinateY;
 	}
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jp.bike.model.Station;
@@ -27,8 +28,20 @@ public class StationController {
 		if(stations.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} else {
-			return new ResponseEntity<List<Station>>(repository.findAll(), new HttpHeaders(), HttpStatus.OK);
+			return new ResponseEntity<List<Station>>(stations, new HttpHeaders(), HttpStatus.OK);
 		}
 		
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/station/{fid}")
+	public ResponseEntity<Station> getByFid(@PathVariable("fid") int fid) {
+		Station station = repository.findByFid(fid);
+
+		if(station == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<Station>(station, new HttpHeaders(), HttpStatus.OK);
+		}
 	}
 }
