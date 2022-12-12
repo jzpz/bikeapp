@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.jp.bike.model.Station;
 
 public interface StationRepository extends JpaRepository<Station, Integer> {
-    Station findByFid(int fid);
+    Station findById(String id);
 }
 

@@ -9,8 +9,8 @@
 	@Table(name = "bikeapp_stations")
 	public class Station {
 
-	private @Id int fid;
-	private int id;
+	private int fid;
+	private @Id String id;
 	private String nameLocaleFi;
 	private String nameLocaleSe;
 	private String nameLocaleEn;
@@ -27,7 +27,7 @@
 
 	public Station() {}
 
-	public Station(int fid, int id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, String addressLocaleFi,
+	public Station(int fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, String addressLocaleFi,
 			String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, String operator, String capacity,
 			Double coordinateX, Double coordinateY) {
 		this.fid = fid;
@@ -49,7 +49,7 @@
 		return fid;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 

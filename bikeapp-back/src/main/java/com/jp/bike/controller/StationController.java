@@ -34,9 +34,9 @@ public class StationController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/station/{fid}")
-	public ResponseEntity<Station> getByFid(@PathVariable("fid") int fid) {
-		Station station = repository.findByFid(fid);
+	@GetMapping("/station/{id}")
+	public ResponseEntity<Station> getById(@PathVariable("id") String id) {
+		Station station = repository.findById(id);
 
 		if(station == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

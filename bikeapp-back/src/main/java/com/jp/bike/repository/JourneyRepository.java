@@ -8,8 +8,8 @@ import com.jp.bike.model.Journey;
 
 public interface JourneyRepository extends PagingAndSortingRepository<Journey, Integer> {
     Journey findById(int id);
-    Page<Journey> findByDepartureStationId(int departureStationId, Pageable pageable);
-    Page<Journey> findByReturnStationId(int returnStationId, Pageable pageable);
-    Page<Journey> findByDepartureStationIdAndReturnStationId(int departureStationId, int returnStationId, Pageable pageable);
+    Page<Journey> findByDepartureStationId(String departureStationId, Pageable pageable);
+    Page<Journey> findByReturnStationId(String returnStationId, Pageable pageable);
+    Page<Journey> findByDepartureStationIdAndReturnStationId(String departureStationId, String returnStationId, Pageable pageable);
 }
 

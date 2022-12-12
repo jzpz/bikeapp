@@ -33,8 +33,8 @@ public class JourneyController {
 			@RequestParam(defaultValue = "20") Integer size,
 			@RequestParam(defaultValue = "id") String sortBy,
 			@RequestParam(defaultValue = "false") Boolean descending,
-			@RequestParam(name="departureStationId", required=false) Integer departureStationId,
-			@RequestParam(name="returnStationId", required=false) Integer returnStationId) {
+			@RequestParam(name="departureStationId", required = false) String departureStationId,
+			@RequestParam(name="returnStationId", required = false) String returnStationId) {
 		
 		if(size > 100) size = 100; // Keep the max page size at 100
 
@@ -48,7 +48,7 @@ public class JourneyController {
 
 		// Search journeys by departure or return station
 		if(departureStationId != null && returnStationId != null) {
-			journeys = repository.findByDepartureStationIdAndReturnStationId(departureStationId, returnStationId, pageRequest);
+			journeys = repository.findByDepartureStationIdAndReturnStationId((String) departureStationId, (String) returnStationId, pageRequest);
 		} else if(departureStationId != null) {
 			journeys = repository.findByDepartureStationId(departureStationId, pageRequest);
 		} else if(returnStationId != null) {
@@ -65,8 +65,8 @@ public class JourneyController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/journeys/{id}")
-	public ResponseEntity<Journey> getByFid(@PathVariable("id") int id) {
+	@GetMapping("/journey/{id}")
+	public ResponseEntity<Journey> getById(@PathVariable("id") int id) {
 		Journey journey = repository.findById(id);
 
 		if(journey == null)

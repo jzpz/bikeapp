@@ -16,9 +16,9 @@ public class Journey {
 	private @Id int id;
 	private Date departureDate;
 	private Date returnDate;
-	private int departureStationId;
+	private String departureStationId;
 	private String departureStationName;
-	private int returnStationId;
+	private String returnStationId;
 	private String returnStationName;
 	@Column(name = "distanceCovered")
 	private int distanceCoveredInMeters;
@@ -28,8 +28,8 @@ public class Journey {
 	public Journey() {}
 
 	public Journey(
-			Date departureDate, Date returnDate, int departureStationId, 
-			String departureStationName, int returnStationId, String returnStationName, 
+			Date departureDate, Date returnDate, String departureStationId, 
+			String departureStationName, String returnStationId, String returnStationName, 
 			int distanceCoveredInMeters, int durationInSeconds) {
 
 		this.departureDate = departureDate;
@@ -54,7 +54,7 @@ public class Journey {
 		return returnDate;
 	}
 
-	public int getDepartureStationId() {
+	public String getDepartureStationId() {
 		return departureStationId;
 	}
 
@@ -62,7 +62,7 @@ public class Journey {
 		return departureStationName;
 	}
 
-	public int getReturnStationId() {
+	public String getReturnStationId() {
 		return returnStationId;
 	}
 
