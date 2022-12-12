@@ -2,27 +2,53 @@ import React, { useEffect, useState } from "react"
 import { Map, Marker } from "pigeon-maps"
 import "../app.css"
 
-export default function CityMap({stations, currentStation, setStation}) {
-    const [stationCoords, setStationCoords] = useState([]);
+export default function CityMap({stations, departureStation, returnStation, 
+    setDepartureStation, setReturnStation, currentSelectedStation, setCurrentSelectedStation}) {
+    
+    function isDepartureOrReturnStation(station) {
+        if(departureStation?.id === station.id) {
+            return true
+        } else if(returnStation?.id === station.id) {
+            return true
+        }
+        return false
+    }
+
+    function markerColor(station) {
+        if(departureStation?.id === station.id) {
+            return "red"
+        } else if(returnStation?.id === station.id) {
+            return "blue"
+        }
+        return null
+    }
 
     return (
         <Map 
-            height={"100vh"} 
+            height={1000}
             defaultZoom={12} 
             minZoom={11} // Max zoom out distance
             center={[60.21, 24.95]} // Default location to Helsinki
-            onClick={() => setStation([])} // Remove selected station
+            onClick={() => { // Remove marker highlights
+                setCurrentSelectedStation([])
+                setDepartureStation([])
+                setReturnStation([])
+            }}
             className="city-map"
         >
             {stations.map((station) => { // Get all stations and mark them
                 return(
                     <Marker 
-                        width={station.fid === currentStation.fid ? 50 : 30} // Make current station larger in map
+                        width={isDepartureOrReturnStation(station) ? 50 : 30} // Make current station larger in map
                         anchor={[station.coordinateY, station.coordinateX]} 
-                        key={station.fid}
-                        onClick={() => setStation(station)}
-                        color={station.fid === currentStation.fid ? "red" : null} // Mark current station as red
-                        className={station.fid === currentStation.fid ? "active" : ""} // Add class to current station marker
+                        key={station.id}
+                        onClick={() => {
+                            setCurrentSelectedStation(station)
+                            setDepartureStation(station)
+                            setReturnStation([])
+                        }}
+                        color={markerColor(station)} // Mark current station as red
+                        className={isDepartureOrReturnStation(station) ? "active" : ""} // Add class to current station marker
                         title={station.nameLocaleFi}
                     />
                 )

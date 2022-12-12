@@ -6,10 +6,7 @@ import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
 // An offcanvas view that contains all stations
-export default function StationList({stations, offCanvas, setOffCanvas, setStation}) {
-    const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(25);
-    const [descending, setDescending] = useState(false);
+export default function StationList({stations, offCanvas, setOffCanvas, setDepartureStation, setCurrentSelectedStation}) {
     const [filterWord, setFilterWord] = useState('');
 
     // Check station names for filter word
@@ -26,10 +23,10 @@ export default function StationList({stations, offCanvas, setOffCanvas, setStati
             return(
                 <div 
                     onClick={() => {
-                        setStation(station)
+                        setCurrentSelectedStation(station)
                         setOffCanvas({...offCanvas, stations: false})
                     }}
-                    key={station.fid} 
+                    key={station.id} 
                     className="list-item station">
                     <span>{station.nameLocaleFi} </span>
                     <span className="secondary">{station.nameLocaleSe}</span>

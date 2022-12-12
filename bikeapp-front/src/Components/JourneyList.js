@@ -3,25 +3,49 @@ import { useState, useEffect, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { getStation } from '../Functions/stations';
 
 // An offcanvas view that contains all journeys
-export default function JourneyList({offCanvas, setOffCanvas, returnStation, departureStation}) {
+export default function JourneyList({offCanvas, setOffCanvas, 
+        departureStation, setDepartureStation, currentSelectedStation,
+        setCurrentSelectedStation, returnStation, setReturnStation}) {
     const [journeys, setJourneys] = useState([]);
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(25);
-    const [descending, setDescending] = useState(false);
+    // Show departures or returns?
+    const [showDepartures, setShowDepartures] = useState(true);
+
+    useEffect(() => {
+        getJourneys();
+    }, [currentSelectedStation, showDepartures]);
+
+    /* Follow when user changes between departures and arrivals
+        and change the states accordingly */
+    useEffect(() => {
+        if(showDepartures) {
+            setDepartureStation(returnStation);
+            setReturnStation([]);
+        } else {
+            setReturnStation(departureStation);
+            setDepartureStation([]);
+        }
+    }, [showDepartures]);
 
     function getJourneys(_page = page) {
-        // pass empty string params if value not set
-        let _departureStationId = "";
-        let _returnStationId = "";
+        let searchParams = "";
 
-        if(returnStation) _returnStationId = returnStation.id
-        if(departureStation) _departureStationId = departureStation.id
+        // Fetch journeys from the selected station
+        if(currentSelectedStation.id) {
+            if(showDepartures) 
+            searchParams += "&departureStationId=" + currentSelectedStation.id
+        else
+            searchParams += "&returnStationId=" + currentSelectedStation.id
+        }
 
-        fetch(`http://localhost:8080/journeys?page=${_page}&size=${pageSize}&departureStationId=${_departureStationId}&returnStationId=${_returnStationId}`)
+        fetch(`http://localhost:8080/journeys?page=${_page}&size=${pageSize + searchParams}`)
         .then((response) => response.json())
-        .then((data) => setJourneys(data));
+        .then((data) => setJourneys(data))
+        .catch((e) => console.log(e))
     }
 
     function switchPage(page, pageSize = 25) {
@@ -33,21 +57,35 @@ export default function JourneyList({offCanvas, setOffCanvas, returnStation, dep
         getJourneys(newPage);
     }
 
-    // Initialize list on start
-    useEffect(() => {
-        getJourneys()
-    }, [departureStation, returnStation])
-
     // Make JSX list from array
     function List() {
         const list = journeys.map((journey, index) => {
             return(
-                <div key={journey.id} className="list-item">
+                <div 
+                    onClick={() => {
+                        if(departureStation.id !== journey.departureStationId) {
+                            // Set departure station to departure station of this journey
+                            getStation(journey.departureStationId)
+                            .then(data => {
+                                setDepartureStation(data)
+                            })
+                        }
+
+                        if(returnStation.id !== journey.returnStationId) {
+                            // Set return station to return station of this journey
+                            getStation(journey.returnStationId)
+                            .then(data => {
+                                setReturnStation(data)
+                            })
+                        }
+                    }}
+                    key={journey.id} className="list-item">
                     <span title="Departed at">{formatDate(journey.departureDate)}</span><br/>
                     <span> From </span>
-                    <span style={{fontWeight:"bold"}}>{journey.departureStationName}</span>
+                    <span className={journey.departureStationId === departureStation.id ? "departure-station" : ""} style={{fontWeight:"bold"}}>{journey.departureStationName}</span>
                     <span> to </span>
-                    <span style={{fontWeight:"bold"}}>{journey.returnStationName}</span>
+                    <span className={journey.returnStationId === returnStation.id ? "return-station": ""}
+                    style={{fontWeight:"bold"}}>{journey.returnStationName}</span>
                     <br/>
                     <span>Duration: {formatDuration(journey.durationInSeconds)} </span>
                     <span>Length: {formatDistance(journey.distanceCoveredInMeters)}</span>
@@ -63,7 +101,22 @@ export default function JourneyList({offCanvas, setOffCanvas, returnStation, dep
             onHide={() => setOffCanvas({...offCanvas, journeys: false})}>
             
             <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Journeys</Offcanvas.Title>
+            <Offcanvas.Title>
+                {departureStation.nameLocaleFi}
+                <hr/>
+                <Button 
+                    variant="dark" 
+                    style={{backgroundColor: "red"}}
+                    onClick={() => setShowDepartures(true)}>
+                    Show Departures
+                </Button>
+                <Button 
+                    variant="dark" 
+                    style={{backgroundColor: "blue"}}
+                    onClick={() => setShowDepartures(false)}>
+                    Show Arrivals
+                </Button>
+            </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
                 {journeys?.length > 0 &&
