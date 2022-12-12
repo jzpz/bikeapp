@@ -24,6 +24,7 @@ export default function StationList({stations, offCanvas, setOffCanvas, setDepar
                 <div 
                     onClick={() => {
                         setCurrentSelectedStation(station)
+                        setDepartureStation(station)
                         setOffCanvas({...offCanvas, stations: false})
                     }}
                     key={station.id} 

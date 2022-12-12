@@ -4,20 +4,22 @@ import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { getStation } from '../Functions/stations';
+import { getJourneys } from '../Functions/journeys';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList({offCanvas, setOffCanvas, 
         departureStation, setDepartureStation, currentSelectedStation,
-        setCurrentSelectedStation, returnStation, setReturnStation}) {
+        returnStation, setReturnStation}) {
     const [journeys, setJourneys] = useState([]);
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(25);
     // Show departures or returns?
     const [showDepartures, setShowDepartures] = useState(true);
 
     useEffect(() => {
-        getJourneys();
-    }, [currentSelectedStation, showDepartures]);
+        getJourneys(page, currentSelectedStation, showDepartures)
+        .then(data => setJourneys(data))
+        .catch(e => console.log(e));
+    }, [currentSelectedStation, showDepartures, page]);
 
     /* Follow when user changes between departures and arrivals
         and change the states accordingly */
@@ -31,30 +33,12 @@ export default function JourneyList({offCanvas, setOffCanvas,
         }
     }, [showDepartures]);
 
-    function getJourneys(_page = page) {
-        let searchParams = "";
-
-        // Fetch journeys from the selected station
-        if(currentSelectedStation.id) {
-            if(showDepartures) 
-            searchParams += "&departureStationId=" + currentSelectedStation.id
-        else
-            searchParams += "&returnStationId=" + currentSelectedStation.id
-        }
-
-        fetch(`http://localhost:8080/journeys?page=${_page}&size=${pageSize + searchParams}`)
-        .then((response) => response.json())
-        .then((data) => setJourneys(data))
-        .catch((e) => console.log(e))
-    }
-
-    function switchPage(page, pageSize = 25) {
+    function switchPage(page) {
         let newPage;
         // Check page validity and get items from backend
         if(page < 0) newPage = 0;
         else newPage = page;
         setPage(newPage);
-        getJourneys(newPage);
     }
 
     // Make JSX list from array
@@ -102,19 +86,19 @@ export default function JourneyList({offCanvas, setOffCanvas,
             
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-                {departureStation.nameLocaleFi}
+                {currentSelectedStation.nameLocaleFi}
                 <hr/>
                 <Button 
                     variant="dark" 
                     style={{backgroundColor: "red"}}
                     onClick={() => setShowDepartures(true)}>
-                    Show Departures
+                    Departures
                 </Button>
                 <Button 
                     variant="dark" 
                     style={{backgroundColor: "blue"}}
                     onClick={() => setShowDepartures(false)}>
-                    Show Arrivals
+                    Returns
                 </Button>
             </Offcanvas.Title>
             </Offcanvas.Header>

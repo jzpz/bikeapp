@@ -48,6 +48,7 @@ export default function MainView() {
                     View Departures
                 </Button>
             </div>
+
             <CityMap 
                 stations={stations} 
                 departureStation={departureStation}
@@ -57,6 +58,7 @@ export default function MainView() {
                 currentSelectedStation={currentSelectedStation}
                 setCurrentSelectedStation={setCurrentSelectedStation}
             />
+
             <JourneyList className="overlay"
                 offCanvas={offCanvas}
                 setOffCanvas={setOffCanvas}
@@ -67,11 +69,11 @@ export default function MainView() {
                 setDepartureStation={setDepartureStation}
                 setReturnStation={setReturnStation}
             />
+            
             <StationList className="overlay"
                 stations={stations}
                 offCanvas={offCanvas}
                 setOffCanvas={setOffCanvas}
-                currentSelectedStation={currentSelectedStation}
                 setCurrentSelectedStation={setCurrentSelectedStation}
                 setDepartureStation={setDepartureStation}
             />
