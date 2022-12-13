@@ -1,7 +1,8 @@
 package com.jp.bike.controller;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,8 +34,8 @@ public class JourneyController {
 			@RequestParam(defaultValue = "20") Integer size,
 			@RequestParam(defaultValue = "id") String sortBy,
 			@RequestParam(defaultValue = "false") Boolean descending,
-			@RequestParam(name="departureStationId", required = false) String departureStationId,
-			@RequestParam(name="returnStationId", required = false) String returnStationId) {
+			@RequestParam(name="departureStationId", required=false) String departureStationId,
+			@RequestParam(name="returnStationId", required=false) String returnStationId) {
 		
 		if(size > 100) size = 100; // Keep the max page size at 100
 
@@ -48,7 +49,7 @@ public class JourneyController {
 
 		// Search journeys by departure or return station
 		if(departureStationId != null && returnStationId != null) {
-			journeys = repository.findByDepartureStationIdAndReturnStationId((String) departureStationId, (String) returnStationId, pageRequest);
+			journeys = repository.findByDepartureStationIdAndReturnStationId(departureStationId, returnStationId, pageRequest);
 		} else if(departureStationId != null) {
 			journeys = repository.findByDepartureStationId(departureStationId, pageRequest);
 		} else if(returnStationId != null) {
@@ -65,14 +66,62 @@ public class JourneyController {
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/journey1")
+	Page<Journey> get() {
+		Pageable pageRequest = PageRequest.of(1, 25);
+		return repository.findAll(pageRequest);
+	}
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/journey/{id}")
-	public ResponseEntity<Journey> getById(@PathVariable("id") int id) {
+	public ResponseEntity<Journey> getById(@PathVariable("id") Integer id) {
 		Journey journey = repository.findById(id);
 
 		if(journey == null)
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 		return new ResponseEntity<Journey>(journey, new HttpHeaders(), HttpStatus.OK);
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/journeyinfo")
+	public ResponseEntity<HashMap<String, Object>> getInfo(
+		@RequestParam(name="stationId", required=false) String stationId) {
+
+		HashMap<String, Object> values = new HashMap<String, Object>();
+		
+		Long journeysStarting;
+		Long journeysEnding;
+		Long averageDistanceCoveredAsReturnStation;
+		Long averageDistanceCoveredAsDepartureStation;
+		List<HashMap<String, Integer>> mostPopularDepartureStations;
+		List<HashMap<String, Integer>> mostPopularReturnStations;
+
+		if(stationId != null) { // Search using station id
+
+			journeysStarting = repository.countByDepartureStationId(stationId);
+			journeysEnding = repository.countByReturnStationId(stationId);
+			
+			averageDistanceCoveredAsDepartureStation = repository.averageDistanceCoveredByDepartureStation(stationId);
+			averageDistanceCoveredAsReturnStation = repository.averageDistanceCoveredByReturnStation(stationId);
+
+		} else { // Include all stations in search
+
+			// These will be shown as separate values but they will be same if no station is selected.
+			Long journeyCount = repository.count();
+			journeysStarting = journeyCount;
+			journeysEnding = journeyCount;
+
+			Long averageDistance = repository.averageDistanceCovered();
+			averageDistanceCoveredAsDepartureStation = averageDistance;
+			averageDistanceCoveredAsReturnStation = averageDistance;
+		}
+
+		values.put("journeysStarting", journeysStarting);
+		values.put("journeysEnding", journeysEnding);
+		values.put("averageDistanceCoveredAsDepartureStation", averageDistanceCoveredAsDepartureStation);
+		values.put("averageDistanceCoveredAsReturnStation", averageDistanceCoveredAsReturnStation);
+
+		return new ResponseEntity<HashMap<String, Object>>(values, new HttpHeaders(), HttpStatus.OK);
 	}
 
 }

@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 public class Journey {
 	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
-	private @Id int id;
+	private @Id Integer id;
 	private Date departureDate;
 	private Date returnDate;
 	private String departureStationId;
@@ -21,16 +21,16 @@ public class Journey {
 	private String returnStationId;
 	private String returnStationName;
 	@Column(name = "distanceCovered")
-	private int distanceCoveredInMeters;
+	private Integer distanceCoveredInMeters;
 	@Column(name = "duration")
-	private int durationInSeconds;
+	private Integer durationInSeconds;
 
 	public Journey() {}
 
 	public Journey(
 			Date departureDate, Date returnDate, String departureStationId, 
 			String departureStationName, String returnStationId, String returnStationName, 
-			int distanceCoveredInMeters, int durationInSeconds) {
+			Integer distanceCoveredInMeters, Integer durationInSeconds) {
 
 		this.departureDate = departureDate;
 		this.returnDate = returnDate;
@@ -42,7 +42,7 @@ public class Journey {
 		this.durationInSeconds = durationInSeconds;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -70,11 +70,11 @@ public class Journey {
 		return returnStationName;
 	}
 
-	public int getDistanceCoveredInMeters() {
+	public Integer getDistanceCoveredInMeters() {
 		return distanceCoveredInMeters;
 	}
 
-	public int getDurationInSeconds() {
+	public Integer getDurationInSeconds() {
 		return durationInSeconds;
 	}
 	

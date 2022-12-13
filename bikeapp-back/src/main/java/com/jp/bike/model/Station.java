@@ -9,7 +9,7 @@
 	@Table(name = "bikeapp_stations")
 	public class Station {
 
-	private int fid;
+	private Integer fid;
 	private @Id String id;
 	private String nameLocaleFi;
 	private String nameLocaleSe;
@@ -27,7 +27,7 @@
 
 	public Station() {}
 
-	public Station(int fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, String addressLocaleFi,
+	public Station(Integer fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, String addressLocaleFi,
 			String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, String operator, String capacity,
 			Double coordinateX, Double coordinateY) {
 		this.fid = fid;
@@ -45,7 +45,7 @@
 		this.coordinateY = coordinateY;
 	}
 
-	public int getFid() {
+	public Integer getFid() {
 		return fid;
 	}
 
