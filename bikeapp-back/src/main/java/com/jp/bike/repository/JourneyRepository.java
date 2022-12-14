@@ -30,12 +30,19 @@ public interface JourneyRepository extends PagingAndSortingRepository<Journey, I
         (translated names, amount of departures/returns, station id)
     */
 
-    // Returns the most popular stations out of all
+    // Returns the most popular departure stations out of all
     @Query("SELECT new com.jp.bike.model.StationPopularity( " + // Make the result a StationPopularity object
         "s.id, COUNT(j.departureStationId) AS journeyAmount, s.nameLocaleFi, s.nameLocaleSe, s.nameLocaleEn) " +
         "FROM Journey j INNER JOIN Station s ON j.departureStationId = s.id " +
         "GROUP BY j.departureStationId ORDER BY journeyAmount DESC LIMIT 5")
-    List<StationPopularity> mostPopularStations();
+    List<StationPopularity> mostPopularDepartureStations();
+
+    // Returns the most popular return stations out of all
+    @Query("SELECT new com.jp.bike.model.StationPopularity( " + // Make the result a StationPopularity object
+        "s.id, COUNT(j.returnStationId) AS journeyAmount, s.nameLocaleFi, s.nameLocaleSe, s.nameLocaleEn) " +
+        "FROM Journey j INNER JOIN Station s ON j.returnStationId = s.id " +
+        "GROUP BY j.returnStationId ORDER BY journeyAmount DESC LIMIT 5")
+    List<StationPopularity> mostPopularReturnStations();
 
     // Returns the most popular return stations for a departure station
     @Query("SELECT new com.jp.bike.model.StationPopularity( " +

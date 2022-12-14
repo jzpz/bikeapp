@@ -118,9 +118,8 @@ public class JourneyController {
 			averageDistanceCoveredAsDepartureStation = averageDistance;
 			averageDistanceCoveredAsReturnStation = averageDistance;
 
-			List<StationPopularity> popularStations = repository.mostPopularStations();
-			mostPopularDepartureStations = popularStations;
-			mostPopularReturnStations = popularStations;
+			mostPopularDepartureStations = repository.mostPopularDepartureStations();
+			mostPopularReturnStations = repository.mostPopularReturnStations();
 		}
 
 		values.put("journeysStarting", journeysStarting);
