@@ -2,7 +2,6 @@ package com.jp.bike.controller;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jp.bike.model.Journey;
+import com.jp.bike.model.StationPopularity;
 import com.jp.bike.repository.JourneyRepository;
 
 @RestController
@@ -93,8 +93,8 @@ public class JourneyController {
 		Long journeysEnding;
 		Long averageDistanceCoveredAsReturnStation;
 		Long averageDistanceCoveredAsDepartureStation;
-		List<HashMap<String, Integer>> mostPopularDepartureStations;
-		List<HashMap<String, Integer>> mostPopularReturnStations;
+		List<StationPopularity> mostPopularDepartureStations;
+		List<StationPopularity> mostPopularReturnStations;
 
 		if(stationId != null) { // Search using station id
 
@@ -103,6 +103,9 @@ public class JourneyController {
 			
 			averageDistanceCoveredAsDepartureStation = repository.averageDistanceCoveredByDepartureStation(stationId);
 			averageDistanceCoveredAsReturnStation = repository.averageDistanceCoveredByReturnStation(stationId);
+			
+			mostPopularDepartureStations = repository.mostPopularDepartureStations(stationId);
+			mostPopularReturnStations = repository.mostPopularReturnStations(stationId);
 
 		} else { // Include all stations in search
 
@@ -114,12 +117,18 @@ public class JourneyController {
 			Long averageDistance = repository.averageDistanceCovered();
 			averageDistanceCoveredAsDepartureStation = averageDistance;
 			averageDistanceCoveredAsReturnStation = averageDistance;
+
+			List<StationPopularity> popularStations = repository.mostPopularStations();
+			mostPopularDepartureStations = popularStations;
+			mostPopularReturnStations = popularStations;
 		}
 
 		values.put("journeysStarting", journeysStarting);
 		values.put("journeysEnding", journeysEnding);
 		values.put("averageDistanceCoveredAsDepartureStation", averageDistanceCoveredAsDepartureStation);
 		values.put("averageDistanceCoveredAsReturnStation", averageDistanceCoveredAsReturnStation);
+		values.put("mostPopularDepartureStations", mostPopularDepartureStations);
+		values.put("mostPopularReturnStations", mostPopularReturnStations);
 
 		return new ResponseEntity<HashMap<String, Object>>(values, new HttpHeaders(), HttpStatus.OK);
 	}
