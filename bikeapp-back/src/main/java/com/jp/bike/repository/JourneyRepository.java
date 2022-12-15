@@ -12,6 +12,9 @@ import com.jp.bike.model.StationPopularity;
 
 public interface JourneyRepository extends PagingAndSortingRepository<Journey, Integer> {
     Journey findById(int id);
+    Page<Journey> findByDepartureStationId(String departureStationId, Pageable pageable);
+    Page<Journey> findByReturnStationId(String returnStationId, Pageable pageable);
+    Page<Journey> findByDepartureStationIdAndReturnStationId(String departureStationId, String returnStationId, Pageable pageable);
 
     Long count();
     Long countByDepartureStationId(String departureStationId);
@@ -30,36 +33,47 @@ public interface JourneyRepository extends PagingAndSortingRepository<Journey, I
         (translated names, amount of departures/returns, station id)
     */
 
-    // Returns the most popular departure stations out of all
-    @Query("SELECT new com.jp.bike.model.StationPopularity( " + // Make the result a StationPopularity object
-        "s.id, COUNT(j.departureStationId) AS journeyAmount, s.nameLocaleFi, s.nameLocaleSe, s.nameLocaleEn) " +
-        "FROM Journey j INNER JOIN Station s ON j.departureStationId = s.id " +
+    // Query first part
+    String stationPopularityDefaultColumns = 
+        "SELECT new com.jp.bike.model.StationPopularity( " +
+            "s.id, "+
+            "s.nameLocaleFi, "+
+            "s.nameLocaleSe, " +
+            "s.nameLocaleEn, ";
+
+    // Returns the most popular departure stations out of all - warning: SLOW
+    @Query(stationPopularityDefaultColumns + 
+        "COUNT(j.departureStationId) AS journeyAmount)" +
+        "FROM Journey j " +
+        "INNER JOIN Station s ON j.departureStationId = s.id " +
         "GROUP BY j.departureStationId ORDER BY journeyAmount DESC LIMIT 5")
     List<StationPopularity> mostPopularDepartureStations();
 
-    // Returns the most popular return stations out of all
-    @Query("SELECT new com.jp.bike.model.StationPopularity( " + // Make the result a StationPopularity object
-        "s.id, COUNT(j.returnStationId) AS journeyAmount, s.nameLocaleFi, s.nameLocaleSe, s.nameLocaleEn) " +
-        "FROM Journey j INNER JOIN Station s ON j.returnStationId = s.id " +
+    // Returns the most popular return stations out of all - warning: SLOW
+    @Query(stationPopularityDefaultColumns + 
+        "COUNT(j.returnStationId) AS journeyAmount)" +
+        "FROM Journey j " +
+        "INNER JOIN Station s ON j.returnStationId = s.id " +
         "GROUP BY j.returnStationId ORDER BY journeyAmount DESC LIMIT 5")
     List<StationPopularity> mostPopularReturnStations();
 
     // Returns the most popular return stations for a departure station
-    @Query("SELECT new com.jp.bike.model.StationPopularity( " +
-        "s.id, COUNT(j.departureStationId) AS journeyAmount, s.nameLocaleFi, s.nameLocaleSe, s.nameLocaleEn) " +
-        "FROM Journey j INNER JOIN Station s ON j.returnStationId = s.id " +
-        "WHERE j.departureStationId = ?1 GROUP BY j.returnStationId ORDER BY journeyAmount DESC LIMIT 5")
+    @Query(stationPopularityDefaultColumns + 
+        "COUNT(j.returnStationId) AS journeyAmount)" +
+        "FROM Journey j " +
+        "INNER JOIN Station s ON j.returnStationId = s.id " +
+        "WHERE j.departureStationId = ?1 "+
+        "GROUP BY j.returnStationId ORDER BY journeyAmount DESC LIMIT 5")
     List<StationPopularity> mostPopularReturnStations(String departureStationId);
 
     // Returns the most popular departure stations for a return station
-    @Query("SELECT new com.jp.bike.model.StationPopularity( " +
-        "s.id, COUNT(j.departureStationId) AS journeyAmount, s.nameLocaleFi, s.nameLocaleSe, s.nameLocaleEn) " +
-        "FROM Journey j INNER JOIN Station s ON j.departureStationId = s.id " +
-        "WHERE j.returnStationId = ?1 GROUP BY j.departureStationId ORDER BY journeyAmount DESC LIMIT 5")
+    @Query(stationPopularityDefaultColumns + 
+        "COUNT(j.departureStationId) AS journeyAmount)" +
+        "FROM Journey j " +
+        "INNER JOIN Station s ON j.departureStationId = s.id " +
+        "WHERE j.returnStationId = ?1 " +
+        "GROUP BY j.departureStationId ORDER BY journeyAmount DESC LIMIT 5")
     List<StationPopularity> mostPopularDepartureStations(String returnStationId);
 
-    Page<Journey> findByDepartureStationId(String departureStationId, Pageable pageable);
-    Page<Journey> findByReturnStationId(String returnStationId, Pageable pageable);
-    Page<Journey> findByDepartureStationIdAndReturnStationId(String departureStationId, String returnStationId, Pageable pageable);
 }
 

@@ -5,15 +5,15 @@ package com.jp.bike.model;
 public class StationPopularity {
 
     private Object id;
-    private Object journeyAmount;
     private String nameLocaleFi;
     private String nameLocaleSe;
     private String nameLocaleEn;
+    private Object journeyAmount;
 
     public StationPopularity() {}
 
-    public StationPopularity(Object id, Object journeyAmount, String nameLocaleFi, String nameLocaleSe,
-            String nameLocaleEn) {
+    public StationPopularity(Object id, String nameLocaleFi, String nameLocaleSe,
+            String nameLocaleEn, Object journeyAmount) {
         this.id = id;
         this.journeyAmount = journeyAmount;
         this.nameLocaleFi = nameLocaleFi;
