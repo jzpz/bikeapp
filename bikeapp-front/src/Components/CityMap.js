@@ -14,7 +14,7 @@ export default function CityMap({stations, departureStation, returnStation,
         return null
     }
 
-    function selectStation(station = null) {
+    function selectStation(station) {
         if(station) {
             setCurrentSelectedStation(station)
             setDepartureStation(station)
@@ -51,7 +51,7 @@ export default function CityMap({stations, departureStation, returnStation,
                             }
                         }}
                         color={markerColor(station)} // Mark current station as red
-                        className={markerColor(station)  ? "active" : ""} // Add class to current station marker
+                        className={markerColor(station) ? "active" : ""} // Add class to current station marker
                         title={station.nameLocaleFi}
                     />
                 )

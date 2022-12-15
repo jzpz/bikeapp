@@ -1,10 +1,9 @@
-import { formatDistance, formatDate, formatDuration } from '../Functions/formatValues';
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { getStation } from '../Functions/stations';
+import Pagination from 'react-bootstrap/Pagination';
 import { getJourneys } from '../Functions/journeys';
+import JourneyListItem from './JourneyListItem';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList({offCanvas, setOffCanvas, 
@@ -47,38 +46,15 @@ export default function JourneyList({offCanvas, setOffCanvas,
 
     // Make JSX list from array
     function List() {
-        const list = journeys.map((journey, index) => {
+        const list = journeys.map((journey) => {
             return(
-                <div 
-                    onClick={() => {
-                        if(departureStation.id !== journey.departureStationId) {
-                            // Set departure station to departure station of this journey
-                            getStation(journey.departureStationId)
-                            .then(data => {
-                                setDepartureStation(data)
-                            })
-                        }
-
-                        if(returnStation.id !== journey.returnStationId) {
-                            // Set return station to return station of this journey
-                            getStation(journey.returnStationId)
-                            .then(data => {
-                                setReturnStation(data)
-                            })
-                        }
-                    }}
-                    key={journey.id} className="list-item">
-                    <span title="Departed at">{formatDate(journey.departureDate)}</span><br/>
-                    <span> From </span>
-                    <span className={journey.departureStationId === departureStation.id ? "departure-station" : ""} style={{fontWeight:"bold"}}>{journey.departureStationName}</span>
-                    <span> to </span>
-                    <span className={journey.returnStationId === returnStation.id ? "return-station": ""}
-                    style={{fontWeight:"bold"}}>{journey.returnStationName}</span>
-                    <br/>
-                    <span>Duration: {formatDuration(journey.durationInSeconds)} </span>
-                    <span>Length: {formatDistance(journey.distanceCoveredInMeters)}</span>
-                    <br/>{journey.returnStationId}&nbsp;{departureStation.id}
-                </div>
+                <JourneyListItem
+                    key={journey.id}
+                    journey={journey}
+                    returnStation={returnStation}
+                    departureStation={departureStation} 
+                    setDepartureStation={setDepartureStation}
+                    setReturnStation={setReturnStation} />
             )
         });
         return <>{list}</>

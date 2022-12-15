@@ -6,7 +6,8 @@ import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
 // An offcanvas view that contains all stations
-export default function StationList({stations, offCanvas, setOffCanvas, setDepartureStation, setCurrentSelectedStation}) {
+export default function StationList({stations, offCanvas, setOffCanvas, setDepartureStation, 
+    setReturnStation, setCurrentSelectedStation}) {
     const [filterWord, setFilterWord] = useState('');
 
     // Check station names for filter word
@@ -25,6 +26,7 @@ export default function StationList({stations, offCanvas, setOffCanvas, setDepar
                     onClick={() => {
                         setCurrentSelectedStation(station)
                         setDepartureStation(station)
+                        setReturnStation(station)
                         setOffCanvas({...offCanvas, stations: false})
                     }}
                     key={station.id} 
