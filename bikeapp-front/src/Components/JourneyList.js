@@ -16,10 +16,15 @@ export default function JourneyList({offCanvas, setOffCanvas,
     const [showDepartures, setShowDepartures] = useState(true);
 
     useEffect(() => {
+        setJourneys([])
         getJourneys(page, currentSelectedStation, showDepartures)
         .then(data => setJourneys(data))
         .catch(e => console.log(e));
     }, [currentSelectedStation, showDepartures, page]);
+
+    useEffect(() => {
+        setShowDepartures(true)
+    }, [currentSelectedStation]);
 
     /* Follow when user changes between departures and arrivals
         and change the states accordingly */
@@ -35,7 +40,6 @@ export default function JourneyList({offCanvas, setOffCanvas,
 
     function switchPage(page) {
         let newPage;
-        // Check page validity and get items from backend
         if(page < 0) newPage = 0;
         else newPage = page;
         setPage(newPage);
@@ -73,6 +77,7 @@ export default function JourneyList({offCanvas, setOffCanvas,
                     <br/>
                     <span>Duration: {formatDuration(journey.durationInSeconds)} </span>
                     <span>Length: {formatDistance(journey.distanceCoveredInMeters)}</span>
+                    <br/>{journey.returnStationId}&nbsp;{departureStation.id}
                 </div>
             )
         });

@@ -2,6 +2,7 @@ export function getJourneys(page, currentSelectedStation, showDepartures = false
     let searchParams = "";
 
     // Fetch journeys from the selected station
+    // fetch all if no station is specified
     if(currentSelectedStation.id) {
         if(showDepartures) 
         searchParams += "&departureStationId=" + currentSelectedStation.id

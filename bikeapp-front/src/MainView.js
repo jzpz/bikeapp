@@ -30,23 +30,39 @@ export default function MainView() {
     return(
         <div className="main-view">
             <div className="station-info">
-                <h1>{currentSelectedStation.nameLocaleFi}&nbsp;</h1>
-                <h3 className="secondary">
-                    {currentSelectedStation.nameLocaleSe}
-                    { // Show English name if its different from Finnish
-                        currentSelectedStation.nameLocaleEn === currentSelectedStation.nameLocaleFi ? 
-                        "" : " " + currentSelectedStation.nameLocaleEn
-                    }
-                </h3>
-                <hr/>
-                <Button className="overlay" variant="primary" onClick={() => setOffCanvas({...offCanvas, stations: true})}>
-                    Change station
-                </Button>
-                <Button className="overlay" variant="primary" 
-                    onClick={() => {
-                        setOffCanvas({...offCanvas, journeys: true})}}>
-                    View Departures
-                </Button>
+                <Row>
+                    {currentSelectedStation.id ? <>
+                        <h1>{currentSelectedStation.nameLocaleFi}&nbsp;</h1>
+                        <h3 className="secondary">
+                            {currentSelectedStation.nameLocaleSe}
+                            { // Show English name if its different from Finnish
+                                currentSelectedStation.nameLocaleEn === currentSelectedStation.nameLocaleFi ? 
+                                "" : " - " + currentSelectedStation.nameLocaleEn
+                            }
+                        </h3>
+                        <hr/>
+                        <Button className="overlay" variant="primary" onClick={() => setOffCanvas({...offCanvas, stations: true})}>
+                            Change station
+                        </Button>
+                        <Button className="overlay" variant="primary" 
+                            onClick={() => {
+                                setOffCanvas({...offCanvas, journeys: true})}}>
+                            View Departures
+                        </Button>
+                    </> : <>
+                        <Col xs={3}></Col>
+                        <Col xs={6}>
+                            <h1>No station selected</h1>
+                            <h3>Click a marker or select a station from the Station list
+                            <br/>to view journeys that start or end at that station.</h3>
+                        </Col>
+                        <Col xs={3}>
+                            <Button className="overlay" variant="primary" onClick={() => setOffCanvas({...offCanvas, stations: true})}>
+                                Change station
+                            </Button>
+                        </Col>
+                    </>}
+                </Row>
             </div>
 
             <CityMap 
@@ -69,7 +85,7 @@ export default function MainView() {
                 setDepartureStation={setDepartureStation}
                 setReturnStation={setReturnStation}
             />
-            
+
             <StationList className="overlay"
                 stations={stations}
                 offCanvas={offCanvas}

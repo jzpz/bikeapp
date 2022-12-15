@@ -43,9 +43,15 @@ export default function CityMap({stations, departureStation, returnStation,
                         anchor={[station.coordinateY, station.coordinateX]} 
                         key={station.id}
                         onClick={() => {
-                            setCurrentSelectedStation(station)
-                            setDepartureStation(station)
-                            setReturnStation([])
+                            if(currentSelectedStation.id === station.id) {
+                                setCurrentSelectedStation([])
+                                setDepartureStation([])
+                                setReturnStation([])
+                            } else {
+                                setCurrentSelectedStation(station)
+                                setDepartureStation(station)
+                                setReturnStation(station)
+                            }
                         }}
                         color={markerColor(station)} // Mark current station as red
                         className={isDepartureOrReturnStation(station) ? "active" : ""} // Add class to current station marker
