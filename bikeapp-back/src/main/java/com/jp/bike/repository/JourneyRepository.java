@@ -41,22 +41,6 @@ public interface JourneyRepository extends PagingAndSortingRepository<Journey, I
             "s.nameLocaleSe, " +
             "s.nameLocaleEn, ";
 
-    // Returns the most popular departure stations out of all - warning: SLOW
-    @Query(stationPopularityDefaultColumns + 
-        "COUNT(j.departureStationId) AS journeyAmount)" +
-        "FROM Journey j " +
-        "INNER JOIN Station s ON j.departureStationId = s.id " +
-        "GROUP BY j.departureStationId ORDER BY journeyAmount DESC LIMIT 5")
-    List<StationPopularity> mostPopularDepartureStations();
-
-    // Returns the most popular return stations out of all - warning: SLOW
-    @Query(stationPopularityDefaultColumns + 
-        "COUNT(j.returnStationId) AS journeyAmount)" +
-        "FROM Journey j " +
-        "INNER JOIN Station s ON j.returnStationId = s.id " +
-        "GROUP BY j.returnStationId ORDER BY journeyAmount DESC LIMIT 5")
-    List<StationPopularity> mostPopularReturnStations();
-
     // Returns the most popular return stations for a departure station
     @Query(stationPopularityDefaultColumns + 
         "COUNT(j.returnStationId) AS journeyAmount)" +

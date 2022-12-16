@@ -1,6 +1,5 @@
 package com.jp.bike.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jp.bike.model.Journey;
-import com.jp.bike.model.StationPopularity;
 import com.jp.bike.repository.JourneyRepository;
 
 @RestController
@@ -80,56 +78,6 @@ public class JourneyController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 		return new ResponseEntity<Journey>(journey, new HttpHeaders(), HttpStatus.OK);
-	}
-
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/journeyinfo")
-	public ResponseEntity<HashMap<String, Object>> getInfo(
-		@RequestParam(name="stationId", required=false) String stationId) {
-
-		HashMap<String, Object> values = new HashMap<String, Object>();
-		
-		Long journeysStarting;
-		Long journeysEnding;
-		Long averageDistanceCoveredAsReturnStation;
-		Long averageDistanceCoveredAsDepartureStation;
-		List<StationPopularity> mostPopularDepartureStations;
-		List<StationPopularity> mostPopularReturnStations;
-
-		if(stationId != null) { // Search using station id
-
-			journeysStarting = repository.countByDepartureStationId(stationId);
-			journeysEnding = repository.countByReturnStationId(stationId);
-			
-			averageDistanceCoveredAsDepartureStation = repository.averageDistanceCoveredByDepartureStation(stationId);
-			averageDistanceCoveredAsReturnStation = repository.averageDistanceCoveredByReturnStation(stationId);
-			
-			mostPopularDepartureStations = repository.mostPopularDepartureStations(stationId);
-			mostPopularReturnStations = repository.mostPopularReturnStations(stationId);
-
-		} else { // Include all stations in search
-
-			// These will be shown as separate values but they will be same if no station is selected.
-			Long journeyCount = repository.count();
-			journeysStarting = journeyCount;
-			journeysEnding = journeyCount;
-
-			Long averageDistance = repository.averageDistanceCovered();
-			averageDistanceCoveredAsDepartureStation = averageDistance;
-			averageDistanceCoveredAsReturnStation = averageDistance;
-
-			mostPopularDepartureStations = repository.mostPopularDepartureStations();
-			mostPopularReturnStations = repository.mostPopularReturnStations();
-		}
-
-		values.put("journeysStarting", journeysStarting);
-		values.put("journeysEnding", journeysEnding);
-		values.put("averageDistanceCoveredAsDepartureStation", averageDistanceCoveredAsDepartureStation);
-		values.put("averageDistanceCoveredAsReturnStation", averageDistanceCoveredAsReturnStation);
-		values.put("mostPopularDepartureStations", mostPopularDepartureStations);
-		values.put("mostPopularReturnStations", mostPopularReturnStations);
-
-		return new ResponseEntity<HashMap<String, Object>>(values, new HttpHeaders(), HttpStatus.OK);
 	}
 
 }
