@@ -4,46 +4,32 @@
     height: 100%;
 }
 
-.station-info {
-    top: 0;
-    left: 0; 
-    right: 0; 
-    margin-left: auto; 
-    margin-right: auto; 
-    height: 200px;
-    z-index: 1;
-    background-color: white;
-    position:absolute;
-}
-
 .departure-station {
-    color: red;
+    color: #c40053;
 }
 
 .return-station {
-    color: blue;
+    color: #003c85;
 }
 
 .secondary {
-    color: gray;
+    color: rgb(88, 88, 88);
 }
 
 body {
     overflow: hidden;
 }
 
-.list-item {
-    border-top: 1px solid silver;
-    padding: 5px;
-}
-
 .list-item.station {
-    border-top: 1px solid silver;
     padding: 15px;
 }
 
+.list-item {
+    border-top: 1px solid silver;
+}
+
 .list-item:hover {
-    background-color: rgb(235, 235, 235);
+    background-color: rgb(243, 243, 243);
     cursor: pointer;
 }
 
@@ -55,15 +41,31 @@ body {
 .journey-line {
     width: 100%;
     height: 5px;
-    background-image: linear-gradient(to right, #3b3b3b, silver);
+    background-image: linear-gradient(to right, #ff036c, #1d63b8);
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .journey-line.active {
     width: 100%;
     height: 5px;
-    background-image: linear-gradient(to right, red, blue);
 }
 
-.journey-item-data {
-    padding-right: 20px;
+button.btn {
+    min-width: 150px;
+}
+
+.selected-journey-container {
+    width: 300px;
+    top: 125px;
+    height: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: white;
+    z-index: 2;
+    position:absolute;
+}
+
+button.active {
+    filter: brightness(0.8);
 }

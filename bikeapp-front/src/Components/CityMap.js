@@ -7,9 +7,9 @@ export default function CityMap({stations, departureStation, returnStation,
 
     function markerColor(station) {
         if(departureStation?.id === station.id) {
-            return "red"
+            return "#ff036c"
         } else if(returnStation?.id === station.id) {
-            return "blue"
+            return "#1d63b8"
         }
         return null
     }
@@ -50,9 +50,10 @@ export default function CityMap({stations, departureStation, returnStation,
                                 selectStation(station)
                             }
                         }}
-                        color={markerColor(station)} // Mark current station as red
-                        className={markerColor(station) ? "active" : ""} // Add class to current station marker
+                        color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
+                        className={markerColor(station) ? "active" : ""} // Add class to active station
                         title={station.nameLocaleFi}
+                        onMouseOver={()=>console.log(station.nameLocaleFi)}
                     />
                 )
             })}

@@ -26,37 +26,39 @@ export default function JourneyListItem ({journey, departureStation, returnStati
             }
         }}
         className="list-item journey-item">
-            <span title="Departed at">{formatDate(journey.departureDate)}</span><br/>
-            
-            {/* Add classnames for colorcoding (red=departure, blue=return)*/}
-            <span 
-                className={journey.departureStationId === departureStation.id ? "departure-station" : ""} 
-                style={{fontWeight:"bold"}}>{journey.departureStationName}
-            </span>
-            <span> 
-                <IoArrowForward />
-            </span>
-            <span 
-                className={journey.returnStationId === returnStation.id ? "return-station": ""}
-                style={{fontWeight:"bold"}}>{journey.returnStationName}
-            </span>
-            <br/>
-            <span className="journey-item-data">
-                <IoTimeOutline /> 
-                {formatDuration(journey.durationInSeconds)}
-            </span>
-            <span className="journey-item-data">
-                <IoBicycle /> 
-                {formatDistance(journey.distanceCoveredInMeters)}
-            </span>
+            <div>
+                <span className="secondary" title="Departed at">{formatDate(journey.departureDate)}</span>
+            </div>
+            <div className="text-center" style={{padding:3}}>
+                {/* Add classnames for colorcoding (red=departure, blue=return)*/}
+                <span 
+                    className={`${journey.departureStationId === departureStation.id ? "departure-station" : ""}`} 
+                    style={{fontWeight:"bold"}}>{journey.departureStationName}
+                </span>
+                <IoArrowForward size={18} style={{marginRight:5,marginLeft:5}} />
+                <span 
+                    className={`float-right ${journey.returnStationId === returnStation.id ? "return-station": ""}`}
+                    style={{fontWeight:"bold"}}>{journey.returnStationName}
+                </span>
+            </div>
+            <div>
+                <span className="journey-item-data">
+                    <IoTimeOutline style={{marginRight:5}} /> 
+                    {formatDuration(journey.durationInSeconds)}
+                </span>
+                <span className="journey-item-data">
+                    <IoBicycle style={{marginLeft:10,marginRight:5}} /> 
+                    {formatDistance(journey.distanceCoveredInMeters)}
+                </span>
+            </div>
             <div className="journey-line" 
                 style={{
                     // Color code the journey underline to match station colors
                     backgroundImage: 
                         `linear-gradient(to right, 
-                            ${journey.departureStationId === departureStation.id ? "red" : "#4b4b4b"},
-                            ${journey.returnStationId === returnStation.id ? "blue" : "#4b4b4b"}`
-                }} 
+                            ${journey.departureStationId === departureStation.id ? "#ff036c" : "#fc81b4"},
+                            ${journey.returnStationId === returnStation.id ? "#1d63b8" : "#5e9be6"}`
+                }}
             />
         </div>
     )

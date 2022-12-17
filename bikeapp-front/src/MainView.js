@@ -8,6 +8,7 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import './app.css';
 import CityMap from './Components/CityMap';
 import JourneyList from './Components/JourneyList';
+import JourneyListItem from './Components/JourneyListItem';
 import StationList from './Components/StationList';
 import { formatDistance } from './Functions/formatValues';
 import { getStationInfo, getStations, getStation } from './Functions/stations';
@@ -21,6 +22,7 @@ export default function MainView() {
     const [departureStation, setDepartureStation] = useState([]);
     // Return station of currently viewed journey (marked blue)
     const [returnStation, setReturnStation] = useState([]);
+    const [currentSelectedJourney, setCurrentSelectedJourney] = useState([]);
     const [stationInfo, setStationInfo] = useState([]);
 
     // Initialize station list on start
@@ -73,7 +75,7 @@ export default function MainView() {
                                     <NavDropdown.Divider />
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    As departure station<br/>
+                                    Starting from this station<br/>
                                     <span className="secondary">
                                         {stationInfo.averageDistanceCoveredAsDepartureStation ?
                                         formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
@@ -83,7 +85,7 @@ export default function MainView() {
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Item>
-                                    As return station<br/>
+                                    Ending at this station<br/>
                                     <span className="secondary">
                                         {stationInfo.averageDistanceCoveredAsReturnStation ?
                                         formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :
@@ -148,6 +150,18 @@ export default function MainView() {
                         </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <Container>
+                <div className="selected-journey-container">
+                    {/*<JourneyListItem
+                        key={curre.id}
+                        journey={journey}
+                        returnStation={returnStation}
+                        departureStation={departureStation} 
+                        setDepartureStation={setDepartureStation}
+                        setReturnStation={setReturnStation} />
+                    */}
+                </div>
+            </Container>
 
             <CityMap 
                 stations={stations} 

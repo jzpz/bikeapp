@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ButtonGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Pagination from 'react-bootstrap/Pagination';
@@ -21,6 +22,7 @@ export default function JourneyList({offCanvas, setOffCanvas,
         .catch(e => console.log(e));
     }, [currentSelectedStation, showDepartures, page]);
 
+    // Always show departures by default when selecting a station
     useEffect(() => {
         setShowDepartures(true)
     }, [currentSelectedStation]);
@@ -69,18 +71,22 @@ export default function JourneyList({offCanvas, setOffCanvas,
             <Offcanvas.Title>
                 {currentSelectedStation.nameLocaleFi}
                 <hr/>
-                <Button 
-                    variant="dark" 
-                    style={{backgroundColor: "red"}}
-                    onClick={() => setShowDepartures(true)}>
-                    Departures
-                </Button>
-                <Button 
-                    variant="dark" 
-                    style={{backgroundColor: "blue"}}
-                    onClick={() => setShowDepartures(false)}>
-                    Returns
-                </Button>
+                <ButtonGroup>
+                    <Button 
+                        variant="light" 
+                        style={{backgroundColor: "#ff036c", color:"white"}}
+                        className={showDepartures ? "active" : ""}
+                        onClick={() => setShowDepartures(true)}>
+                        Departures
+                    </Button>
+                    <Button 
+                        variant="light" 
+                        style={{backgroundColor: "#1d63b8", color:"white"}}
+                        className={showDepartures ? "" : "active"}
+                        onClick={() => setShowDepartures(false)}>
+                        Returns
+                    </Button>
+                </ButtonGroup>
             </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
