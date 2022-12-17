@@ -8,24 +8,24 @@ export default function JourneyListItem ({journey, departureStation, returnStati
 
     return(
         <div 
-        onClick={() => {
-            if(departureStation.id !== journey.departureStationId) {
-                // Set departure station to departure station of this journey
-                getStation(journey.departureStationId)
-                .then(data => {
-                    setDepartureStation(data)
-                })
-            }
+            onClick={() => {
+                if(departureStation.id !== journey.departureStationId) {
+                    // Set departure station to departure station of this journey
+                    getStation(journey.departureStationId)
+                    .then(data => {
+                        setDepartureStation(data)
+                    })
+                }
 
-            if(returnStation.id !== journey.returnStationId) {
-                // Set return station to return station of this journey
-                getStation(journey.returnStationId)
-                .then(data => {
-                    setReturnStation(data)
-                })
-            }
-        }}
-        className="list-item journey-item">
+                if(returnStation.id !== journey.returnStationId) {
+                    // Set return station to return station of this journey
+                    getStation(journey.returnStationId)
+                    .then(data => {
+                        setReturnStation(data)
+                    })
+                }
+            }}
+            className="list-item journey-item">
             <div>
                 <span className="secondary" title="Departed at">{formatDate(journey.departureDate)}</span>
             </div>

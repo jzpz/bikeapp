@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Placeholder from 'react-bootstrap/Placeholder';
 import './app.css';
 import CityMap from './Components/CityMap';
+import CurrentJourney from './Components/CurrentJourney';
 import JourneyList from './Components/JourneyList';
 import JourneyListItem from './Components/JourneyListItem';
 import StationList from './Components/StationList';
@@ -22,7 +25,7 @@ export default function MainView() {
     const [departureStation, setDepartureStation] = useState([]);
     // Return station of currently viewed journey (marked blue)
     const [returnStation, setReturnStation] = useState([]);
-    const [currentSelectedJourney, setCurrentSelectedJourney] = useState([]);
+    const [currentJourney, setCurrentJourney] = useState([]);
     const [stationInfo, setStationInfo] = useState([]);
 
     // Initialize station list on start
@@ -59,7 +62,7 @@ export default function MainView() {
                     </Navbar.Text>
                 </Container>
             </Navbar>
-            <Navbar bg="light" className="mb-3">
+            <Navbar bg="light">
                 <Container fluid>
                     <Navbar.Toggle />
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -150,18 +153,6 @@ export default function MainView() {
                         </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container>
-                <div className="selected-journey-container">
-                    {/*<JourneyListItem
-                        key={curre.id}
-                        journey={journey}
-                        returnStation={returnStation}
-                        departureStation={departureStation} 
-                        setDepartureStation={setDepartureStation}
-                        setReturnStation={setReturnStation} />
-                    */}
-                </div>
-            </Container>
 
             <CityMap 
                 stations={stations} 
@@ -192,6 +183,12 @@ export default function MainView() {
                 setDepartureStation={setDepartureStation}
                 setReturnStation={setReturnStation}
             />
+
+            <div id="journey-info">
+                <CurrentJourney
+                    departureStation={departureStation}
+                    returnStation={returnStation} />
+            </div>
         </div>
     )
 }
