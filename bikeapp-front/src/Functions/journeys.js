@@ -1,13 +1,19 @@
-export function getJourneys(page, currentSelectedStation, showDepartures = false) {
+/**
+ * @param {*} page page number
+ * @param {*} selectedStation station object
+ * @param {*} showDepartures show departures for selectedStation? true/false
+ * @returns Journey promise
+ */
+export function getJourneys(page, selectedStation, showDepartures = true) {
     let url = `http://localhost:8080/journeys?page=${page}`;
 
     // Fetch journeys from the selected station
     // fetch all if no station is specified
-    if(currentSelectedStation.id) {
+    if(selectedStation.id) {
         if(showDepartures) {
-            url += "&departureStationId=" + currentSelectedStation.id
+            url += "&departureStationId=" + selectedStation.id
         } else {
-            url += "&returnStationId=" + currentSelectedStation.id
+            url += "&returnStationId=" + selectedStation.id
         }
     }
 

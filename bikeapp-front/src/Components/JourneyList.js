@@ -7,9 +7,17 @@ import { getJourneys } from '../Functions/journeys';
 import JourneyListItem from './JourneyListItem';
 
 // An offcanvas view that contains all journeys
-export default function JourneyList({offCanvas, setOffCanvas, 
-        departureStation, setDepartureStation, currentSelectedStation,
-        returnStation, setReturnStation}) {
+export default function JourneyList({
+    offCanvas, 
+    setOffCanvas,       
+    departureStation, 
+    selectedStation,
+    returnStation, 
+    setDepartureStation, 
+    setSelectedStation, 
+    setReturnStation
+}) {
+    
     const [journeys, setJourneys] = useState([]);
     const [page, setPage] = useState(0);
     // Show departures or returns?
@@ -17,25 +25,25 @@ export default function JourneyList({offCanvas, setOffCanvas,
 
     useEffect(() => {
         setJourneys([])
-        getJourneys(page, currentSelectedStation, showDepartures)
+        getJourneys(page, selectedStation, showDepartures)
         .then(data => setJourneys(data))
         .catch(e => console.log(e));
-    }, [currentSelectedStation, showDepartures, page]);
+    }, [selectedStation, showDepartures, page]);
 
     // Always show departures by default when selecting a station
     useEffect(() => {
         setShowDepartures(true)
-    }, [currentSelectedStation]);
+    }, [selectedStation]);
 
     /* Follow when user changes between departures and arrivals
         and change the states accordingly */
     useEffect(() => {
         if(showDepartures) {
             setDepartureStation(returnStation);
-            setReturnStation([]);
+            setReturnStation(departureStation);
         } else {
             setReturnStation(departureStation);
-            setDepartureStation([]);
+            setDepartureStation(returnStation);
         }
     }, [showDepartures]);
 
@@ -52,11 +60,13 @@ export default function JourneyList({offCanvas, setOffCanvas,
             return(
                 <JourneyListItem
                     key={journey.id}
+                    setSelectedStation={setSelectedStation}
                     journey={journey}
                     returnStation={returnStation}
                     departureStation={departureStation} 
                     setDepartureStation={setDepartureStation}
-                    setReturnStation={setReturnStation} />
+                    setReturnStation={setReturnStation} 
+                    showDepartures={showDepartures} />
             )
         });
         return <>{list}</>
@@ -69,19 +79,16 @@ export default function JourneyList({offCanvas, setOffCanvas,
             
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-                {currentSelectedStation.nameLocaleFi}
-                <hr/>
+                {selectedStation.nameLocaleFi}
                 <ButtonGroup>
                     <Button 
-                        variant="light" 
-                        style={{backgroundColor: "#ff036c", color:"white"}}
+                        style={{backgroundColor: "#ff036c",border:"none"}}
                         className={showDepartures ? "active" : ""}
                         onClick={() => setShowDepartures(true)}>
                         Departures
                     </Button>
                     <Button 
-                        variant="light" 
-                        style={{backgroundColor: "#1d63b8", color:"white"}}
+                        style={{backgroundColor: "#1d63b8",border:"none"}}
                         className={showDepartures ? "" : "active"}
                         onClick={() => setShowDepartures(false)}>
                         Returns

@@ -1,25 +1,48 @@
 import { IoBicycle, IoTimeOutline, IoArrowForward } from 'react-icons/io5';
+import Button from 'react-bootstrap/Button';
 
 // Displays currently selected journey details
-export default function CurrentJourney ({departureStation, returnStation}) {
+export default function CurrentJourney ({
+    departureStation, 
+    returnStation, 
+    selectedStation
+}) {
+
+    function ReturnStation() {
+        if(departureStation.id !== returnStation.id) {
+            return(
+                <>
+                    <IoArrowForward size={26} style={{marginRight:5,marginLeft:5,marginBottom:3}} />
+                    <span className="return-station" style={{fontWeight:"bold"}}>
+                        {returnStation.nameLocaleFi}
+                    </span>
+                </>
+            )
+        } 
+
+        return null;
+    }
 
     return(
         <div className="journey-item">
-            <div className="text-center" style={{padding:3}}>
+            <div className="text-center" style={{margin:3, display:"inline-flex"}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
-                <span style={{display:"inline-flex"}}>
-                    <h4
-                        className="departure-station"
-                        style={{fontWeight:"bold"}}>{departureStation.nameLocaleFi}
-                    </h4>
-                    <IoArrowForward size={26} style={{marginRight:5,marginLeft:5,marginTop:2}} />
-                    <h4
-                        className="return-station"
-                        style={{fontWeight:"bold"}}>{returnStation.nameLocaleFi}
-                    </h4>
-                </span>
+                <h4>
+                    {selectedStation.id ? <>
+                        <span className="departure-station" style={{fontWeight:"bold"}}>
+                            {departureStation.nameLocaleFi}
+                        </span>
+                        <ReturnStation />
+                    </>:
+                        <span>
+                            Click a marker on the map
+                        </span>
+                    }
+                </h4>
             </div>
-            <div className="journey-line" />
+            {selectedStation.id  &&
+                <div className="journey-line" />
+            }
         </div>
     )
 }

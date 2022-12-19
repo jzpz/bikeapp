@@ -1,31 +1,21 @@
 import { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Placeholder from 'react-bootstrap/Placeholder';
 import './app.css';
 import CityMap from './Components/CityMap';
 import CurrentJourney from './Components/CurrentJourney';
 import JourneyList from './Components/JourneyList';
-import JourneyListItem from './Components/JourneyListItem';
 import StationList from './Components/StationList';
-import { formatDistance } from './Functions/formatValues';
 import { getStationInfo, getStations, getStation } from './Functions/stations';
+import Navigation from './Components/Navigation';
 
 export default function MainView() {
     const [stations, setStations] = useState([]);
     const [offCanvas, setOffCanvas] = useState({journeys: false, stations: false});
     // Currently selected station
-    const [currentSelectedStation, setCurrentSelectedStation] = useState([]);
+    const [selectedStation, setSelectedStation] = useState([]);
     // Departure station of currently viewed journey (marked red)
     const [departureStation, setDepartureStation] = useState([]);
     // Return station of currently viewed journey (marked blue)
     const [returnStation, setReturnStation] = useState([]);
-    const [currentJourney, setCurrentJourney] = useState([]);
     const [stationInfo, setStationInfo] = useState([]);
 
     // Initialize station list on start
@@ -34,125 +24,26 @@ export default function MainView() {
         .then(data => setStations(data));
     }, []);
 
+    // Fetch station info (avg journeys, top stations)
     useEffect(() => {
         setStationInfo([]);
 
-        if(currentSelectedStation.id) {
-            getStationInfo(currentSelectedStation.id)
+        if(selectedStation.id) {
+            getStationInfo(selectedStation.id)
             .then(data => setStationInfo(data));
         }
-    }, [currentSelectedStation]);
+    }, [selectedStation]);
 
     return(
         <div className="main-view">
-            <Navbar bg="dark" variant="dark">
-                <Container fluid>
-                    <Navbar.Brand>
-                        {currentSelectedStation.id ? 
-                            <>
-                                <span>{currentSelectedStation.nameLocaleFi} </span>
-                                <span className="secondary">{currentSelectedStation.nameLocaleSe}</span>
-                            </> : <>
-                                <span>No station selected</span>
-                            </>
-                        }
-                    </Navbar.Brand>
-                    <Navbar.Text>
-                        {currentSelectedStation.addressLocaleFi}
-                    </Navbar.Text>
-                </Container>
-            </Navbar>
-            <Navbar bg="light">
-                <Container fluid>
-                    <Navbar.Toggle />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto"> 
-                            <Button className="overlay" variant="success" 
-                                onClick={() => {
-                                    setOffCanvas({...offCanvas, journeys: true})}}>
-                                View Journeys
-                            </Button>
-                            <NavDropdown title="Station info" id="collasible-nav-dropdown">
-                                <NavDropdown.Item>
-                                    Average journey distance
-                                    <NavDropdown.Divider />
-                                </NavDropdown.Item>
-                                <NavDropdown.Item>
-                                    Starting from this station<br/>
-                                    <span className="secondary">
-                                        {stationInfo.averageDistanceCoveredAsDepartureStation ?
-                                        formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
-                                        <Placeholder as="p" animation="wave">
-                                            <Placeholder xs={5} />
-                                        </Placeholder>}
-                                    </span>
-                                </NavDropdown.Item>
-                                <NavDropdown.Item>
-                                    Ending at this station<br/>
-                                    <span className="secondary">
-                                        {stationInfo.averageDistanceCoveredAsReturnStation ?
-                                        formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :
-                                        <Placeholder as="p" animation="wave">
-                                            <Placeholder xs={5} />
-                                        </Placeholder>}
-                                    </span>
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                            <NavDropdown title="Arrivals" id="collasible-nav-dropdown">
-                                <NavDropdown.Item>
-                                    People most often travel to...
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                {stationInfo.mostPopularReturnStations?.map((station) => { // Get all stations and mark them
-                                    return(
-                                        <NavDropdown.Item 
-                                            key={station.id} 
-                                            onClick={() => getStation(station.id)
-                                                .then(data => {
-                                                    setReturnStation(data)
-                                                    setDepartureStation(currentSelectedStation)
-                                                })
-                                            }>
-                                            <span>{station.nameLocaleFi} </span>
-                                            <span className="secondary">{station.nameLocaleSe}</span>
-                                            <br/>
-                                            <span className="secondary">{station.journeyAmount} journeys</span>
-                                        </NavDropdown.Item>
-                                    )
-                                })}
-                            </NavDropdown>
-                            <NavDropdown title="Departures" id="collasible-nav-dropdown">
-                                <NavDropdown.Item>
-                                    People most often travel from...
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                {stationInfo.mostPopularDepartureStations?.map((station) => { // Get all stations and mark them
-                                    return(
-                                        <NavDropdown.Item 
-                                        key={station.id}
-                                        onClick={() => getStation(station.id)
-                                            .then(data => {
-                                                setDepartureStation(data);
-                                                setReturnStation(currentSelectedStation)
-                                            })
-                                        }>
-                                            <span>{station.nameLocaleFi} </span>
-                                            <span className="secondary">{station.nameLocaleSe}</span>
-                                            <br/>
-                                            <span className="secondary">{station.journeyAmount} journeys</span>
-                                        </NavDropdown.Item>
-                                    )
-                                })}
-                            </NavDropdown>
-                        </Nav>
-                        <Nav>
-                            <Button className="overlay" variant="primary" onClick={() => setOffCanvas({...offCanvas, stations: true})}>
-                                Change station
-                            </Button>
-                        </Nav>
-                        </Navbar.Collapse>
-                </Container>
-            </Navbar>
+            <Navigation
+                selectedStation={selectedStation}
+                offCanvas={offCanvas}
+                setOffCanvas={setOffCanvas}
+                stationInfo={stationInfo}
+                setDepartureStation={setDepartureStation}
+                setReturnStation={setReturnStation}
+            />
 
             <CityMap 
                 stations={stations} 
@@ -160,8 +51,8 @@ export default function MainView() {
                 returnStation={returnStation}
                 setReturnStation={setReturnStation}
                 setDepartureStation={setDepartureStation}
-                currentSelectedStation={currentSelectedStation}
-                setCurrentSelectedStation={setCurrentSelectedStation}
+                selectedStation={selectedStation}
+                setSelectedStation={setSelectedStation}
             />
 
             <JourneyList className="overlay"
@@ -169,8 +60,8 @@ export default function MainView() {
                 setOffCanvas={setOffCanvas}
                 departureStation={departureStation}
                 returnStation={returnStation}
-                currentSelectedStation={currentSelectedStation}
-                setCurrentSelectedStation={setCurrentSelectedStation}
+                selectedStation={selectedStation}
+                setSelectedStation={setSelectedStation}
                 setDepartureStation={setDepartureStation}
                 setReturnStation={setReturnStation}
             />
@@ -179,13 +70,14 @@ export default function MainView() {
                 stations={stations}
                 offCanvas={offCanvas}
                 setOffCanvas={setOffCanvas}
-                setCurrentSelectedStation={setCurrentSelectedStation}
+                setSelectedStation={setSelectedStation}
                 setDepartureStation={setDepartureStation}
                 setReturnStation={setReturnStation}
             />
 
             <div id="journey-info">
                 <CurrentJourney
+                    selectedStation={selectedStation}
                     departureStation={departureStation}
                     returnStation={returnStation} />
             </div>

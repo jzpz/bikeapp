@@ -2,27 +2,34 @@ import React, { useEffect, useState } from "react"
 import { Map, Marker } from "pigeon-maps"
 import "../app.css"
 
-export default function CityMap({stations, departureStation, returnStation, 
-    setDepartureStation, setReturnStation, currentSelectedStation, setCurrentSelectedStation}) {
+export default function CityMap({
+    stations, 
+    departureStation, 
+    returnStation, 
+    setDepartureStation, 
+    setReturnStation, 
+    selectedStation, 
+    setSelectedStation
+}) {
 
     function markerColor(station) {
         if(departureStation?.id === station.id) {
-            return "#ff036c"
+            return "#ff036c";
         } else if(returnStation?.id === station.id) {
-            return "#1d63b8"
+            return "#1d63b8";
         }
-        return null
+        return null;
     }
 
     function selectStation(station) {
         if(station) {
-            setCurrentSelectedStation(station)
-            setDepartureStation(station)
-            setReturnStation(station)
+            setSelectedStation(station);
+            setDepartureStation(station);
+            setReturnStation(station);
         } else {
-            setCurrentSelectedStation([])
-            setDepartureStation([])
-            setReturnStation([])
+            setSelectedStation([]);
+            setDepartureStation([]);
+            setReturnStation([]);
         }
     }
 
@@ -44,7 +51,7 @@ export default function CityMap({stations, departureStation, returnStation,
                         anchor={[station.coordinateY, station.coordinateX]} 
                         key={station.id}
                         onClick={() => {
-                            if(currentSelectedStation.id === station.id) {
+                            if(selectedStation.id === station.id) {
                                 selectStation()
                             } else {
                                 selectStation(station)

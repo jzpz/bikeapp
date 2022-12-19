@@ -1,13 +1,16 @@
-import { formatDistance, formatDate, formatDuration } from '../Functions/formatValues';
-import { useState, useEffect, useMemo } from 'react';
-import Button from 'react-bootstrap/Button';
+import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Pagination from 'react-bootstrap/Pagination';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
 // An offcanvas view that contains all stations
-export default function StationList({stations, offCanvas, setOffCanvas, setDepartureStation, 
-    setReturnStation, setCurrentSelectedStation}) {
+export default function StationList({
+    stations, 
+    offCanvas, 
+    setOffCanvas, 
+    setDepartureStation, 
+    setReturnStation, 
+    setSelectedStation
+}) {
     const [filterWord, setFilterWord] = useState('');
 
     // Check station names for filter word
@@ -24,7 +27,7 @@ export default function StationList({stations, offCanvas, setOffCanvas, setDepar
             return(
                 <div 
                     onClick={() => {
-                        setCurrentSelectedStation(station)
+                        setSelectedStation(station)
                         setDepartureStation(station)
                         setReturnStation(station)
                         setOffCanvas({...offCanvas, stations: false})
@@ -43,26 +46,27 @@ export default function StationList({stations, offCanvas, setOffCanvas, setDepar
         <Offcanvas 
             placement="end" 
             show={offCanvas.stations} 
-            onHide={() => setOffCanvas({...offCanvas, stations: false})}>
-            
+            onHide={() => setOffCanvas({...offCanvas, stations: false})}
+        >
             <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-                Station
-            </Offcanvas.Title>
+            <Offcanvas.Title>Station</Offcanvas.Title>
             </Offcanvas.Header>
+            {/* Station list and search */}
             <Offcanvas.Body>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formStationSearch">
                     <Form.Label>Search by name</Form.Label>
                     <Form.Control 
                         value={filterWord}
                         onChange={(e) => setFilterWord(e.target.value)}
                         type="text" 
-                        placeholder="Type station name" />
+                        placeholder="Type station name" 
+                    />
                 </Form.Group>
                 {stations?.length > 0 &&
                     <List />
                 }
             </Offcanvas.Body>
+
         </Offcanvas>
     )
 }
