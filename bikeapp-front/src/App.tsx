@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
 import './app.css';
 import { useEffect, useState } from 'react';
 import './app.css';
@@ -8,17 +9,18 @@ import JourneyList from './Components/JourneyList';
 import StationList from './Components/StationList';
 import { getStationInfo, getStations, getStation } from './Functions/stations';
 import Navigation from './Components/Navigation';
+import { Station } from './Types/Station';
 
 function App() {
-    const [stations, setStations] = useState([]);
-    const [offCanvas, setOffCanvas] = useState({journeys: false, stations: false});
+    const [stations, setStations] = useState<Station[] | null>(null);
+    const [offCanvas, setOffCanvas] = useState<any>({journeys: false, stations: false});
     // Currently selected station
-    const [selectedStation, setSelectedStation] = useState([]);
+    const [selectedStation, setSelectedStation] = useState<Station | null>(null);
     // Departure station of currently viewed journey (marked red)
-    const [departureStation, setDepartureStation] = useState([]);
+    const [departureStation, setDepartureStation] = useState<Station | null>(null);
     // Return station of currently viewed journey (marked blue)
-    const [returnStation, setReturnStation] = useState([]);
-    const [stationInfo, setStationInfo] = useState([]);
+    const [returnStation, setReturnStation] = useState<Station | null>(null);
+    const [stationInfo, setStationInfo] = useState<any>(null);
     
     // Initialize station list on start
     useEffect(() => {
@@ -28,9 +30,9 @@ function App() {
 
     // Fetch station info (avg journeys, top stations)
     useEffect(() => {
-        setStationInfo([]);
+        setStationInfo(null);
 
-        if(selectedStation.id) {
+        if(selectedStation) {
             getStationInfo(selectedStation.id)
             .then(data => setStationInfo(data));
         }
@@ -57,7 +59,7 @@ function App() {
                 setSelectedStation={setSelectedStation}
             />
 
-            <JourneyList className="overlay"
+            <JourneyList
                 offCanvas={offCanvas}
                 setOffCanvas={setOffCanvas}
                 departureStation={departureStation}
@@ -68,7 +70,7 @@ function App() {
                 setReturnStation={setReturnStation}
             />
 
-            <StationList className="overlay"
+            <StationList
                 stations={stations}
                 offCanvas={offCanvas}
                 setOffCanvas={setOffCanvas}
@@ -81,7 +83,8 @@ function App() {
                 <CurrentJourney
                     selectedStation={selectedStation}
                     departureStation={departureStation}
-                    returnStation={returnStation} />
+                    returnStation={returnStation} 
+                />
             </div>
         </div>
     );

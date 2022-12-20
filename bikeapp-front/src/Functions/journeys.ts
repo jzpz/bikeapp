@@ -1,16 +1,19 @@
+import { Journey } from "../Types/Journey";
+import { Station, StationType } from "../Types/Station";
+
 /**
  * @param {*} page page number
  * @param {*} selectedStation station object
- * @param {*} showDepartures show departures for selectedStation? true/false
+ * @param {*} selectedStationType is selected station arrival or return station of a journey?
  * @returns Journey promise
  */
-export function getJourneys(page, selectedStation, showDepartures = true) {
+export function getJourneys(page: any, selectedStation: Station, selectedStationType: StationType): Promise<Journey[]> {
     let url = `http://localhost:8080/journeys?page=${page}`;
 
     // Fetch journeys from the selected station
     // fetch all if no station is specified
-    if(selectedStation.id) {
-        if(showDepartures) {
+    if(selectedStation) {
+        if(selectedStationType === "departure") {
             url += "&departureStationId=" + selectedStation.id
         } else {
             url += "&returnStationId=" + selectedStation.id

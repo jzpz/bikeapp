@@ -1,3 +1,4 @@
+import React from "react";
 import { IoBicycle, IoTimeOutline, IoArrowForward } from 'react-icons/io5';
 import Button from 'react-bootstrap/Button';
 
@@ -6,7 +7,7 @@ export default function CurrentJourney ({
     departureStation, 
     returnStation, 
     selectedStation
-}) {
+}: any) {
 
     function ReturnStation() {
         if(departureStation.id !== returnStation.id) {
@@ -28,7 +29,7 @@ export default function CurrentJourney ({
             <div className="text-center" style={{margin:3, display:"inline-flex"}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
                 <h4>
-                    {selectedStation.id ? <>
+                    {selectedStation && selectedStation.id ? <>
                         <span className="departure-station" style={{fontWeight:"bold"}}>
                             {departureStation.nameLocaleFi}
                         </span>
@@ -40,7 +41,7 @@ export default function CurrentJourney ({
                     }
                 </h4>
             </div>
-            {selectedStation.id  &&
+            {selectedStation && selectedStation.id  &&
                 <div className="journey-line" />
             }
         </div>

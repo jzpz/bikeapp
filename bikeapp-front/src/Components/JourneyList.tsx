@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ButtonGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Pagination from 'react-bootstrap/Pagination';
 import { getJourneys } from '../Functions/journeys';
 import JourneyListItem from './JourneyListItem';
+import { Journey } from '../Types/Journey';
+import { Station, StationType } from '../Types/Station';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList({
@@ -16,39 +18,39 @@ export default function JourneyList({
     setDepartureStation, 
     setSelectedStation, 
     setReturnStation
-}) {
+}: any) {
     
-    const [journeys, setJourneys] = useState([]);
+    const [journeys, setJourneys] = useState<Journey[] | null>(null);
     const [page, setPage] = useState(0);
     // Show departures or returns?
-    const [showDepartures, setShowDepartures] = useState(true);
+    const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
 
     useEffect(() => {
-        setJourneys([])
-        getJourneys(page, selectedStation, showDepartures)
-        .then(data => setJourneys(data))
+        setJourneys(null)
+        getJourneys(page, selectedStation, selectedStationType)
+        .then((data: any) => setJourneys(data))
         .catch(e => console.log(e));
-    }, [selectedStation, showDepartures, page]);
+    }, [selectedStation, selectedStationType, page]);
 
     // Always show departures by default when selecting a station
     useEffect(() => {
-        setShowDepartures(true)
+        setSelectedStationType("departure");
     }, [selectedStation]);
 
     /* Follow when user changes between departures and arrivals
         and change the states accordingly */
     useEffect(() => {
-        if(showDepartures) {
+        if(selectedStationType === "departure") {
             setDepartureStation(returnStation);
             setReturnStation(departureStation);
         } else {
             setReturnStation(departureStation);
             setDepartureStation(returnStation);
         }
-    }, [showDepartures]);
+    }, [selectedStationType]);
 
-    function switchPage(page) {
-        let newPage;
+    function switchPage(page: number) {
+        let newPage: number;
         if(page < 0) newPage = 0;
         else newPage = page;
         setPage(newPage);
@@ -56,20 +58,24 @@ export default function JourneyList({
 
     // Make JSX list from array
     function List() {
-        const list = journeys.map((journey) => {
-            return(
-                <JourneyListItem
-                    key={journey.id}
-                    setSelectedStation={setSelectedStation}
-                    journey={journey}
-                    returnStation={returnStation}
-                    departureStation={departureStation} 
-                    setDepartureStation={setDepartureStation}
-                    setReturnStation={setReturnStation} 
-                    showDepartures={showDepartures} />
-            )
-        });
-        return <>{list}</>
+        if(journeys) {
+            const list = journeys.map((journey: any) => {
+                return(
+                    <JourneyListItem
+                        key={journey.id}
+                        setSelectedStation={setSelectedStation}
+                        journey={journey}
+                        returnStation={returnStation}
+                        departureStation={departureStation} 
+                        setDepartureStation={setDepartureStation}
+                        setReturnStation={setReturnStation} 
+                        selectedStationType={selectedStationType} />
+                )
+            });
+            return <>{list}</>
+        } else {
+            return <span>No journeys found</span>
+        }
     }
 
     return(
@@ -79,25 +85,25 @@ export default function JourneyList({
             
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-                {selectedStation.nameLocaleFi}
+                {selectedStation && selectedStation.nameLocaleFi}
                 <ButtonGroup>
                     <Button 
                         style={{backgroundColor: "#ff036c",border:"none"}}
-                        className={showDepartures ? "active" : ""}
-                        onClick={() => setShowDepartures(true)}>
+                        className={selectedStationType === "departure" ? "active" : ""}
+                        onClick={() => setSelectedStationType("departure")}>
                         Departures
                     </Button>
                     <Button 
                         style={{backgroundColor: "#1d63b8",border:"none"}}
-                        className={showDepartures ? "" : "active"}
-                        onClick={() => setShowDepartures(false)}>
+                        className={selectedStationType === "return" ? "active" : ""}
+                        onClick={() => setSelectedStationType("return")}>
                         Returns
                     </Button>
                 </ButtonGroup>
             </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                {journeys?.length > 0 &&
+                {journeys &&
                     <List />
                 }
                 <Pagination>

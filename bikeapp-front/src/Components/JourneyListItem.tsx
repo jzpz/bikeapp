@@ -1,3 +1,4 @@
+import React from "react";
 import { IoBicycle, IoTimeOutline, IoArrowForward } from 'react-icons/io5';
 import { formatDate, formatDistance, formatDuration } from '../Functions/formatValues';
 import { getStation } from '../Functions/stations';
@@ -10,8 +11,8 @@ export default function JourneyListItem ({
     returnStation, 
     setDepartureStation, 
     setReturnStation, 
-    showDepartures
-}) {
+    selectedStationType
+}: any) {
 
     function selectJourney() {
         if(departureStation.id !== journey.departureStationId) {
@@ -19,7 +20,7 @@ export default function JourneyListItem ({
             getStation(journey.departureStationId)
             .then(data => {
                 setDepartureStation(data)
-                if(showDepartures)
+                if(selectedStationType === "departure")
                     setSelectedStation(data)
             })
         }
@@ -29,7 +30,7 @@ export default function JourneyListItem ({
             getStation(journey.returnStationId)
             .then(data => {
                 setReturnStation(data)
-                if(!showDepartures)
+                if(selectedStationType === "return")
                     setSelectedStation(data)
             })
         }

@@ -1,4 +1,4 @@
-import { getStation } from "../Functions/stations"
+import React from "react";
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -6,6 +6,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { formatDistance } from "../Functions/formatValues";
+import { getStation } from "../Functions/stations";
+import { Station } from "../Types/Station";
 
 export default function Navigation({
     selectedStation, 
@@ -14,10 +16,10 @@ export default function Navigation({
     stationInfo, 
     setDepartureStation, 
     setReturnStation
-}) {
+}: any) {
 
     // Popular stations dropdown item
-    function PopularStationItem({station, isDepartureStation}) {
+    function PopularStationItem({station, isDepartureStation}: any) {
         return(
             <NavDropdown.Item 
                 key={station.id}
@@ -34,13 +36,13 @@ export default function Navigation({
                     })
                 }
             >
-                <span>{station.nameLocaleFi} </span>
+                <span>{station && station.nameLocaleFi} </span>
                 <span className="secondary">
-                    {station.nameLocaleSe}
+                    {station && station.nameLocaleSe}
                 </span>
                 <br/>
                 <span className="secondary">
-                    {station.journeyAmount} journeys
+                    {station && station.journeyAmount} journeys
                 </span>
             </NavDropdown.Item>
         )
@@ -55,7 +57,7 @@ export default function Navigation({
                     {/* Position left */}
                     {/* Station name */}
                     <Navbar.Brand>
-                        {selectedStation.id ? 
+                        {selectedStation && selectedStation.id ? 
                             <>
                                 <span>{selectedStation.nameLocaleFi} </span>
                                 <span className="secondary">
@@ -70,7 +72,7 @@ export default function Navigation({
                     {/* Position right */}
                     {/* Station address */}
                     <Navbar.Text>
-                        {selectedStation.addressLocaleFi}
+                        {selectedStation && selectedStation.addressLocaleFi}
                     </Navbar.Text>
 
                 </Container>
@@ -100,7 +102,7 @@ export default function Navigation({
                             </Button>
 
                             {/* Station info */}
-                            {selectedStation.id ?
+                            {selectedStation && selectedStation.id ?
                                 <>
                                 <NavDropdown title="Station info" id="collasible-nav-dropdown">
                                     <NavDropdown.Item>
@@ -110,7 +112,7 @@ export default function Navigation({
                                     <NavDropdown.Item>
                                         Starting from this station<br/>
                                         <span className="secondary">
-                                            {stationInfo.averageDistanceCoveredAsDepartureStation ?
+                                            {stationInfo && stationInfo.averageDistanceCoveredAsDepartureStation ?
                                                 formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
                                                 <Placeholder as="p" animation="wave">
                                                     <Placeholder xs={5} />
@@ -121,7 +123,7 @@ export default function Navigation({
                                     <NavDropdown.Item>
                                         Ending at this station<br/>
                                         <span className="secondary">
-                                            {stationInfo.averageDistanceCoveredAsReturnStation ?
+                                            {stationInfo && stationInfo.averageDistanceCoveredAsReturnStation ?
                                                 formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :
                                                 <Placeholder as="p" animation="wave">
                                                     <Placeholder xs={5} />
@@ -141,9 +143,10 @@ export default function Navigation({
                                         </span>
                                     </NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    {stationInfo.mostPopularReturnStations?.map((station) => {
+                                    {stationInfo && stationInfo.mostPopularReturnStations.map((station: Station) => {
                                         return(
                                             <PopularStationItem 
+                                                key={station.id}
                                                 station={station}
                                                 isDepartureStation={false} 
                                             /> 
@@ -161,9 +164,10 @@ export default function Navigation({
                                         </span>
                                     </NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    {stationInfo.mostPopularDepartureStations?.map((station) => {
+                                    {stationInfo && stationInfo.mostPopularDepartureStations?.map((station: Station) => {
                                         return(
                                             <PopularStationItem 
+                                                key={station.id}
                                                 station={station}
                                                 isDepartureStation={true} 
                                             /> 

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Station } from '../Types/Station';
 
 // An offcanvas view that contains all stations
 export default function StationList({
@@ -10,12 +11,12 @@ export default function StationList({
     setDepartureStation, 
     setReturnStation, 
     setSelectedStation
-}) {
+}: any) {
     const [filterWord, setFilterWord] = useState('');
 
     // Check station names for filter word
-    function filteredList(list) {
-        return list.filter(el => 
+    function filteredList(list: any) {
+        return list.filter((el: { nameLocaleFi: string; nameLocaleSe: string; }) => 
             el.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase()) ||
             el.nameLocaleSe.toLowerCase().includes(filterWord.toLowerCase())
         )
@@ -23,7 +24,7 @@ export default function StationList({
 
     // Make JSX list from array
     function List() {
-        const list = filteredList(stations).map((station, index) => {
+        const list = filteredList(stations).map((station: Station) => {
             return(
                 <div 
                     onClick={() => {
