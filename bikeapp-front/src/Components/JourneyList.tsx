@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ButtonGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -24,6 +25,7 @@ export default function JourneyList() {
     const [page, setPage] = useState(0);
     // Show departures or returns?
     const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
+    const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
 
     useEffect(() => {
         setJourneys(null)
@@ -38,11 +40,13 @@ export default function JourneyList() {
     // Always show departures by default when selecting a station
     useEffect(() => {
         setSelectedStationType("departure");
+        setSelectedStationType("departure");
     }, [selectedStation]);
 
     /* Follow when user changes between departures and arrivals
         and change the states accordingly */
     useEffect(() => {
+        if(selectedStationType === "departure") {
         if(selectedStationType === "departure") {
             setDepartureStation(returnStation);
             setReturnStation(departureStation);
@@ -51,7 +55,10 @@ export default function JourneyList() {
             setDepartureStation(returnStation);
         }
     }, [selectedStationType]);
+    }, [selectedStationType]);
 
+    function switchPage(page: number) {
+        let newPage: number;
     function switchPage(page: number) {
         let newPage: number;
         if(page < 0) newPage = 0;
@@ -85,6 +92,7 @@ export default function JourneyList() {
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>
                 {selectedStation && selectedStation.nameLocaleFi}
+                {selectedStation && selectedStation.nameLocaleFi}
                 <ButtonGroup>
                     <Button 
                         style={{backgroundColor: "#ff036c",border:"none"}}
@@ -104,6 +112,7 @@ export default function JourneyList() {
             </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
+                {journeys &&
                 {journeys &&
                     <List />
                 }
