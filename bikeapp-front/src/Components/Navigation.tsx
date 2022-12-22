@@ -62,7 +62,6 @@ export default function Navigation() {
                     {/* Station name */}
                     <Navbar.Brand>
                         {selectedStation && selectedStation.id ? 
-                        {selectedStation && selectedStation.id ? 
                             <>
                                 <span>{selectedStation.nameLocaleFi} </span>
                                 <span className="secondary">
@@ -77,7 +76,6 @@ export default function Navigation() {
                     {/* Position right */}
                     {/* Station address */}
                     <Navbar.Text>
-                        {selectedStation && selectedStation.addressLocaleFi}
                         {selectedStation && selectedStation.addressLocaleFi}
                     </Navbar.Text>
 
@@ -109,7 +107,6 @@ export default function Navigation() {
 
                             {/* Station info */}
                             {selectedStation && selectedStation.id ?
-                            {selectedStation && selectedStation.id ?
                                 <>
                                 <NavDropdown title="Station info" id="collasible-nav-dropdown">
                                     <NavDropdown.Item>
@@ -119,7 +116,6 @@ export default function Navigation() {
                                     <NavDropdown.Item>
                                         Starting from this station<br/>
                                         <span className="secondary">
-                                            {stationInfo && stationInfo.averageDistanceCoveredAsDepartureStation ?
                                             {stationInfo && stationInfo.averageDistanceCoveredAsDepartureStation ?
                                                 formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
                                                 <Placeholder as="p" animation="wave">
@@ -131,7 +127,6 @@ export default function Navigation() {
                                     <NavDropdown.Item>
                                         Ending at this station<br/>
                                         <span className="secondary">
-                                            {stationInfo && stationInfo.averageDistanceCoveredAsReturnStation ?
                                             {stationInfo && stationInfo.averageDistanceCoveredAsReturnStation ?
                                                 formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :
                                                 <Placeholder as="p" animation="wave">
