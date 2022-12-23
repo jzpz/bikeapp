@@ -1,4 +1,6 @@
-export function getStation(stationId) {
+import { Station, StationInfo } from "../Types/Station";
+
+export function getStation(stationId: string): Promise<Station> {
     return new Promise((resolve, reject) => {
         fetch(`http://localhost:8080/station/${stationId}`)
         .then((response) => response.json())
@@ -7,7 +9,7 @@ export function getStation(stationId) {
     })
 }
 
-export function getStations() {
+export function getStations(): Promise<Station[]> {
     return new Promise((resolve, reject) => {
         fetch(`http://localhost:8080/stations`)
         .then((response) => response.json())
@@ -20,7 +22,7 @@ export function getStations() {
  * @param {*} stationId
  * @returns station info (journey amount, average values, top stations)
  */
-export function getStationInfo(stationId) {
+export function getStationInfo(stationId: string): Promise<StationInfo> {
     let url = "http://localhost:8080/stationinfo"
     
     if(stationId) {

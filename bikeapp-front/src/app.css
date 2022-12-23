@@ -49,6 +49,7 @@ body {
     background-image: linear-gradient(to right, #ff036c, #1d63b8);
     margin-top: 5px;
     margin-bottom: 5px;
+    border-radius: 5px;
 }
 
 .journey-line.active {
