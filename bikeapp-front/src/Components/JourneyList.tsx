@@ -28,12 +28,12 @@ export default function JourneyList() {
     useEffect(() => {
         setJourneys(null)
 
-        if(selectedStation) {
+        if(selectedStation && offCanvas) {
             getJourneys(page, selectedStation, selectedStationType)
             .then((data: Journey[]) => setJourneys(data))
             .catch(e => console.log(e));
         }
-    }, [selectedStation, selectedStationType, page]);
+    }, [selectedStation, selectedStationType, page, offCanvas]);
 
     // Always show departures by default when selecting a station
     useEffect(() => {

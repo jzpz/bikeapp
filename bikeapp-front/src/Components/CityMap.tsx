@@ -1,5 +1,5 @@
 import { Map, Marker } from "pigeon-maps";
-import React, { useEffect } from "react";
+import React, { memo, ReactElement, useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
 import "../app.css";
 import { getStationInfo, getStations } from "../Functions/stations";
@@ -15,7 +15,8 @@ export default function CityMap() {
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
     const [stationInfo, setStationInfo] = useRecoilState<StationInfo | null>(stationInfoState);
 
-    // Initialize station list on start
+    const stationMapMemo = useMemo((): JSX.Element => <StationMap />, [stations, departureStation, returnStation])
+
     useEffect(() => {
         getStations()
         .then(data => setStations(data));
@@ -53,36 +54,47 @@ export default function CityMap() {
         }
     }
 
+    function StationMap() { 
+        if(!stations) return <></>
+        console.log("render")
+        return(
+            <Map 
+                height={window.innerHeight - 110} // Height excludin top nav
+                defaultZoom={12} 
+                minZoom={11} // Max zoom out distance
+                center={[60.21, 24.95]} // Default location to Helsinki
+                onClick={() => { // Remove marker highlights
+                    selectStation(null)
+                }}
+            >
+                {stations && stations.map((station: Station) => { // Get all stations and mark them
+                    
+                    return(
+                        <Marker 
+                            width={markerColor(station) ? 50 : 30} // Make current station larger in map
+                            anchor={[station.coordinateY, station.coordinateX]} 
+                            key={"station-marker" + station.id}
+                            onClick={() => {
+                                console.log(station.coordinateY, station.coordinateX, station.id)
+                                if(selectedStation && selectedStation.id === station.id) {
+                                    selectStation(null)
+                                } else {
+                                    selectStation(station)
+                                }
+                            }}
+                            color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
+                            className={markerColor(station) ? "active" : ""} // Add class to active station
+                            //onMouseOver={()=> } TODO: show station name
+                        ></Marker>
+                    )
+                })}
+            </Map>
+        )
+    }
+
     return (
-        <Map 
-            height={1000}
-            defaultZoom={12} 
-            minZoom={11} // Max zoom out distance
-            center={[60.21, 24.95]} // Default location to Helsinki
-            onClick={() => { // Remove marker highlights
-                selectStation(null)
-            }}
-        >
-            {stations && stations.map((station: Station) => { // Get all stations and mark them
-                console.log(station)
-                return(
-                    <Marker 
-                        width={markerColor(station) ? 50 : 30} // Make current station larger in map
-                        anchor={[station.coordinateY, station.coordinateX]} 
-                        key={"station-marker" + station.id}
-                        onClick={() => {
-                            if(selectedStation && selectedStation.id === station.id) {
-                                selectStation(null)
-                            } else {
-                                selectStation(station)
-                            }
-                        }}
-                        color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
-                        className={markerColor(station) ? "active" : ""} // Add class to active station
-                        //onMouseOver={()=> } TODO: show station name
-                    />
-                )
-            })}
-        </Map>
+        <div>
+            {stationMapMemo}
+        </div>
     )
 }
