@@ -1,7 +1,6 @@
-import { Map, Marker } from "pigeon-maps";
-import React, { memo, ReactElement, useCallback, useEffect, useMemo, useState } from "react";
-import { useRecoilState } from "recoil";
-import "../app.css";
+import { Map, Marker, Overlay } from "pigeon-maps";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { getStationInfo, getStations } from "../Functions/stations";
 import { stationsState, selectedStationState, departureStationState, returnStationState, stationInfoState } from "../GlobalStates";
 import { Station, StationInfo } from "../Types/Station";
@@ -13,13 +12,18 @@ export default function CityMap() {
     const [selectedStation, setSelectedStation] = useRecoilState<Station | null>(selectedStationState);
     const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
-    const [stationInfo, setStationInfo] = useRecoilState<StationInfo | null>(stationInfoState);
+    const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
+
+    const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95 ] as [number, number]});
+    const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
 
     const stationMapMemo = useMemo((): JSX.Element => <StationMap />, [stations, departureStation, returnStation])
 
     useEffect(() => {
         getStations()
-        .then(data => setStations(data));
+        .then(data => {
+            setStations(data);
+        });
     }, []);
 
     // Fetch station info (avg journeys, top stations) on station select
@@ -55,39 +59,69 @@ export default function CityMap() {
     }
 
     function StationMap() { 
-        if(!stations) return <></>
-        console.log("render")
+        if(!stations) 
+            return <span>Loading map...</span>
+
         return(
+            // Need to rerender the map on station change, otherwise markers dont work
             <Map 
-                height={window.innerHeight - 110} // Height excludin top nav
-                defaultZoom={12} 
+                height={window.innerHeight - 110} // Height excluding top nav
+                defaultZoom={currentMapSettings.zoom} 
                 minZoom={11} // Max zoom out distance
-                center={[60.21, 24.95]} // Default location to Helsinki
-                onClick={() => { // Remove marker highlights
+                center={currentMapSettings.center}
+                onClick={() => {
                     selectStation(null)
                 }}
+                onBoundsChanged={(e) => { // Keep the settings when map rerenders
+                    setCurrentMapSettings({...currentMapSettings, zoom: e.zoom, center: e.center})
+                }}
             >
-                {stations && stations.map((station: Station) => { // Get all stations and mark them
-                    
-                    return(
-                        <Marker 
-                            width={markerColor(station) ? 50 : 30} // Make current station larger in map
-                            anchor={[station.coordinateY, station.coordinateX]} 
-                            key={"station-marker" + station.id}
-                            onClick={() => {
-                                console.log(station.coordinateY, station.coordinateX, station.id)
-                                if(selectedStation && selectedStation.id === station.id) {
-                                    selectStation(null)
-                                } else {
-                                    selectStation(station)
-                                }
-                            }}
-                            color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
-                            className={markerColor(station) ? "active" : ""} // Add class to active station
-                            //onMouseOver={()=> } TODO: show station name
-                        ></Marker>
-                    )
-                })}
+                {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
+                    <Marker 
+                        width={markerColor(station) ? 50 : 30} // Make current station larger in map
+                        anchor={[station.coordinateY, station.coordinateX]} 
+                        key={"station-marker" + station.id}
+                        onClick={() => {
+                            if(selectedStation && selectedStation.id === station.id) {
+                                selectStation(null)
+                                stationInfoboxRefs.current[i].style.display = "none";
+                            } else {
+                                selectStation(station)
+                                stationInfoboxRefs.current[i].style.display = "block";
+                            }
+                        }}
+                        color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
+                        className={markerColor(station) ? "active" : ""} // Add class to active station
+                        onMouseOver={() => {
+                            stationInfoboxRefs.current[i].style.display = "block";
+                        }}
+                        onMouseOut={() => {
+                            stationInfoboxRefs.current[i].style.display = "none";
+                        }}
+                    />
+                )}
+
+                {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
+                    <Overlay 
+                        anchor={[station.coordinateY, station.coordinateX]}
+                        key={"station-infobox" + station.id}
+                    >
+                        <div 
+                            id={"station-infobox" + station.id}
+                            className="selected-station-info"
+                            ref={(el: HTMLDivElement) => stationInfoboxRefs.current[i] = el}
+                        >
+                            {station.nameLocaleFi}&nbsp;
+                            <span className="secondary">
+                                {station.nameLocaleSe}
+                            </span>
+                            <br/>
+                            <span className="secondary">
+                                {station.addressLocaleFi}
+                            </span>
+                        </div>
+                    </Overlay>
+                )}
             </Map>
         )
     }

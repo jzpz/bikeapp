@@ -32,7 +32,7 @@ export default function CurrentJourney () {
         <div className="journey-item">
             <div className="text-center" style={{margin:3, display:"inline-flex"}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
-                <h4>
+                <h4 style={{marginBottom:0}}>
                     {selectedStation && selectedStation.id ? <>
                         <span className="departure-station" style={{fontWeight:"bold"}}>
                             {departureStation?.nameLocaleFi}

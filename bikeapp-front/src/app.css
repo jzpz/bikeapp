@@ -1,3 +1,7 @@
+:root {
+    --background-hover: rgb(243, 243, 243);
+}
+
 .App {
     text-align: center;
     width: 100%;
@@ -21,10 +25,6 @@ body {
     font-family: Arial, Helvetica, sans-serif!important;
 }
 
-.top-nav {
-    height: 60px;
-}
-
 .list-item.station {
     padding: 15px;
 }
@@ -34,7 +34,7 @@ body {
 }
 
 .list-item:hover {
-    background-color: rgb(243, 243, 243);
+    background-color: var(--background-hover);
     cursor: pointer;
 }
 
@@ -49,6 +49,7 @@ body {
     background-image: linear-gradient(to right, #ff036c, #1d63b8);
     margin-top: 5px;
     margin-bottom: 5px;
+    border-radius: 5px;
 }
 
 .journey-line.active {
@@ -79,5 +80,16 @@ button.active, button:hover {
     margin-left: auto; 
     margin-right: auto; 
     border-radius: 35px;
-    border: 1px solid rgb(211, 211, 211);
+    border: 1px solid rgba(211, 211, 211);
+}
+
+.selected-station-info {
+    background-color: rgba(255, 255, 255, 0.822);
+    border-radius: 10px;
+    padding: 10px;
+    display: none;
+}
+
+div.selected-station-info:hover {
+    background-color: var(--background-hover);
 }

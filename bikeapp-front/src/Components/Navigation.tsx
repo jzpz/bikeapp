@@ -55,7 +55,7 @@ export default function Navigation() {
     // Navbar for station name and address
     function FirstNavbar() {
         return(
-            <Navbar bg="dark" variant="dark" className="top-nav">
+            <Navbar bg="dark" variant="dark" className="top-nav" style={{height:50}}>
                 <Container fluid>
 
                     {/* Position left */}
@@ -87,7 +87,7 @@ export default function Navigation() {
     // Navbar for station info and buttons
     function SecondNavbar() {
         return(
-            <Navbar bg="light" className="top-nav">
+            <Navbar bg="light" className="top-nav" style={{height:60}}>
                 <Container fluid>
                     <Navbar.Toggle />
                     <Navbar.Collapse id="responsive-navbar-nav">
