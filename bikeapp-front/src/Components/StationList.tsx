@@ -20,41 +20,40 @@ export default function StationList() {
 
     // Check station names for filter word
     function filteredList(list: Station[]) {
-        return list.filter((el: Station) => 
-            el.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase()) ||
-            el.nameLocaleSe.toLowerCase().includes(filterWord.toLowerCase())
+        return list.filter((station: Station) => 
+            station.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase()) ||
+            station.nameLocaleSe.toLowerCase().includes(filterWord.toLowerCase())
         )
     }
 
     // Make JSX list from array
     function List() {
         if(stations) {
-
-            const list = filteredList(stations).map((station: Station) => {
-                return(
-                    <div 
-                        onClick={() => {
-                            setSelectedStation(station)
-                            setDepartureStation(station)
-                            setReturnStation(station)
-                            setOffCanvas({...offCanvas, stations: false})
-                        }}
-                        key={"station-list-item" + station.id} 
-                        className="list-item station">
-                        <span>{station.nameLocaleFi} </span>
-                        <span className="secondary">{station.nameLocaleSe}</span>
-                    </div>
-                )
-            });
-            return <>{list}</>
-
-        } else {
-            return(
-                <span>
-                    No stations match the specified filter
-                </span>
+            const list = filteredList(stations).map((station: Station) => 
+                <div 
+                    onClick={() => {
+                        setSelectedStation(station)
+                        setDepartureStation(station)
+                        setReturnStation(station)
+                        setOffCanvas({...offCanvas, stations: false})
+                    }}
+                    key={"station-list-item" + station.id} 
+                    className="list-item station">
+                    <span>{station.nameLocaleFi} </span>
+                    <span className="secondary">{station.nameLocaleSe}</span>
+                </div>
             )
+
+            if(list.length > 0) {
+                return <>{list}</>
+            }
         }
+
+        return(
+            <span>
+                No stations match the specified filter
+            </span>
+        )
     }
 
     return(
@@ -81,11 +80,9 @@ export default function StationList() {
                         placeholder="Type station name" 
                     />
                 </Form.Group>
-                {stations && stations.length > 0 &&
-                    <List />
-                }
-            </Offcanvas.Body>
 
+                <List />
+            </Offcanvas.Body>
         </Offcanvas>
     )
 }

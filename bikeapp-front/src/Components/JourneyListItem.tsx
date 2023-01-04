@@ -53,7 +53,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
             <div className="text-center" style={{padding:3}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
                 <span 
-                    className={`${journey.departureStationId === departureStation?.id ? "departure-station" : ""}`} 
+                    className={journey.departureStationId === departureStation?.id ? "departure-station" : ""} 
                     style={{fontWeight:"bold"}}
                 >
                     {journey.departureStationName}

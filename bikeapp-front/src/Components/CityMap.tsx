@@ -14,16 +14,16 @@ export default function CityMap() {
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
 
+    const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95 ] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
 
-    const stationMapMemo = useMemo((): JSX.Element => <StationMap />, [stations, departureStation, returnStation])
+    const stationMapMemo = useMemo(() => <StationMap />, [stations, departureStation, returnStation]);
 
     useEffect(() => {
         getStations()
-        .then(data => {
-            setStations(data);
-        });
+        .then(data => setStations(data))
+        .catch(e => setError(e));
     }, []);
 
     // Fetch station info (avg journeys, top stations) on station select
@@ -32,7 +32,8 @@ export default function CityMap() {
 
         if(selectedStation) {
             getStationInfo(selectedStation.id)
-            .then(data => setStationInfo(data));
+            .then(data => setStationInfo(data))
+            .catch(e => setError(e));
         }
     }, [selectedStation]);
 
@@ -46,7 +47,7 @@ export default function CityMap() {
         return null;
     }
 
-    function selectStation(station: Station | null): void {
+    function selectStation(station: Station | null) {
         if(station) {
             setSelectedStation(station);
             setDepartureStation(station);
@@ -59,8 +60,12 @@ export default function CityMap() {
     }
 
     function StationMap() { 
-        if(!stations) 
-            return <span>Loading map...</span>
+        if(!stations) {
+            if(!error) 
+                return <span>Loading map...</span>
+            else 
+                return <span>An error occurred while loading the map: {error}</span>
+        }
 
         return(
             // Need to rerender the map on station change, otherwise markers dont work
@@ -84,10 +89,8 @@ export default function CityMap() {
                         onClick={() => {
                             if(selectedStation && selectedStation.id === station.id) {
                                 selectStation(null)
-                                stationInfoboxRefs.current[i].style.display = "none";
                             } else {
                                 selectStation(station)
-                                stationInfoboxRefs.current[i].style.display = "block";
                             }
                         }}
                         color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations

@@ -1,5 +1,5 @@
 import React from "react";
-import { IoBicycle, IoTimeOutline, IoArrowForward } from 'react-icons/io5';
+import { IoArrowForward } from 'react-icons/io5';
 import { departureStationState, returnStationState, selectedStationState } from "../GlobalStates";
 import { useRecoilValue } from 'recoil';
 import { Station } from "../Types/Station";
@@ -12,32 +12,29 @@ export default function CurrentJourney () {
     const departureStation = useRecoilValue<Station | null>(departureStationState);
     const returnStation = useRecoilValue<Station | null>(returnStationState);
 
-    function ReturnStation() {
-        if(departureStation && returnStation 
-        && departureStation.id !== returnStation.id) {
-            return(
-                <>
-                    <IoArrowForward size={26} style={{marginRight:5,marginLeft:5,marginBottom:3}} />
-                    <span className="return-station" style={{fontWeight:"bold"}}>
-                        {returnStation.nameLocaleFi}
-                    </span>
-                </>
-            )
-        } 
-
-        return null;
-    }
+    const ReturnStation = () => (
+        <>
+            <IoArrowForward size={26} style={{marginRight:5,marginLeft:5,marginBottom:3}} />
+            <span className="return-station" style={{fontWeight:"bold"}}>
+                {returnStation?.nameLocaleFi}
+            </span>
+        </>
+    )
 
     return(
         <div className="journey-item">
             <div className="text-center" style={{margin:3, display:"inline-flex"}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
                 <h4 style={{marginBottom:0}}>
-                    {selectedStation && selectedStation.id ? <>
-                        <span className="departure-station" style={{fontWeight:"bold"}}>
-                            {departureStation?.nameLocaleFi}
-                        </span>
-                        <ReturnStation />
+                    {selectedStation ? <>
+                        {departureStation && <>
+                            <span className="departure-station" style={{fontWeight:"bold"}}>
+                                {departureStation?.nameLocaleFi}
+                            </span>
+                            {returnStation && departureStation.id !== returnStation.id &&
+                                <ReturnStation />
+                            }
+                        </>}
                     </>:
                         <span>
                             Click a marker on the map
@@ -45,7 +42,7 @@ export default function CurrentJourney () {
                     }
                 </h4>
             </div>
-            {selectedStation && selectedStation.id  &&
+            {selectedStation &&
                 <div className="journey-line" />
             }
         </div>

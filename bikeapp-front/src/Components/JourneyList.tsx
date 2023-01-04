@@ -22,16 +22,21 @@ export default function JourneyList() {
 
     const [journeys, setJourneys] = useState<Journey[] | null>(null);
     const [page, setPage] = useState(0);
-    // Show departures or returns?
     const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
 
     useEffect(() => {
         setJourneys(null)
 
-        if(selectedStation && offCanvas) {
-            getJourneys(page, selectedStation, selectedStationType)
-            .then((data: Journey[]) => setJourneys(data))
-            .catch(e => console.log(e));
+        if(offCanvas) {
+            if(selectedStation) {
+                getJourneys(page, selectedStation, selectedStationType)
+                .then((data: Journey[]) => setJourneys(data))
+                .catch(e => console.log(e));
+            } else {
+                getJourneys(page)
+                .then((data: Journey[]) => setJourneys(data))
+                .catch(e => console.log(e));
+            }
         }
     }, [selectedStation, selectedStationType, page, offCanvas]);
 
@@ -40,8 +45,6 @@ export default function JourneyList() {
         setSelectedStationType("departure");
     }, [selectedStation]);
 
-    /* Follow when user changes between departures and arrivals
-        and change the states accordingly */
     useEffect(() => {
         if(selectedStationType === "departure") {
             setDepartureStation(returnStation);
@@ -84,10 +87,14 @@ export default function JourneyList() {
             
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-                {selectedStation && selectedStation.nameLocaleFi}
+                {selectedStation && selectedStation.nameLocaleFi}&nbsp;
+                <span className="secondary">
+                    {selectedStation?.nameLocaleSe}
+                </span>
+                <hr />
                 <ButtonGroup>
                     <Button 
-                        style={{backgroundColor: "#ff036c",border:"none"}}
+                        style={{backgroundColor: "#ff036c",border:"none",marginRight:10}}
                         className={selectedStationType === "departure" ? "active" : ""}
                         onClick={() => setSelectedStationType("departure")}
                     >
@@ -104,24 +111,25 @@ export default function JourneyList() {
             </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
+                <List />
+
                 {journeys &&
-                    <List />
+                    <Pagination>
+                        <Pagination.Prev onClick={() => switchPage(page - 1)} />
+                        {page > 1 &&
+                            <Pagination.Item onClick={() => switchPage(page - 2)}>{page - 2}</Pagination.Item>
+                        }
+                        {page > 0 &&
+                            <Pagination.Item onClick={() => switchPage(page - 1)}>{page - 1}</Pagination.Item>
+                        }
+                        <Pagination.Item active>
+                            {page}
+                        </Pagination.Item>
+                        <Pagination.Item onClick={() => switchPage(page + 1)}>{page + 1}</Pagination.Item>
+                        <Pagination.Item onClick={() => switchPage(page + 2)}>{page + 2}</Pagination.Item>
+                        <Pagination.Next onClick={() => switchPage(page + 1)} />
+                    </Pagination>
                 }
-                <Pagination>
-                    <Pagination.Prev onClick={() => switchPage(page - 1)} />
-                    {page > 1 &&
-                        <Pagination.Item onClick={() => switchPage(page - 2)}>{page - 2}</Pagination.Item>
-                    }
-                    {page > 0 &&
-                        <Pagination.Item onClick={() => switchPage(page - 1)}>{page - 1}</Pagination.Item>
-                    }
-                    <Pagination.Item active>
-                        {page}
-                    </Pagination.Item>
-                    <Pagination.Item onClick={() => switchPage(page + 1)}>{page + 1}</Pagination.Item>
-                    <Pagination.Item onClick={() => switchPage(page + 2)}>{page + 2}</Pagination.Item>
-                    <Pagination.Next onClick={() => switchPage(page + 1)} />
-                </Pagination>
             </Offcanvas.Body>
         </Offcanvas>
     )

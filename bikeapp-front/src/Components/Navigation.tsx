@@ -22,184 +22,177 @@ export default function Navigation() {
     const stationInfo = useRecoilValue<StationInfo | null>(stationInfoState);
 
     // Popular stations dropdown item
-    function PopularStationItem({stationPopularity, selectedStationType}: PopularStationItemProps) {
-
-        return(
-            <NavDropdown.Item 
-                key={"popular-station-" + selectedStationType + stationPopularity.id}
-                onClick={() => 
-                    getStation(stationPopularity.id)
-                    .then(data => {
-                        if(selectedStationType === "departure") {
-                            setDepartureStation(data);
-                            setReturnStation(selectedStation);
-                        } else { // return station
-                            setReturnStation(data)
-                            setDepartureStation(selectedStation)
-                        }
-                    })
-                }
-            >
-                <span>{stationPopularity.nameLocaleFi} </span>
-                <span className="secondary">
-                    {stationPopularity.nameLocaleSe}
-                </span>
-                <br/>
-                <span className="secondary">
-                    {stationPopularity.journeyAmount} journeys
-                </span>
-            </NavDropdown.Item>
-        )
-    }
+    const PopularStationItem = ({stationPopularity, selectedStationType}: PopularStationItemProps) => (
+        <NavDropdown.Item 
+            key={"popular-station-" + selectedStationType + stationPopularity.id}
+            onClick={() => 
+                getStation(stationPopularity.id)
+                .then(data => {
+                    if(selectedStationType === "departure") {
+                        setDepartureStation(data);
+                        setReturnStation(selectedStation);
+                    } else { // return station
+                        setReturnStation(data)
+                        setDepartureStation(selectedStation)
+                    }
+                })
+            }
+        >
+            <span>{stationPopularity.nameLocaleFi} </span>
+            <span className="secondary">
+                {stationPopularity.nameLocaleSe}
+            </span>
+            <br/>
+            <span className="secondary">
+                {stationPopularity.journeyAmount} journeys
+            </span>
+        </NavDropdown.Item>
+    )
 
     // Navbar for station name and address
-    function FirstNavbar() {
-        return(
-            <Navbar bg="dark" variant="dark" className="top-nav" style={{height:50}}>
-                <Container fluid>
+    const FirstNavbar = () => (
+        <Navbar bg="dark" variant="dark" className="top-nav" style={{height:50}}>
+            <Container fluid>
 
-                    {/* Position left */}
-                    {/* Station name */}
-                    <Navbar.Brand>
-                        {selectedStation && selectedStation.id ? 
-                            <>
-                                <span>{selectedStation.nameLocaleFi} </span>
-                                <span className="secondary">
-                                    {selectedStation.nameLocaleSe}
-                                </span>
-                            </> : <>
-                                <span>No station selected</span>
-                            </>
-                        }
-                    </Navbar.Brand>
+                {/* Position left */}
+                {/* Station name */}
+                <Navbar.Brand>
+                    {selectedStation && selectedStation.id ? 
+                        <>
+                            <span>{selectedStation.nameLocaleFi} </span>
+                            <span className="secondary">
+                                {selectedStation.nameLocaleSe}
+                            </span>
+                        </> : <>
+                            <span>No station selected</span>
+                        </>
+                    }
+                </Navbar.Brand>
 
-                    {/* Position right */}
-                    {/* Station address */}
-                    <Navbar.Text>
-                        {selectedStation && selectedStation.addressLocaleFi}
-                    </Navbar.Text>
+                {/* Position right */}
+                {/* Station address */}
+                <Navbar.Text>
+                    {selectedStation && selectedStation.addressLocaleFi}
+                </Navbar.Text>
 
-                </Container>
-            </Navbar>
-        )
-    }
+            </Container>
+        </Navbar>
+    )
 
     // Navbar for station info and buttons
-    function SecondNavbar() {
-        return(
-            <Navbar bg="light" className="top-nav" style={{height:60}}>
-                <Container fluid>
-                    <Navbar.Toggle />
-                    <Navbar.Collapse id="responsive-navbar-nav">
+    const SecondNavbar = () => (
+        <Navbar bg="light" className="top-nav" style={{height:60}}>
+            <Container fluid>
+                <Navbar.Toggle />
+                <Navbar.Collapse id="responsive-navbar-nav">
 
-                        {/* Position left */}
-                        <Nav className="me-auto"> 
+                    {/* Position left */}
+                    <Nav className="me-auto"> 
 
-                            {/* View journeys button */}
-                            <Button 
-                                className="overlay" 
-                                variant="success" 
-                                onClick={() => {setOffCanvas({...offCanvas, journeys: true})}}
-                                style={{backgroundColor:"#02a35d",border:"none",marginRight:10}}
-                            >
-                                View Journeys
-                            </Button>
+                        {/* View journeys button */}
+                        <Button 
+                            className="overlay" 
+                            variant="success" 
+                            onClick={() => {setOffCanvas({...offCanvas, journeys: true})}}
+                            style={{backgroundColor:"#02a35d",border:"none",marginRight:10}}
+                        >
+                            View Journeys
+                        </Button>
 
-                            {/* Station info */}
-                            {selectedStation && selectedStation.id ?
-                                <>
-                                <NavDropdown title="Station info" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item>
-                                        Average journey distance
-                                        <NavDropdown.Divider />
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        Starting from this station<br/>
-                                        <span className="secondary">
-                                            {stationInfo && stationInfo.averageDistanceCoveredAsDepartureStation ?
-                                                formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
-                                                <Placeholder as="p" animation="wave">
-                                                    <Placeholder xs={5} />
-                                                </Placeholder>
-                                            }
-                                        </span>
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        Ending at this station<br/>
-                                        <span className="secondary">
-                                            {stationInfo && stationInfo.averageDistanceCoveredAsReturnStation ?
-                                                formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :
-                                                <Placeholder as="p" animation="wave">
-                                                    <Placeholder xs={5} />
-                                                </Placeholder>
-                                            }
-                                        </span>
-                                    </NavDropdown.Item>
-                                </NavDropdown>
-
-                                {/* Most popular departure stations */}
-                                <NavDropdown title="Departures" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item>
-                                        Most popular departure stations<br/>
-                                        for&nbsp;
-                                        <span className="return-station">
-                                            {selectedStation.nameLocaleFi}
-                                        </span>
-                                    </NavDropdown.Item>
+                        {/* Station info */}
+                        {selectedStation && selectedStation.id ?
+                            <>
+                            <NavDropdown title="Station Info" id="collasible-nav-dropdown">
+                                <NavDropdown.Item>
+                                    Average journey distance
                                     <NavDropdown.Divider />
-                                    {stationInfo && stationInfo.mostPopularReturnStations.map((stationPopularity: StationPopularity) => {
-                                        return(
-                                            <PopularStationItem 
-                                                key={"popular-return-station" + stationPopularity.id}
-                                                stationPopularity={stationPopularity}
-                                                selectedStationType={"return"} 
-                                            /> 
-                                        )
-                                    })}
-                                </NavDropdown>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    Starting from this station<br/>
+                                    <span className="secondary">
+                                        {stationInfo && stationInfo.averageDistanceCoveredAsDepartureStation ?
+                                            formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
+                                            <Placeholder as="p" animation="wave">
+                                                <Placeholder xs={5} />
+                                            </Placeholder>
+                                        }
+                                    </span>
+                                </NavDropdown.Item>
+                                <NavDropdown.Item>
+                                    Ending at this station<br/>
+                                    <span className="secondary">
+                                        {stationInfo && stationInfo.averageDistanceCoveredAsReturnStation ?
+                                            formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :
+                                            <Placeholder as="p" animation="wave">
+                                                <Placeholder xs={5} />
+                                            </Placeholder>
+                                        }
+                                    </span>
+                                </NavDropdown.Item>
+                            </NavDropdown>
 
-                                {/* Most popular return stations */}
-                                <NavDropdown title="Arrivals" id="collasible-nav-dropdown">
-                                    <NavDropdown.Item>
-                                        Most popular arrival stations <br/>
-                                        for&nbsp;
-                                        <span className="departure-station">
-                                            {selectedStation.nameLocaleFi}
-                                        </span>
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    {stationInfo && stationInfo.mostPopularDepartureStations?.map((stationPopularity: StationPopularity) => {
-                                        return(
-                                            <PopularStationItem 
-                                                key={"popular-departure-station" + stationPopularity.id}
-                                                stationPopularity={stationPopularity}
-                                                selectedStationType={"departure"} 
-                                            /> 
-                                        )
-                                    })}
-                                </NavDropdown>
-                                </>
-                            : null}
-                        </Nav>
-                        
-                        {/* Position right */}
-                        <Nav>
-                            {/* Change station button */}
-                            <Button 
-                                className="overlay" 
-                                variant="dark" 
-                                onClick={() => setOffCanvas({...offCanvas, stations: true})}
-                                style={{backgroundColor:"#66aacc", border:"none"}}
-                            >
-                                Change station
-                            </Button>
-                        </Nav>
+                            {/* Most popular departure stations */}
+                            <NavDropdown title="Departure Stations" id="collasible-nav-dropdown">
+                                <NavDropdown.Item>
+                                    Most popular departure stations<br/>
+                                    for&nbsp;
+                                    <span className="return-station">
+                                        {selectedStation.nameLocaleFi}
+                                    </span>
+                                </NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                {stationInfo && stationInfo.mostPopularReturnStations.map((stationPopularity: StationPopularity) => {
+                                    return(
+                                        <PopularStationItem 
+                                            key={"popular-return-station" + stationPopularity.id}
+                                            stationPopularity={stationPopularity}
+                                            selectedStationType={"return"} 
+                                        /> 
+                                    )
+                                })}
+                            </NavDropdown>
 
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        )
-    }
+                            {/* Most popular return stations */}
+                            <NavDropdown title="Arrival Stations" id="collasible-nav-dropdown">
+                                <NavDropdown.Item>
+                                    Most popular arrival stations <br/>
+                                    for&nbsp;
+                                    <span className="departure-station">
+                                        {selectedStation.nameLocaleFi}
+                                    </span>
+                                </NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                {stationInfo && stationInfo.mostPopularDepartureStations?.map((stationPopularity: StationPopularity) => {
+                                    return(
+                                        <PopularStationItem 
+                                            key={"popular-departure-station" + stationPopularity.id}
+                                            stationPopularity={stationPopularity}
+                                            selectedStationType={"departure"} 
+                                        /> 
+                                    )
+                                })}
+                            </NavDropdown>
+                            </>
+                        : null}
+                    </Nav>
+                    
+                    {/* Position right */}
+                    <Nav>
+                        {/* Change station button */}
+                        <Button 
+                            className="overlay" 
+                            variant="dark" 
+                            onClick={() => setOffCanvas({...offCanvas, stations: true})}
+                            style={{backgroundColor:"#66aacc", border:"none"}}
+                        >
+                            Change station
+                        </Button>
+                    </Nav>
+
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
+    )
 
     return(
         <div id="navigation">
