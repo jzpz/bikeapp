@@ -1,7 +1,7 @@
 import React from "react";
 import { IoBicycle, IoTimeOutline, IoArrowForward } from 'react-icons/io5';
 import { useRecoilState } from "recoil";
-import { formatDate, formatDistance, formatDuration } from '../Functions/formatValues';
+import { formatDateString, formatDistance, formatDuration } from '../Functions/formatValues';
 import { getStation } from '../Functions/stations';
 import { selectedStationState, departureStationState, returnStationState } from "../GlobalStates";
 import { JourneyListItemProps } from "../Types/App";
@@ -45,7 +45,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
             {/* Departure date */}
             <div>
                 <span className="secondary" title="Departed at">
-                    {formatDate(journey.departureDate)}
+                    {formatDateString(journey.departureDate)}
                 </span>
             </div>
 

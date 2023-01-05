@@ -1,12 +1,24 @@
 /**
  * @param {*} date ISO datetime
- * @returns formatted datetime string y-d-m h.m
+ * @returns formatted datetime string y-m-d h.m
  */
-export function formatDate(date: string): string {
+export function formatDateString(date: string): string {
     return (
         date.substring(0, 10) + " " + 
         date.substring(11, 16).replaceAll(":", '.')
     );
+}
+
+/**
+ * @param date 
+ * @returns date as y-m-d
+ */
+export function dateToString(date: Date): string {
+    let year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+
+    return(year + "-" + month + "-" + day)
 }
 
 /**

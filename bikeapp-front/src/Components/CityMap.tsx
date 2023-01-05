@@ -1,8 +1,16 @@
 import { Map, Marker, Overlay } from "pigeon-maps";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { getStationInfo, getStations } from "../Functions/stations";
-import { stationsState, selectedStationState, departureStationState, returnStationState, stationInfoState } from "../GlobalStates";
+import { 
+    stationsState, 
+    selectedStationState, 
+    departureStationState, 
+    returnStationState, 
+    stationInfoState,
+    dateFromState,
+    dateToState, 
+} from "../GlobalStates";
 import { Station, StationInfo } from "../Types/Station";
 
 export default function CityMap() {
@@ -12,6 +20,9 @@ export default function CityMap() {
     const [selectedStation, setSelectedStation] = useRecoilState<Station | null>(selectedStationState);
     const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
+    const dateFrom = useRecoilValue<Date | null>(dateFromState);
+    const dateTo = useRecoilValue<Date | null>(dateToState);
+    
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
 
     const [error, setError] = useState<string | null>(null);
@@ -35,7 +46,7 @@ export default function CityMap() {
             .then(data => setStationInfo(data))
             .catch(e => setError(e));
         }
-    }, [selectedStation]);
+    }, [selectedStation, dateFrom, dateTo]);
 
     // Determines if a marker is departure/return station and returns color or null
     function markerColor(station: Station | null): string | null {

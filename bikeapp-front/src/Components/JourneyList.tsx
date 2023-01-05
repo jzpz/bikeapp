@@ -5,10 +5,17 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Pagination from 'react-bootstrap/Pagination';
 import { getJourneys } from '../Functions/journeys';
 import JourneyListItem from './JourneyListItem';
-import { Journey } from '../Types/Journey';
+import { Journey, JourneyParams } from '../Types/Journey';
 import { Station, StationType } from '../Types/Station';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { offCanvasState, selectedStationState, departureStationState, returnStationState } from '../GlobalStates';
+import { 
+    offCanvasState, 
+    selectedStationState, 
+    departureStationState, 
+    returnStationState,
+    dateFromState,
+    dateToState, 
+} from '../GlobalStates';
 import { OffCanvasStatus } from '../Types/App';
 
 // An offcanvas view that contains all journeys
@@ -19,33 +26,51 @@ export default function JourneyList() {
     const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
     const selectedStation = useRecoilValue<Station | null>(selectedStationState);
+    const dateFrom = useRecoilValue<Date | null>(dateFromState);
+    const dateTo = useRecoilValue<Date | null>(dateToState);
 
     const [journeys, setJourneys] = useState<Journey[] | null>(null);
     const [page, setPage] = useState(0);
     const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
 
     useEffect(() => {
-        setJourneys(null)
-
         if(offCanvas) {
-            if(selectedStation) {
-                getJourneys(page, selectedStation, selectedStationType)
-                .then((data: Journey[]) => setJourneys(data))
-                .catch(e => console.log(e));
-            } else {
-                getJourneys(page)
-                .then((data: Journey[]) => setJourneys(data))
-                .catch(e => console.log(e));
-            }
-        }
-    }, [selectedStation, selectedStationType, page, offCanvas]);
+            let params: JourneyParams = {
+                page: page,
+            };
 
-    // Always show departures by default when selecting a station
+            if(selectedStation)
+                params = {
+                    ...params, 
+                    selectedStation: selectedStation, 
+                    selectedStationType: selectedStationType,
+                }
+
+            if(dateFrom && dateTo) 
+                params = {
+                    ...params,
+                    dateFrom: dateFrom,
+                    dateTo: dateTo,
+                }
+
+            getJourneys(params)
+            .then((data: Journey[]) => setJourneys(data))
+            .catch(e => console.log(e));
+        }
+    }, [selectedStation, selectedStationType, page, offCanvas, dateFrom, dateTo]);
+
+    // Reset values on station change
     useEffect(() => {
+        setJourneys(null)
+        setPage(0)
+        
         setSelectedStationType("departure");
     }, [selectedStation]);
 
     useEffect(() => {
+        setJourneys(null)
+        setPage(0)
+
         if(selectedStationType === "departure") {
             setDepartureStation(returnStation);
             setReturnStation(departureStation);

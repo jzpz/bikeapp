@@ -25,6 +25,16 @@ export const returnStationState = atom({
     default: null as Station | null,
 });
 
+export const dateFromState = atom({
+    key: 'dateFromState' as string,
+    default: null as Date | null,
+});
+
+export const dateToState = atom({
+    key: 'dateToState' as string,
+    default: null as Date | null,
+});
+
 export const offCanvasState = atom({
     key: 'offCanvasState' as string,
     default: {journeys: false, stations: false} as OffCanvasStatus,

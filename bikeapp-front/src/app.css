@@ -1,3 +1,5 @@
+@import "~react-datepicker/dist/react-datepicker.css";
+
 :root {
     --background-hover: rgb(243, 243, 243);
 }
@@ -92,4 +94,17 @@ button.active, button:hover {
 
 div.selected-station-info:hover {
     background-color: var(--background-hover);
+}
+
+.date-selector {
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 35px;
+    right: 0;
+    text-align: left;
+}
+
+.date-selector-picker > * {
+    margin: 5px;
 }

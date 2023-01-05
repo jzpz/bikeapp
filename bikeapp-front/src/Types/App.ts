@@ -20,3 +20,10 @@ export interface PopularStationItemProps {
     stationPopularity: StationPopularity,
     selectedStationType: StationType,
 }
+
+export interface SelectDateProps {
+    dateFrom: Date | null,
+    setDateFrom: Dispatch<SetStateAction<Date | null>>,
+    dateTo: Date | null,
+    setDateTo: Dispatch<SetStateAction<Date | null>>,
+}

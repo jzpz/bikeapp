@@ -3,7 +3,7 @@ import { Station, StationInfo } from "../Types/Station";
 export function getStation(stationId: string): Promise<Station> {
     return new Promise((resolve, reject) => {
         fetch(`http://localhost:8080/station/${stationId}`)
-        .then((response) => response.json())
+        .then((response) => response.status === 200 ? response.json() : null)
         .then((data) => resolve(data))
         .catch((e) => reject(e));
     })
@@ -11,8 +11,8 @@ export function getStation(stationId: string): Promise<Station> {
 
 export function getStations(): Promise<Station[]> {
     return new Promise((resolve, reject) => {
-        fetch(`http://localhost:8080/stations`)
-        .then((response) => response.json())
+        fetch("http://localhost:8080/stations")
+        .then((response) => response.status === 200 ? response.json() : null)
         .then((data) => resolve(data))
         .catch((e) => reject(e));
     })
@@ -22,7 +22,7 @@ export function getStations(): Promise<Station[]> {
  * @param {*} stationId
  * @returns station info (journey amount, average values, top stations)
  */
-export function getStationInfo(stationId: string): Promise<StationInfo> {
+export function getStationInfo(stationId: string, dateFrom?: Date, dateTo?: Date): Promise<StationInfo> {
     let url = "http://localhost:8080/stationinfo"
     
     if(stationId) {
@@ -31,7 +31,7 @@ export function getStationInfo(stationId: string): Promise<StationInfo> {
     
     return new Promise((resolve, reject) => {
         fetch(url)
-        .then((response) => response.json())
+        .then((response) => response.status === 200 ? response.json() : null)
         .then((data) => resolve(data))
         .catch((e) => reject(e))
     })
