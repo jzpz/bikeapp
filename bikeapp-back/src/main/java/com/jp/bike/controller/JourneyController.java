@@ -1,5 +1,8 @@
 package com.jp.bike.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +36,9 @@ public class JourneyController {
 			@RequestParam(defaultValue = "id") String sortBy,
 			@RequestParam(defaultValue = "false") Boolean descending,
 			@RequestParam(name="departureStationId", required=false) String departureStationId,
-			@RequestParam(name="returnStationId", required=false) String returnStationId) {
+			@RequestParam(name="returnStationId", required=false) String returnStationId,
+			@RequestParam(name="dateFrom", required=false) String strDateFrom, // Strings will be parsed
+			@RequestParam(name="dateTo", required=false) String strDateTo) { // as LocalDate yyyy-MM-dd
 		
 		if(size > 100) size = 100; // Keep the max page size at 100
 
@@ -45,15 +50,44 @@ public class JourneyController {
 
 		Page<Journey> journeys;
 
-		// Search journeys by departure or return station
-		if(departureStationId != null && returnStationId != null) {
-			journeys = repository.findByDepartureStationIdAndReturnStationId(departureStationId, returnStationId, pageRequest);
-		} else if(departureStationId != null) {
-			journeys = repository.findByDepartureStationId(departureStationId, pageRequest);
-		} else if(returnStationId != null) {
-			journeys = repository.findByReturnStationId(returnStationId, pageRequest);
+		if(strDateFrom != null && strDateTo != null) {
+
+			try {
+				LocalDateTime dateFrom = LocalDate.parse(strDateFrom).atStartOfDay();
+				LocalDateTime dateTo = LocalDate.parse(strDateTo).atTime(LocalTime.MAX);
+
+				if(departureStationId != null && returnStationId != null) {
+					journeys = repository.
+						findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+						departureStationId, returnStationId, dateFrom, dateTo, pageRequest);
+				} else if(departureStationId != null) {
+					journeys = repository.findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+						departureStationId, dateFrom, dateTo, pageRequest);
+				} else if(returnStationId != null) {
+					journeys = repository.findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+						returnStationId, dateFrom, dateTo, pageRequest);
+				} else {
+					journeys = repository.findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+						dateFrom, dateTo, pageRequest);
+				}
+			} catch (Exception e) {
+				System.out.println("Invalid date specified. " + e);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
 		} else {
-			journeys = repository.findAll(pageRequest);
+
+			if(departureStationId != null && returnStationId != null) {
+				journeys = repository.findByDepartureStationIdAndReturnStationIdOrderByDepartureDateAsc(
+					departureStationId, returnStationId, pageRequest);
+			} else if(departureStationId != null) {
+				journeys = repository.findByDepartureStationIdOrderByDepartureDateAsc(departureStationId, pageRequest);
+			} else if(returnStationId != null) {
+				journeys = repository.findByReturnStationIdOrderByDepartureDateAsc(returnStationId, pageRequest);
+			} else {
+				journeys = repository.findAllByOrderByDepartureDateAsc(pageRequest);
+			}
+
 		}
 
 		if(journeys.hasContent())
@@ -63,12 +97,6 @@ public class JourneyController {
 		
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/journey1")
-	Page<Journey> get() {
-		Pageable pageRequest = PageRequest.of(1, 25);
-		return repository.findAll(pageRequest);
-	}
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/journey/{id}")
 	public ResponseEntity<Journey> getById(@PathVariable("id") Integer id) {

@@ -41,5 +41,4 @@ public class StationPopularity {
         return nameLocaleEn;
     }
 
-    
 }

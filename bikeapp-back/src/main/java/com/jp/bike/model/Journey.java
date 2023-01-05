@@ -1,7 +1,9 @@
 package com.jp.bike.model;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,12 +12,13 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bikeapp_journeys")
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "Journey_Type")
 public class Journey {
 	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private @Id Integer id;
-	private Date departureDate;
-	private Date returnDate;
+	private LocalDateTime departureDate;
+	private LocalDateTime returnDate;
 	private String departureStationId;
 	private String departureStationName;
 	private String returnStationId;
@@ -28,7 +31,7 @@ public class Journey {
 	public Journey() {}
 
 	public Journey(
-			Date departureDate, Date returnDate, String departureStationId, 
+			LocalDateTime departureDate, LocalDateTime returnDate, String departureStationId, 
 			String departureStationName, String returnStationId, String returnStationName, 
 			Integer distanceCoveredInMeters, Integer durationInSeconds) {
 
@@ -46,11 +49,11 @@ public class Journey {
 		return id;
 	}
 
-	public Date getDepartureDate() {
+	public LocalDateTime getDepartureDate() {
 		return departureDate;
 	}
 
-	public Date getReturnDate() {
+	public LocalDateTime getReturnDate() {
 		return returnDate;
 	}
 

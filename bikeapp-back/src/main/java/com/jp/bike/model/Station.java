@@ -1,13 +1,13 @@
-	package com.jp.bike.model;
+package com.jp.bike.model;
 
-	import jakarta.persistence.Column;
-	import jakarta.persistence.Entity;
-	import jakarta.persistence.Id;
-	import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-	@Entity
-	@Table(name = "bikeapp_stations")
-	public class Station {
+@Entity
+@Table(name = "bikeapp_stations")
+public class Station {
 
 	private Integer fid;
 	private @Id String id;
@@ -27,9 +27,9 @@
 
 	public Station() {}
 
-	public Station(Integer fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, String addressLocaleFi,
-			String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, String operator, String capacity,
-			Double coordinateX, Double coordinateY) {
+	public Station(Integer fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, 
+			String addressLocaleFi, String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, 
+			String operator, String capacity, Double coordinateX, Double coordinateY) {
 		this.fid = fid;
 		this.id = id;
 		this.nameLocaleFi = nameLocaleFi;
