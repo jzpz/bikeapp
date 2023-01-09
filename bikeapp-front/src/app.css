@@ -96,7 +96,7 @@ div.selected-station-info:hover {
     background-color: var(--background-hover);
 }
 
-.date-selector {
+#date-selector {
     background-color: white;
     margin: 20px;
     padding: 20px;

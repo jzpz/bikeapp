@@ -13,10 +13,9 @@ import {
     selectedStationState, 
     departureStationState, 
     returnStationState,
-    dateFromState,
-    dateToState, 
+    dateFilterState
 } from '../GlobalStates';
-import { OffCanvasStatus } from '../Types/App';
+import { DateFilter, OffCanvasStatus } from '../Types/App';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList() {
@@ -26,38 +25,40 @@ export default function JourneyList() {
     const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
     const selectedStation = useRecoilValue<Station | null>(selectedStationState);
-    const dateFrom = useRecoilValue<Date | null>(dateFromState);
-    const dateTo = useRecoilValue<Date | null>(dateToState);
+    const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
 
     const [journeys, setJourneys] = useState<Journey[] | null>(null);
     const [page, setPage] = useState(0);
     const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
 
     useEffect(() => {
-        if(offCanvas) {
+        if(offCanvas.journeys) {
             let params: JourneyParams = {
                 page: page,
+                selectedStationType: selectedStationType,
             };
 
+            console.log(selectedStation)
             if(selectedStation)
                 params = {
                     ...params, 
                     selectedStation: selectedStation, 
-                    selectedStationType: selectedStationType,
                 }
 
-            if(dateFrom && dateTo) 
+            if(dateFilter.dateFrom && dateFilter.dateTo) 
                 params = {
                     ...params,
-                    dateFrom: dateFrom,
-                    dateTo: dateTo,
+                    dateFrom: dateFilter.dateFrom,
+                    dateTo: dateFilter.dateTo,
                 }
 
             getJourneys(params)
-            .then((data: Journey[]) => setJourneys(data))
+            .then((data: Journey[]) => {
+                setJourneys(data);
+            })
             .catch(e => console.log(e));
         }
-    }, [selectedStation, selectedStationType, page, offCanvas, dateFrom, dateTo]);
+    }, [selectedStation, selectedStationType, page, offCanvas, dateFilter]);
 
     // Reset values on station change
     useEffect(() => {
@@ -100,16 +101,16 @@ export default function JourneyList() {
                 )
             });
             return <>{list}</>
-        } else {
-            return <span>No journeys found</span>
         }
+        
+        return <span>No journeys found</span>
     }
 
     return(
         <Offcanvas 
             show={offCanvas.journeys} 
-            onHide={() => setOffCanvas({...offCanvas, journeys: false})}>
-            
+            onHide={() => setOffCanvas({...offCanvas, journeys: false})}
+        >
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>
                 {selectedStation && selectedStation.nameLocaleFi}&nbsp;
@@ -137,24 +138,21 @@ export default function JourneyList() {
             </Offcanvas.Header>
             <Offcanvas.Body>
                 <List />
-
-                {journeys &&
-                    <Pagination>
-                        <Pagination.Prev onClick={() => switchPage(page - 1)} />
-                        {page > 1 &&
-                            <Pagination.Item onClick={() => switchPage(page - 2)}>{page - 2}</Pagination.Item>
-                        }
-                        {page > 0 &&
-                            <Pagination.Item onClick={() => switchPage(page - 1)}>{page - 1}</Pagination.Item>
-                        }
-                        <Pagination.Item active>
-                            {page}
-                        </Pagination.Item>
-                        <Pagination.Item onClick={() => switchPage(page + 1)}>{page + 1}</Pagination.Item>
-                        <Pagination.Item onClick={() => switchPage(page + 2)}>{page + 2}</Pagination.Item>
-                        <Pagination.Next onClick={() => switchPage(page + 1)} />
-                    </Pagination>
-                }
+                <Pagination>
+                    <Pagination.Prev onClick={() => switchPage(page - 1)} />
+                    {page > 1 &&
+                        <Pagination.Item onClick={() => switchPage(page - 2)}>{page - 2}</Pagination.Item>
+                    }
+                    {page > 0 &&
+                        <Pagination.Item onClick={() => switchPage(page - 1)}>{page - 1}</Pagination.Item>
+                    }
+                    <Pagination.Item active>
+                        {page}
+                    </Pagination.Item>
+                    <Pagination.Item onClick={() => switchPage(page + 1)}>{page + 1}</Pagination.Item>
+                    <Pagination.Item onClick={() => switchPage(page + 2)}>{page + 2}</Pagination.Item>
+                    <Pagination.Next onClick={() => switchPage(page + 1)} />
+                </Pagination>
             </Offcanvas.Body>
         </Offcanvas>
     )

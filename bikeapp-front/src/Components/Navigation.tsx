@@ -104,11 +104,20 @@ export default function Navigation() {
                             <>
                             <NavDropdown title="Station Info" id="collasible-nav-dropdown">
                                 <NavDropdown.Item>
-                                    Average journey distance
-                                    <NavDropdown.Divider />
+                                    Journeys
                                 </NavDropdown.Item>
+                                <NavDropdown.Divider />
                                 <NavDropdown.Item>
                                     Starting from this station<br/>
+                                    <span className="secondary">
+                                        {stationInfo && stationInfo.journeysStarting ?
+                                            stationInfo.journeysStarting + " journeys" :
+                                            <Placeholder as="p" animation="wave">
+                                                <Placeholder xs={5} />
+                                            </Placeholder>
+                                        }
+                                    </span><br/>
+                                    Average distance<br/>
                                     <span className="secondary">
                                         {stationInfo && stationInfo.averageDistanceCoveredAsDepartureStation ?
                                             formatDistance(stationInfo.averageDistanceCoveredAsDepartureStation) :
@@ -117,9 +126,17 @@ export default function Navigation() {
                                             </Placeholder>
                                         }
                                     </span>
-                                </NavDropdown.Item>
-                                <NavDropdown.Item>
+                                <NavDropdown.Divider />
                                     Ending at this station<br/>
+                                    <span className="secondary">
+                                        {stationInfo && stationInfo.journeysEnding ?
+                                            stationInfo.journeysEnding + " journeys" :
+                                            <Placeholder as="p" animation="wave">
+                                                <Placeholder xs={5} />
+                                            </Placeholder>
+                                        }
+                                    </span><br/>
+                                    Average distance<br/>
                                     <span className="secondary">
                                         {stationInfo && stationInfo.averageDistanceCoveredAsReturnStation ?
                                             formatDistance(stationInfo.averageDistanceCoveredAsReturnStation) :

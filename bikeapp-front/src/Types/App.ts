@@ -21,6 +21,11 @@ export interface PopularStationItemProps {
     selectedStationType: StationType,
 }
 
+export interface DateFilter {
+    dateFrom: Date | null,
+    dateTo: Date | null,
+}
+
 export interface SelectDateProps {
     dateFrom: Date | null,
     setDateFrom: Dispatch<SetStateAction<Date | null>>,

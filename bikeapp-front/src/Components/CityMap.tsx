@@ -8,9 +8,9 @@ import {
     departureStationState, 
     returnStationState, 
     stationInfoState,
-    dateFromState,
-    dateToState, 
+    dateFilterState,
 } from "../GlobalStates";
+import { DateFilter } from "../Types/App";
 import { Station, StationInfo } from "../Types/Station";
 
 export default function CityMap() {
@@ -20,13 +20,11 @@ export default function CityMap() {
     const [selectedStation, setSelectedStation] = useRecoilState<Station | null>(selectedStationState);
     const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
-    const dateFrom = useRecoilValue<Date | null>(dateFromState);
-    const dateTo = useRecoilValue<Date | null>(dateToState);
-    
+    const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
 
     const [error, setError] = useState<string | null>(null);
-    const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95 ] as [number, number]});
+    const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
 
     const stationMapMemo = useMemo(() => <StationMap />, [stations, departureStation, returnStation]);
@@ -46,7 +44,7 @@ export default function CityMap() {
             .then(data => setStationInfo(data))
             .catch(e => setError(e));
         }
-    }, [selectedStation, dateFrom, dateTo]);
+    }, [selectedStation, dateFilter]);
 
     // Determines if a marker is departure/return station and returns color or null
     function markerColor(station: Station | null): string | null {

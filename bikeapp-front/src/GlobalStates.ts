@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { OffCanvasStatus } from "./Types/App";
+import { DateFilter, OffCanvasStatus } from "./Types/App";
 import { Station, StationInfo } from "./Types/Station";
 
 // Setup global Recoil states for data that needs to be
@@ -25,14 +25,9 @@ export const returnStationState = atom({
     default: null as Station | null,
 });
 
-export const dateFromState = atom({
-    key: 'dateFromState' as string,
-    default: null as Date | null,
-});
-
-export const dateToState = atom({
-    key: 'dateToState' as string,
-    default: null as Date | null,
+export const dateFilterState = atom({
+    key: 'dateFilterState' as string,
+    default: {dateFrom: null, dateTo: null} as DateFilter,
 });
 
 export const offCanvasState = atom({

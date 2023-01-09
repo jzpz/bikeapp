@@ -1,46 +1,42 @@
-import { Map, Marker, Overlay } from "pigeon-maps";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { getStationInfo, getStations } from "../Functions/stations";
-import { dateFromState, dateToState } from "../GlobalStates";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { dateFilterState } from "../GlobalStates";
 import DatePicker from "react-datepicker";
 import Button from "react-bootstrap/Button";
 import { IoClose } from "react-icons/io5";
+import { DateFilter } from "../Types/App";
 
 export default function SelectDate() {
 
-    const [dateFrom, setDateFrom] = useRecoilState<Date | null>(dateFromState);
-    const [dateTo, setDateTo] = useRecoilState<Date | null>(dateToState);
-
-    useEffect(() => {
-        console.log(dateFrom, dateTo)
-    }, [dateFrom, dateTo])
+    const [dateFilter, setDateFilter] = useRecoilState<DateFilter>(dateFilterState);
 
     return(
-        <div className="date-selector" style={{position:"absolute",zIndex:1}}>
+        <div id="date-selector" className="floating-container" style={{position:"absolute",zIndex:1}}>
             <h4>Select date</h4>
             <div className="date-selector-picker" style={{display:"inline-flex"}}>
                 <div>
                     <span>From</span>
                     <DatePicker 
-                        selected={dateFrom}
+                        selected={dateFilter.dateFrom}
                         dateFormat="yyyy-MM-dd"
                         onChange={(newDate: Date) => {
-                            setDateFrom(newDate);
-                            if(!dateTo)
-                                setDateTo(newDate);
+                            if(!dateFilter.dateTo)
+                                setDateFilter({dateFrom: newDate, dateTo: newDate})
+                            else
+                                setDateFilter({...dateFilter, dateFrom: newDate})
                         }}
                     />
                 </div>
                 <div>
                     <span>To</span>
                     <DatePicker 
-                        selected={dateTo}
+                        selected={dateFilter.dateTo}
                         dateFormat="yyyy-MM-dd"
                         onChange={(newDate: Date) => {
-                            setDateTo(newDate);
-                            if(!dateFrom)
-                                setDateFrom(newDate);      
+                            if(!dateFilter.dateFrom)
+                                setDateFilter({dateFrom: newDate, dateTo: newDate})
+                            else
+                                setDateFilter({...dateFilter, dateTo: newDate})    
                         }}
                     />
                 </div>
@@ -50,8 +46,7 @@ export default function SelectDate() {
                     className="mt-2"
                     variant="outline-danger"
                     onClick={() => {
-                        setDateFrom(null);
-                        setDateTo(null);
+                        setDateFilter({dateFrom: null, dateTo: null});
                     }}
                 >
                     <IoClose size={20} />
