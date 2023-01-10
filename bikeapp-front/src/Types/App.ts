@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Journey } from "./Journey";
-import { Station, StationPopularity, StationType } from "./Station";
+import { StationPopularity, StationType } from "./Station";
 export interface OffCanvasStatus {
     journeys: boolean,
     stations: boolean,

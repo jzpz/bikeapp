@@ -25,7 +25,10 @@ export default function CurrentJourney () {
         <div className="journey-item floating-container">
             <div className="text-center" style={{margin:3, display:"inline-flex"}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
-                <h4 style={{marginBottom:0}}>
+                <h4 
+                    style={{marginBottom:0}}
+                    data-cy="current-journey"
+                >
                     {selectedStation ? <>
                         {departureStation && <>
                             <span className="departure-station" style={{fontWeight:"bold"}}>

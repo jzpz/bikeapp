@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { departureStationState, offCanvasState, returnStationState, selectedStationState, stationsState } from '../GlobalStates';
 import { OffCanvasStatus } from '../Types/App';
 import { Station } from '../Types/Station';
@@ -11,15 +11,14 @@ export default function StationList() {
     
     // Global states
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
-    const [stations, setStations] = useRecoilState<Station[] | null>(stationsState);
+    const stations = useRecoilValue<Station[] | null>(stationsState);
     const setSelectedStation = useSetRecoilState<Station | null>(selectedStationState);
     const setDepartureStation = useSetRecoilState<Station | null>(departureStationState);
     const setReturnStation = useSetRecoilState<Station | null>(returnStationState);
 
     const [filterWord, setFilterWord] = useState('');
 
-    // Check station names for filter word
-    function filteredList(list: Station[]) {
+    function filteredStationsList(list: Station[]) {
         return list.filter((station: Station) => 
             station.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase()) ||
             station.nameLocaleSe.toLowerCase().includes(filterWord.toLowerCase())
@@ -29,7 +28,7 @@ export default function StationList() {
     // Make JSX list from array
     function List() {
         if(stations) {
-            const list = filteredList(stations).map((station: Station) => 
+            const list = filteredStationsList(stations).map((station: Station) => 
                 <div 
                     onClick={() => {
                         setSelectedStation(station)
@@ -77,11 +76,14 @@ export default function StationList() {
                         value={filterWord}
                         onChange={(e) => setFilterWord(e.target.value)}
                         type="text" 
-                        placeholder="Type station name" 
+                        placeholder="Type station name"
+                        data-cy="station-search"
                     />
                 </Form.Group>
 
-                <List />
+                <div className="station-list">
+                    <List />
+                </div>
             </Offcanvas.Body>
         </Offcanvas>
     )

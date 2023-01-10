@@ -32,13 +32,14 @@ export default function JourneyList() {
     const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
 
     useEffect(() => {
+        let cancel = false;
+
         if(offCanvas.journeys) {
             let params: JourneyParams = {
                 page: page,
                 selectedStationType: selectedStationType,
             };
 
-            console.log(selectedStation)
             if(selectedStation)
                 params = {
                     ...params, 
@@ -54,17 +55,21 @@ export default function JourneyList() {
 
             getJourneys(params)
             .then((data: Journey[]) => {
-                setJourneys(data);
+                if(!cancel)
+                    setJourneys(data);
             })
             .catch(e => console.log(e));
         }
-    }, [selectedStation, selectedStationType, page, offCanvas, dateFilter]);
+
+        return () => {
+            cancel = true;
+        }
+    }, [selectedStation, selectedStationType, page, offCanvas, dateFilter.dateFrom, dateFilter.dateTo]);
 
     // Reset values on station change
     useEffect(() => {
         setJourneys(null)
         setPage(0)
-        
         setSelectedStationType("departure");
     }, [selectedStation]);
 
@@ -88,8 +93,7 @@ export default function JourneyList() {
         setPage(newPage);
     }
 
-    // Make JSX list from array
-    function List() {
+    function JourneyListElement() {
         if(journeys) {
             const list = journeys.map((journey: Journey) => {
                 return(
@@ -137,7 +141,7 @@ export default function JourneyList() {
             </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                <List />
+                <JourneyListElement />
                 <Pagination>
                     <Pagination.Prev onClick={() => switchPage(page - 1)} />
                     {page > 1 &&

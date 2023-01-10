@@ -13,7 +13,7 @@ function App() {
     return(
         <div className="App">
             <RecoilRoot>
-                <Navigation/>
+                <Navigation />
                 <SelectDate />
                 <CityMap /> 
                 <JourneyList />

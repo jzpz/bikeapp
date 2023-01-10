@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -95,6 +95,7 @@ export default function Navigation() {
                             variant="success" 
                             onClick={() => {setOffCanvas({...offCanvas, journeys: true})}}
                             style={{backgroundColor:"#02a35d",border:"none",marginRight:10}}
+                            data-cy="view-journeys"
                         >
                             View Journeys
                         </Button>
@@ -201,8 +202,9 @@ export default function Navigation() {
                             variant="dark" 
                             onClick={() => setOffCanvas({...offCanvas, stations: true})}
                             style={{backgroundColor:"#66aacc", border:"none"}}
+                            data-cy="change-station"
                         >
-                            Change station
+                            Change Station
                         </Button>
                     </Nav>
 

@@ -1,5 +1,4 @@
 import { Journey, JourneyParams } from "../Types/Journey";
-import { Station, StationType } from "../Types/Station";
 import { dateToString } from "./formatValues";
 
 /**

@@ -37,12 +37,20 @@ export default function CityMap() {
 
     // Fetch station info (avg journeys, top stations) on station select
     useEffect(() => {
+        let cancel = false;
         setStationInfo(null);
 
         if(selectedStation) {
             getStationInfo(selectedStation.id)
-            .then(data => setStationInfo(data))
+            .then(data => {
+                if(!cancel)
+                    setStationInfo(data)
+            })
             .catch(e => setError(e));
+        }
+
+        return () => {
+            cancel = true;
         }
     }, [selectedStation, dateFilter]);
 
