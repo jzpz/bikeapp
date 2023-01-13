@@ -1,4 +1,4 @@
-import { Map, Marker, Overlay } from "pigeon-maps";
+import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { getStationInfo, getStations } from "../Functions/stations";
@@ -98,6 +98,7 @@ export default function CityMap() {
                     setCurrentMapSettings({...currentMapSettings, zoom: e.zoom, center: e.center})
                 }}
             >
+                <ZoomControl />
                 {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
                     <Marker 
                         width={markerColor(station) ? 50 : 30} // Make current station larger in map
