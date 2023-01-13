@@ -22,6 +22,14 @@ export function getJourneys(params: JourneyParams): Promise<Journey[]> {
             "&dateTo=" + dateToString(params.dateTo)
     }
 
+    if(params.orderBy) {
+        url += "&orderBy=" + params.orderBy
+    }
+
+    if(params.descending) {
+        url += "&descending=" + params.descending
+    }
+
     console.log("fetch",url)
     return new Promise((resolve, reject) => {
         fetch(url)

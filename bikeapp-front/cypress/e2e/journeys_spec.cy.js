@@ -12,7 +12,8 @@ describe('Test page switch', () => {
     it('changes page on journey list', () => {
         cy.visit('http://localhost:3000');
         cy.get('[data-cy="view-journeys"]').click();
-        cy.get('[data-cy=journey-list-pagination]').children().last().click();
+        cy.get('[data-cy=journey-list-page-next]').click();
+        cy.get('[data-cy=journey-list-page-next]')
     })
 });
 

@@ -32,3 +32,8 @@ export interface SelectDateProps {
     dateTo: Date | null,
     setDateTo: Dispatch<SetStateAction<Date | null>>,
 }
+
+export interface OrderDirectionButtonProps {
+    isDescending: boolean, 
+    handleChange: (isDescending: boolean) => void,
+}

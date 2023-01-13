@@ -18,4 +18,20 @@ export interface JourneyParams {
     selectedStationType?: StationType,
     dateFrom?: Date, 
     dateTo?: Date,
+    orderBy?: string,
+    descending?: boolean,
 }
+
+export interface JourneyOrderColumn {
+    column: string,
+    name: string,
+}
+
+export const JourneyOrderColumns = {
+    departureDate: {column: "departureDate", name: "Departure Date"},
+    returnDate: {column: "returnDate", name: "Return date"},
+    distanceCoveredInMeters: {column: "distanceCoveredInMeters", name: "Journey Distance"},
+    durationInSeconds: {column: "durationInSeconds", name: "Journey Duration"},
+    departureStationName: {column: "departureStationName", name: "Departure Station"},
+    returnStationName: {column: "returnStationName", name: "Return Station"},
+};
