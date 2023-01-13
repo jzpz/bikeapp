@@ -12,28 +12,28 @@ import com.jp.bike.model.Journey;
 public interface JourneyRepository extends PagingAndSortingRepository<Journey, Integer> {
     Journey findById(int id);
 
-    Page<Journey> findAllByOrderByDepartureDateAsc(
+    Page<Journey> findAll(
         Pageable pageable);
 
-    Page<Journey> findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+    Page<Journey> findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
         LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdOrderByDepartureDateAsc(
+    Page<Journey> findByDepartureStationId(
         String departureStationId, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+    Page<Journey> findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
         String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Page<Journey> findByReturnStationIdOrderByDepartureDateAsc(
+    Page<Journey> findByReturnStationId(
         String returnStationId, Pageable pageable);
 
-    Page<Journey> findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+    Page<Journey> findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
         String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdAndReturnStationIdOrderByDepartureDateAsc(
+    Page<Journey> findByDepartureStationIdAndReturnStationId(
         String departureStationId, String returnStationId, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
+    Page<Journey> findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
         String departureStationId, String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
     Long count();

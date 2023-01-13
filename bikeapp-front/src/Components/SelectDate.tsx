@@ -11,10 +11,17 @@ export default function SelectDate() {
     const [dateFilter, setDateFilter] = useRecoilState<DateFilter>(dateFilterState);
 
     return(
-        <div id="date-selector" className="floating-container" style={{position:"absolute",zIndex:1}}>
+        <div 
+            id="date-selector" 
+            className="floating-container" 
+            style={{position:"absolute",zIndex:1}}
+            data-cy="date-selector"
+        >
             <h4>Select date</h4>
             <div className="date-selector-picker" style={{display:"inline-flex"}}>
-                <div>
+                <div
+                    data-cy="datepicker-datefrom"
+                >
                     <span>From</span>
                     <DatePicker 
                         selected={dateFilter.dateFrom}
@@ -27,7 +34,9 @@ export default function SelectDate() {
                         }}
                     />
                 </div>
-                <div>
+                <div
+                    data-cy="datepicker-dateto"
+                >
                     <span>To</span>
                     <DatePicker 
                         selected={dateFilter.dateTo}

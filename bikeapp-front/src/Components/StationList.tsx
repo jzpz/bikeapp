@@ -26,7 +26,7 @@ export default function StationList() {
     }
 
     // Make JSX list from array
-    function List() {
+    function Stations() {
         if(stations) {
             const list = filteredStationsList(stations).map((station: Station) => 
                 <div 
@@ -60,8 +60,12 @@ export default function StationList() {
             placement="end" 
             show={offCanvas.stations} 
             onHide={() => setOffCanvas({...offCanvas, stations: false})}
+            data-cy="offcanvas-stations"
         >
-            <Offcanvas.Header closeButton>
+            <Offcanvas.Header 
+                closeButton
+                data-cy="station-list-close"
+            >
             <Offcanvas.Title>
                 Station
             </Offcanvas.Title>
@@ -82,7 +86,7 @@ export default function StationList() {
                 </Form.Group>
 
                 <div className="station-list">
-                    <List />
+                    <Stations />
                 </div>
             </Offcanvas.Body>
         </Offcanvas>

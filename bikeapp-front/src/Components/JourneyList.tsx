@@ -30,11 +30,15 @@ export default function JourneyList() {
     const [journeys, setJourneys] = useState<Journey[] | null>(null);
     const [page, setPage] = useState(0);
     const [selectedStationType, setSelectedStationType] = useState<StationType>("departure");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let cancel = false;
 
         if(offCanvas.journeys) {
+            setJourneys(null)
+            setLoading(true);
+
             let params: JourneyParams = {
                 page: page,
                 selectedStationType: selectedStationType,
@@ -55,8 +59,10 @@ export default function JourneyList() {
 
             getJourneys(params)
             .then((data: Journey[]) => {
-                if(!cancel)
+                if(!cancel) {
                     setJourneys(data);
+                    setLoading(false);
+                }
             })
             .catch(e => console.log(e));
         }
@@ -93,21 +99,25 @@ export default function JourneyList() {
         setPage(newPage);
     }
 
-    function JourneyListElement() {
+    function Journeys() {
         if(journeys) {
-            const list = journeys.map((journey: Journey) => {
-                return(
-                    <JourneyListItem
-                        key={"journey-list-item" + journey.id}
-                        journey={journey}
-                        selectedStationType={selectedStationType} 
-                    />
-                )
-            });
+            const list = journeys.map((journey: Journey) => 
+                <JourneyListItem
+                    key={"journey-list-item" + journey.id}
+                    journey={journey}
+                    selectedStationType={selectedStationType} 
+                />
+            );
             return <>{list}</>
+        } else if(!loading) {
+            return(
+                <span data-cy="empty-list-item">
+                    No journeys found
+                </span>
+            )
         }
-        
-        return <span>No journeys found</span>
+
+        return null;
     }
 
     return(
@@ -115,7 +125,10 @@ export default function JourneyList() {
             show={offCanvas.journeys} 
             onHide={() => setOffCanvas({...offCanvas, journeys: false})}
         >
-            <Offcanvas.Header closeButton>
+            <Offcanvas.Header 
+                closeButton
+                data-cy="journey-list-close"
+            >
             <Offcanvas.Title>
                 {selectedStation && selectedStation.nameLocaleFi}&nbsp;
                 <span className="secondary">
@@ -141,8 +154,15 @@ export default function JourneyList() {
             </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                <JourneyListElement />
-                <Pagination>
+                <div 
+                    className="journey-list"
+                    data-cy="journey-list"
+                >
+                    <Journeys />
+                </div>
+                <Pagination
+                    data-cy="journey-list-pagination"
+                >
                     <Pagination.Prev onClick={() => switchPage(page - 1)} />
                     {page > 1 &&
                         <Pagination.Item onClick={() => switchPage(page - 2)}>{page - 2}</Pagination.Item>

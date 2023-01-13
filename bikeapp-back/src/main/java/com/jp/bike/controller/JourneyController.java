@@ -28,6 +28,7 @@ public class JourneyController {
 	@Autowired
 	JourneyRepository repository;
 
+	// Returns paginated list of journeys
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/journeys")
 	public ResponseEntity<List<Journey>> getPaginated(
@@ -40,16 +41,22 @@ public class JourneyController {
 			@RequestParam(name="dateFrom", required=false) String strDateFrom, // Strings will be parsed
 			@RequestParam(name="dateTo", required=false) String strDateTo) { // as LocalDate yyyy-MM-dd
 		
-		if(size > 100) size = 100; // Keep the max page size at 100
+		if(size > 100) {
+			size = 100; // Keep the max page size at 100
+		}
 
-		Pageable pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
-		
-		if(descending == true) {
-			pageRequest = PageRequest.of(page, size, Sort.by(sortBy).descending());
+		if(sortBy == null) {
+			sortBy = "departureDate";
 		}
 
 		Page<Journey> journeys;
+		Pageable pageRequest = PageRequest.of(page, size, Sort.by(sortBy).descending());
+		
+		if(descending == true) {
+			pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+		}
 
+		// Both start and end dates are required in order to query by date
 		if(strDateFrom != null && strDateTo != null) {
 
 			try {
@@ -58,17 +65,20 @@ public class JourneyController {
 
 				if(departureStationId != null && returnStationId != null) {
 					journeys = repository.
-						findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
-						departureStationId, returnStationId, dateFrom, dateTo, pageRequest);
+						findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							departureStationId, returnStationId, dateFrom, dateTo, pageRequest);
 				} else if(departureStationId != null) {
-					journeys = repository.findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
-						departureStationId, dateFrom, dateTo, pageRequest);
+					journeys = repository.
+						findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							departureStationId, dateFrom, dateTo, pageRequest);
 				} else if(returnStationId != null) {
-					journeys = repository.findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
-						returnStationId, dateFrom, dateTo, pageRequest);
+					journeys = repository.
+						findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							returnStationId, dateFrom, dateTo, pageRequest);
 				} else {
-					journeys = repository.findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqualOrderByDepartureDateAsc(
-						dateFrom, dateTo, pageRequest);
+					journeys = repository.
+						findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							dateFrom, dateTo, pageRequest);
 				}
 			} catch (Exception e) {
 				System.out.println("Invalid date specified. " + e);
@@ -78,14 +88,14 @@ public class JourneyController {
 		} else {
 
 			if(departureStationId != null && returnStationId != null) {
-				journeys = repository.findByDepartureStationIdAndReturnStationIdOrderByDepartureDateAsc(
+				journeys = repository.findByDepartureStationIdAndReturnStationId(
 					departureStationId, returnStationId, pageRequest);
 			} else if(departureStationId != null) {
-				journeys = repository.findByDepartureStationIdOrderByDepartureDateAsc(departureStationId, pageRequest);
+				journeys = repository.findByDepartureStationId(departureStationId, pageRequest);
 			} else if(returnStationId != null) {
-				journeys = repository.findByReturnStationIdOrderByDepartureDateAsc(returnStationId, pageRequest);
+				journeys = repository.findByReturnStationId(returnStationId, pageRequest);
 			} else {
-				journeys = repository.findAllByOrderByDepartureDateAsc(pageRequest);
+				journeys = repository.findAll(pageRequest);
 			}
 
 		}

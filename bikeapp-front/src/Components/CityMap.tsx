@@ -147,7 +147,10 @@ export default function CityMap() {
     }
 
     return (
-        <div>
+        <div 
+            className="map-container"
+            data-cy="map-container"
+        >
             {stationMapMemo}
         </div>
     )

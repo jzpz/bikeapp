@@ -30,9 +30,10 @@ public class StationController {
 	@Autowired
 	JourneyRepository jrepository;
 
+	// Returns list of stations
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/stations")
-	public ResponseEntity<List<Station>> getPaginated() {
+	public ResponseEntity<List<Station>> getAll() {
 
 		List<Station> stations = srepository.findAll();
 		if(stations.isEmpty()) {
@@ -43,6 +44,7 @@ public class StationController {
 		
 	}
 
+	// Returns a single station
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/station/{id}")
 	public ResponseEntity<Station> getById(@PathVariable("id") String id) {
@@ -55,6 +57,7 @@ public class StationController {
 		}
 	}
 
+	// Returns information about station - most popular departures/returns, average journeys, journey count
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/stationinfo")
 	public ResponseEntity<HashMap<String, Object>> getInfo(
@@ -71,17 +74,26 @@ public class StationController {
 		List<StationPopularity> mostPopularDepartureStations;
 		List<StationPopularity> mostPopularReturnStations;
 		
-		if(stationId != null) { // Search using station id	
+		if(stationId != null) { // Search using station id
+
+			// Both start and end dates are required in order to query by date
 			if(strDateFrom != null && strDateTo != null) {
 				try {
-					// Add timestamp at 00.00.00
 					LocalDateTime dateFrom = LocalDate.parse(strDateFrom).atStartOfDay();
 					LocalDateTime dateTo = LocalDate.parse(strDateTo).atTime(LocalTime.MAX);
 					
-					journeysStarting = jrepository.countByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(stationId, dateFrom, dateTo);
-					journeysEnding = jrepository.countByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(stationId, dateFrom, dateTo);
-					averageDistanceCoveredAsDepartureStation = jrepository.averageDistanceCoveredByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(stationId, dateFrom, dateTo);
-					averageDistanceCoveredAsReturnStation = jrepository.averageDistanceCoveredByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(stationId, dateFrom, dateTo);
+					journeysStarting = jrepository.
+						countByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							stationId, dateFrom, dateTo);
+					journeysEnding = jrepository.
+						countByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							stationId, dateFrom, dateTo);
+					averageDistanceCoveredAsDepartureStation = jrepository.
+						averageDistanceCoveredByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							stationId, dateFrom, dateTo);
+					averageDistanceCoveredAsReturnStation = jrepository.
+						averageDistanceCoveredByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+							stationId, dateFrom, dateTo);
 				} catch (Exception e) {
 					System.out.println("Invalid date specified. " + e);
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

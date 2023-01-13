@@ -152,30 +152,9 @@ export default function Navigation() {
                             {/* Most popular departure stations */}
                             <NavDropdown title="Departure Stations" id="collasible-nav-dropdown">
                                 <NavDropdown.Item>
-                                    Most popular departure stations<br/>
+                                    Most popular departure stations <br/>
                                     for&nbsp;
                                     <span className="return-station">
-                                        {selectedStation.nameLocaleFi}
-                                    </span>
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                {stationInfo && stationInfo.mostPopularReturnStations.map((stationPopularity: StationPopularity) => {
-                                    return(
-                                        <PopularStationItem 
-                                            key={"popular-return-station" + stationPopularity.id}
-                                            stationPopularity={stationPopularity}
-                                            selectedStationType={"return"} 
-                                        /> 
-                                    )
-                                })}
-                            </NavDropdown>
-
-                            {/* Most popular return stations */}
-                            <NavDropdown title="Arrival Stations" id="collasible-nav-dropdown">
-                                <NavDropdown.Item>
-                                    Most popular arrival stations <br/>
-                                    for&nbsp;
-                                    <span className="departure-station">
                                         {selectedStation.nameLocaleFi}
                                     </span>
                                 </NavDropdown.Item>
@@ -186,6 +165,27 @@ export default function Navigation() {
                                             key={"popular-departure-station" + stationPopularity.id}
                                             stationPopularity={stationPopularity}
                                             selectedStationType={"departure"} 
+                                        /> 
+                                    )
+                                })}
+                            </NavDropdown>
+
+                            {/* Most popular return stations */}
+                            <NavDropdown title="Return Stations" id="collasible-nav-dropdown">
+                                <NavDropdown.Item>
+                                    Most popular return stations<br/>
+                                    for&nbsp;
+                                    <span className="departure-station">
+                                        {selectedStation.nameLocaleFi}
+                                    </span>
+                                </NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                {stationInfo && stationInfo.mostPopularReturnStations.map((stationPopularity: StationPopularity) => {
+                                    return(
+                                        <PopularStationItem 
+                                            key={"popular-return-station" + stationPopularity.id}
+                                            stationPopularity={stationPopularity}
+                                            selectedStationType={"return"} 
                                         /> 
                                     )
                                 })}
