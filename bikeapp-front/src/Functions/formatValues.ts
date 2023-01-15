@@ -26,10 +26,15 @@ export function dateToString(date: Date): string {
  * @returns duration in minutes and seconds
  */
 export function formatDuration(seconds: number): string {
-    let value = // sec -> min, sec
-        Math.floor(seconds / 60) + "m " +
-        (seconds % 60 ? seconds % 60 : '00') + "s";
-    return value
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.floor(seconds % 3600 / 60);
+    seconds = (seconds % 3600) % 60;
+
+    return(
+        (hours ? hours + "h " : "") +
+        (minutes ? minutes + "m " : "") +
+        seconds + "s"
+    )
 }
 
 /**
