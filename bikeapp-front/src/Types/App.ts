@@ -37,3 +37,8 @@ export interface OrderDirectionButtonProps {
     isDescending: boolean, 
     handleChange: (isDescending: boolean) => void,
 }
+
+export interface PaginationMenuProps {
+    handlePageSwitch: (page: number) => void,
+    currentPage: number,
+}

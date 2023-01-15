@@ -1,5 +1,5 @@
 import React from "react";
-import { IoBicycle, IoTimeOutline, IoArrowForward } from 'react-icons/io5';
+import { IoBicycle, IoTimerOutline, IoArrowForward } from 'react-icons/io5';
 import { useRecoilState } from "recoil";
 import { formatDateString, formatDistance, formatDuration } from '../Functions/formatValues';
 import { getStation } from '../Functions/stations';
@@ -70,7 +70,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
             {/* Journey info */}
             <div>
                 <span className="journey-item-data">
-                    <IoTimeOutline style={{marginRight:5}} /> 
+                    <IoTimerOutline style={{marginRight:5}} /> 
                     {formatDuration(journey.durationInSeconds)}
                 </span>
                 <span className="journey-item-data">
@@ -83,8 +83,8 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
                     // Color code the journey underline to match station colors
                     backgroundImage: 
                         `linear-gradient(to right, 
-                            ${journey.departureStationId === departureStation?.id ? "#ff036c" : "#fc81b4"},
-                            ${journey.returnStationId === returnStation?.id ? "#1d63b8" : "#5e9be6"}`
+                            ${journey.departureStationId === departureStation?.id ? "#ff036c" : "darkgray"},
+                            ${journey.returnStationId === returnStation?.id ? "#1d63b8" : "darkgray"}`
                 }}
             />
         </div>

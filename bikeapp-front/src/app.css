@@ -108,3 +108,8 @@ div.selected-station-info:hover {
 .date-selector-picker > * {
     margin: 5px;
 }
+
+.order-direction-button {
+    margin: 3px;
+    cursor: pointer;
+}

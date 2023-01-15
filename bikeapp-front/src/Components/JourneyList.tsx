@@ -5,6 +5,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Pagination from 'react-bootstrap/Pagination';
+import { IoArrowBack, IoArrowForward, IoBicycleOutline, IoTime, IoTimeOutline, IoTimerOutline } from 'react-icons/io5';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getJourneys } from '../Functions/journeys';
 import {
@@ -15,6 +16,7 @@ import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from 
 import { Station, StationType } from '../Types/Station';
 import JourneyListItem from './JourneyListItem';
 import OrderDirectionButton from './OrderDirectionButton';
+import PaginationMenu from './PaginationMenu';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList() {
@@ -104,7 +106,7 @@ export default function JourneyList() {
         }
     }, [selectedStationType]);
 
-    function switchPage(page: number) {
+    function handlePageSwitch(page: number) {
         let newPage: number;
         if(page < 0) newPage = 0;
         else newPage = page;
@@ -173,29 +175,34 @@ export default function JourneyList() {
                 <div className="journey-list-options pb-2" style={{display:"inline-flex"}}>
                     <span className="p-1">Order by</span>
                     <DropdownButton title={orderBy.name}>
-                        <Dropdown.Item href="#/action-1"
+                        <Dropdown.Item
                             onClick={() => setOrderBy(JourneyOrderColumns.departureDate)}
                         >
+                            <IoTimeOutline />&nbsp;
                             {JourneyOrderColumns.departureDate.name}
                         </Dropdown.Item>
                         <Dropdown.Item 
                             onClick={() => setOrderBy(JourneyOrderColumns.departureStationName)}
                         >
+                            <IoArrowForward />&nbsp;
                             {JourneyOrderColumns.departureStationName.name}
                         </Dropdown.Item>
                         <Dropdown.Item 
                             onClick={() => setOrderBy(JourneyOrderColumns.returnStationName)}
                         >
+                            <IoArrowBack />&nbsp;
                             {JourneyOrderColumns.returnStationName.name}
                         </Dropdown.Item>
                         <Dropdown.Item 
                             onClick={() => setOrderBy(JourneyOrderColumns.distanceCoveredInMeters)}
                         >
+                            <IoBicycleOutline />&nbsp;
                             {JourneyOrderColumns.distanceCoveredInMeters.name}
                         </Dropdown.Item>
                         <Dropdown.Item 
                             onClick={() => setOrderBy(JourneyOrderColumns.durationInSeconds)}
                         >
+                            <IoTimerOutline />&nbsp;
                             {JourneyOrderColumns.durationInSeconds.name}
                         </Dropdown.Item>
                     </DropdownButton>
@@ -210,52 +217,10 @@ export default function JourneyList() {
                 >
                     <Journeys />
                 </div>
-                <Pagination
-                    data-cy="journey-list-pagination"
-                >
-                    <Pagination.Prev 
-                        onClick={() => switchPage(page - 1)} 
-                        data-cy="journey-list-page-prev"
-                    />
-                    {page > 1 &&
-                        <Pagination.Item 
-                            onClick={() => switchPage(page - 2)}
-                            data-cy="journey-list-page-minus-2"
-                        >
-                            {page - 2}
-                        </Pagination.Item>
-                    }
-                    {page > 0 &&
-                        <Pagination.Item 
-                            onClick={() => switchPage(page - 1)}
-                            data-cy="journey-list-page-minus-1"
-                        >
-                            {page - 1}
-                        </Pagination.Item>
-                    }
-                    <Pagination.Item 
-                        active
-                        data-cy="journey-list-page-current"
-                    >
-                        {page}
-                    </Pagination.Item>
-                    <Pagination.Item 
-                        onClick={() => switchPage(page + 1)}
-                        data-cy="journey-list-page-plus-1"
-                    >
-                        {page + 1}
-                    </Pagination.Item>
-                    <Pagination.Item 
-                        onClick={() => switchPage(page + 2)}
-                        data-cy="journey-list-page-plus-2"
-                    >
-                        {page + 2}
-                    </Pagination.Item>
-                    <Pagination.Next 
-                        onClick={() => switchPage(page + 1)} 
-                        data-cy="journey-list-page-next"
-                    />
-                </Pagination>
+                <PaginationMenu 
+                    handlePageSwitch={handlePageSwitch}
+                    currentPage={page}
+                />
             </Offcanvas.Body>
         </Offcanvas>
     )

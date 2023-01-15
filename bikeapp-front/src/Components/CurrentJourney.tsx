@@ -45,9 +45,6 @@ export default function CurrentJourney () {
                     }
                 </h4>
             </div>
-            {selectedStation &&
-                <div className="journey-line" />
-            }
         </div>
     )
 }

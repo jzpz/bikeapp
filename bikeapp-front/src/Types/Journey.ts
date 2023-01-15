@@ -29,7 +29,7 @@ export interface JourneyOrderColumn {
 
 export const JourneyOrderColumns = {
     departureDate: {column: "departureDate", name: "Departure Date"},
-    returnDate: {column: "returnDate", name: "Return date"},
+    returnDate: {column: "returnDate", name: "Return Date"},
     distanceCoveredInMeters: {column: "distanceCoveredInMeters", name: "Journey Distance"},
     durationInSeconds: {column: "durationInSeconds", name: "Journey Duration"},
     departureStationName: {column: "departureStationName", name: "Departure Station"},

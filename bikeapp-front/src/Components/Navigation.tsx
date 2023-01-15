@@ -57,7 +57,7 @@ export default function Navigation() {
                 {/* Position left */}
                 {/* Station name */}
                 <Navbar.Brand>
-                    {selectedStation && selectedStation.id ? 
+                    {selectedStation?.id ? 
                         <>
                             <span>{selectedStation.nameLocaleFi} </span>
                             <span className="secondary">
@@ -72,7 +72,7 @@ export default function Navigation() {
                 {/* Position right */}
                 {/* Station address */}
                 <Navbar.Text>
-                    {selectedStation && selectedStation.addressLocaleFi}
+                    {selectedStation?.addressLocaleFi}
                 </Navbar.Text>
 
             </Container>
@@ -101,7 +101,7 @@ export default function Navigation() {
                         </Button>
 
                         {/* Station info */}
-                        {selectedStation && selectedStation.id ?
+                        {selectedStation?.id ?
                             <>
                             <NavDropdown title="Station Info" id="collasible-nav-dropdown">
                                 <NavDropdown.Item>
