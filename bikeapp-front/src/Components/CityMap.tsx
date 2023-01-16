@@ -12,6 +12,7 @@ import {
 } from "../GlobalStates";
 import { DateFilter } from "../Types/App";
 import { Station, StationInfo } from "../Types/Station";
+import StationName from "./StationName";
 
 export default function CityMap() {
 
@@ -132,10 +133,7 @@ export default function CityMap() {
                             className="selected-station-info"
                             ref={(el: HTMLDivElement) => stationInfoboxRefs.current[i] = el}
                         >
-                            {station.nameLocaleEn}&nbsp;
-                            <span className="secondary">
-                                {station.nameLocaleFi}
-                            </span>
+                            <StationName station={station} />
                             <br/>
                             <span className="secondary">
                                 {station.addressLocaleFi}

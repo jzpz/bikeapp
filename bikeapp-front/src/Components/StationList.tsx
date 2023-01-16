@@ -5,6 +5,7 @@ import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { departureStationState, offCanvasState, returnStationState, selectedStationState, stationsState } from '../GlobalStates';
 import { OffCanvasStatus } from '../Types/App';
 import { Station } from '../Types/Station';
+import StationName from './StationName';
 
 // An offcanvas view that contains all stations
 export default function StationList() {
@@ -72,8 +73,7 @@ export default function StationList() {
                         }}
                         key={"station-list-item" + station.id} 
                         className="list-item station">
-                        <span>{station.nameLocaleEn} </span>
-                        <span className="secondary">{station.nameLocaleFi}</span>
+                        <StationName station={station} />
                     </div>
                 )
 

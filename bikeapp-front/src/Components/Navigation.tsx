@@ -11,6 +11,7 @@ import { getStation } from "../Functions/stations";
 import { offCanvasState, selectedStationState, departureStationState, returnStationState, stationInfoState } from "../GlobalStates";
 import { OffCanvasStatus, PopularStationItemProps } from "../Types/App";
 import { Station, StationInfo, StationPopularity } from "../Types/Station";
+import StationName from "./StationName";
 
 export default function Navigation() {
 
@@ -38,10 +39,7 @@ export default function Navigation() {
                 })
             }
         >
-            <span>{stationPopularity.nameLocaleEn} </span>
-            <span className="secondary">
-                {stationPopularity.nameLocaleFi}
-            </span>
+            <StationName station={stationPopularity} />
             <br/>
             <span className="secondary">
                 {stationPopularity.journeyAmount} journeys
@@ -155,7 +153,7 @@ export default function Navigation() {
                                     Most popular departure stations <br/>
                                     for&nbsp;
                                     <span className="return-station">
-                                        {selectedStation.nameLocaleEn}
+                                        <StationName station={selectedStation} />
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
@@ -176,7 +174,7 @@ export default function Navigation() {
                                     Most popular return stations<br/>
                                     for&nbsp;
                                     <span className="departure-station">
-                                        {selectedStation.nameLocaleEn}
+                                        <StationName station={selectedStation} />
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
