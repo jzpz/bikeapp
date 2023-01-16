@@ -132,9 +132,9 @@ export default function CityMap() {
                             className="selected-station-info"
                             ref={(el: HTMLDivElement) => stationInfoboxRefs.current[i] = el}
                         >
-                            {station.nameLocaleFi}&nbsp;
+                            {station.nameLocaleEn}&nbsp;
                             <span className="secondary">
-                                {station.nameLocaleSe}
+                                {station.nameLocaleFi}
                             </span>
                             <br/>
                             <span className="secondary">

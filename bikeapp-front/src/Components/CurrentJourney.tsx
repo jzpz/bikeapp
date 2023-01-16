@@ -16,7 +16,7 @@ export default function CurrentJourney () {
         <>
             <IoArrowForward size={26} style={{marginRight:5,marginLeft:5,marginBottom:3}} />
             <span className="return-station" style={{fontWeight:"bold"}}>
-                {returnStation?.nameLocaleFi}
+                {returnStation?.nameLocaleEn}
             </span>
         </>
     )
@@ -29,17 +29,20 @@ export default function CurrentJourney () {
                     style={{marginBottom:0}}
                     data-cy="current-journey"
                 >
-                    {selectedStation ? <>
-                        {departureStation && <>
-                            <span className="departure-station" style={{fontWeight:"bold"}}>
-                                {departureStation?.nameLocaleFi}
-                            </span>
-                            {returnStation && departureStation.id !== returnStation.id &&
-                                <ReturnStation />
-                            }
-                        </>}
+                    {selectedStation ? 
+                        <>
+                        {departureStation && 
+                            <>
+                                <span className="departure-station" style={{fontWeight:"bold"}}>
+                                    {departureStation?.nameLocaleEn}
+                                </span>
+                                {returnStation && departureStation.id !== returnStation.id &&
+                                    <ReturnStation />
+                                }
+                            </>
+                        }
                     </>:
-                        <span>
+                        <span className="secondary">
                             Click a marker on the map
                         </span>
                     }

@@ -20,19 +20,19 @@ export default function StationList() {
 
     function filterStationsList(list: Station[]): Station[] {
         return list.filter((station: Station) => 
-            station.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase()) ||
-            station.nameLocaleSe.toLowerCase().includes(filterWord.toLowerCase())
+            station.nameLocaleEn.toLowerCase().includes(filterWord.toLowerCase()) ||
+            station.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase())
         )
     }
 
     function sortStationsList(list: Station[]): Station[] {
         return [...list].sort((a: Station, b: Station) => {
-            const a_NameLocaleFi = a.nameLocaleFi.toLowerCase();
-            const b_NameLocaleFi = b.nameLocaleFi.toLowerCase();
+            const a_NameLocaleEn = a.nameLocaleEn.toLowerCase();
+            const b_NameLocaleEn = b.nameLocaleEn.toLowerCase();
 
-            if(a_NameLocaleFi < b_NameLocaleFi) {
+            if(a_NameLocaleEn < b_NameLocaleEn) {
                 return -1;
-            } else if(a_NameLocaleFi > b_NameLocaleFi) {
+            } else if(a_NameLocaleEn > b_NameLocaleEn) {
                 return 1;
             }
             
@@ -48,8 +48,8 @@ export default function StationList() {
                 let elements: JSX.Element[] = [];
 
                 // Alphabetically group station names by adding first letter as heading
-                let stationFirstLetter = station.nameLocaleFi.charAt(0);
-                if(i === 0 || array[i - 1].nameLocaleFi.charAt(0) !== stationFirstLetter) {
+                let stationFirstLetter = station.nameLocaleEn.charAt(0);
+                if(i === 0 || array[i - 1].nameLocaleEn.charAt(0) !== stationFirstLetter) {
                     elements.push(
                         <div 
                             style={{margin:3}} 
@@ -72,8 +72,8 @@ export default function StationList() {
                         }}
                         key={"station-list-item" + station.id} 
                         className="list-item station">
-                        <span>{station.nameLocaleFi} </span>
-                        <span className="secondary">{station.nameLocaleSe}</span>
+                        <span>{station.nameLocaleEn} </span>
+                        <span className="secondary">{station.nameLocaleFi}</span>
                     </div>
                 )
 

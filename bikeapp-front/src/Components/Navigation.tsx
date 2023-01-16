@@ -38,9 +38,9 @@ export default function Navigation() {
                 })
             }
         >
-            <span>{stationPopularity.nameLocaleFi} </span>
+            <span>{stationPopularity.nameLocaleEn} </span>
             <span className="secondary">
-                {stationPopularity.nameLocaleSe}
+                {stationPopularity.nameLocaleFi}
             </span>
             <br/>
             <span className="secondary">
@@ -59,9 +59,9 @@ export default function Navigation() {
                 <Navbar.Brand>
                     {selectedStation?.id ? 
                         <>
-                            <span>{selectedStation.nameLocaleFi} </span>
+                            <span>{selectedStation.nameLocaleEn} </span>
                             <span className="secondary">
-                                {selectedStation.nameLocaleSe}
+                                {selectedStation.nameLocaleFi}
                             </span>
                         </> : <>
                             <span>No station selected</span>
@@ -155,7 +155,7 @@ export default function Navigation() {
                                     Most popular departure stations <br/>
                                     for&nbsp;
                                     <span className="return-station">
-                                        {selectedStation.nameLocaleFi}
+                                        {selectedStation.nameLocaleEn}
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
@@ -176,7 +176,7 @@ export default function Navigation() {
                                     Most popular return stations<br/>
                                     for&nbsp;
                                     <span className="departure-station">
-                                        {selectedStation.nameLocaleFi}
+                                        {selectedStation.nameLocaleEn}
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />

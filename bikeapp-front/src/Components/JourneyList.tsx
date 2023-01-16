@@ -150,10 +150,10 @@ export default function JourneyList() {
                     {selectedStation ?
                         <>
                             <span>
-                                {selectedStation.nameLocaleFi}&nbsp;
+                                {selectedStation.nameLocaleEn}&nbsp;
                             </span>
                             <span className="secondary">
-                                {selectedStation.nameLocaleSe}
+                                {selectedStation.nameLocaleFi}
                             </span>
                         </>
                     : 
