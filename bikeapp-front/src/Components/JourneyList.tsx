@@ -35,6 +35,7 @@ export default function JourneyList() {
     const [orderBy, setOrderBy] = useState<JourneyOrderColumn>(JourneyOrderColumns.departureDate);
     const [orderDescending, setOrderDescending] = useState(false);
 
+    // Fetch journeys with params
     useEffect(() => {
         let cancel = false;
 

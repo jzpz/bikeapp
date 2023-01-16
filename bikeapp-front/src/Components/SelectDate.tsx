@@ -32,6 +32,7 @@ export default function SelectDate() {
                             else
                                 setDateFilter({...dateFilter, dateFrom: newDate})
                         }}
+                        placeholderText="YYYY-MM-DD"
                     />
                 </div>
                 <div
@@ -47,20 +48,23 @@ export default function SelectDate() {
                             else
                                 setDateFilter({...dateFilter, dateTo: newDate})    
                         }}
+                        placeholderText="YYYY-MM-DD"
                     />
                 </div>
             </div>
             <div className="text-center">
-                <Button 
-                    className="mt-2"
-                    variant="outline-danger"
-                    onClick={() => {
-                        setDateFilter({dateFrom: null, dateTo: null});
-                    }}
-                >
-                    <IoClose size={20} />
-                    Clear
-                </Button>
+                {dateFilter?.dateFrom || dateFilter?.dateTo ?
+                    <Button 
+                        className="mt-2"
+                        variant="outline-danger"
+                        onClick={() => {
+                            setDateFilter({dateFrom: null, dateTo: null});
+                        }}
+                    >
+                        <IoClose size={20} />
+                        Clear
+                    </Button>
+                : null}
             </div>
         </div>
     )
