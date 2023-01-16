@@ -84,10 +84,8 @@ button.active, button:hover {
 
 #journey-info {
     width: max-content;
-    padding: 20px;
     position: fixed;
     width: max-content;
-    background-color: white;
     bottom: 30px;
     align-self: center;
     z-index: 2;
@@ -98,7 +96,7 @@ button.active, button:hover {
 }
 
 .selected-station-info {
-    background-color: rgba(255, 255, 255, 0.822);
+    background-color: rgba(255, 255, 255, 0.800);
     border-radius: 10px;
     padding: 10px;
     display: none;
@@ -109,9 +107,7 @@ div.selected-station-info:hover {
 }
 
 #date-selector {
-    background-color: white;
     margin: 20px;
-    padding: 20px;
     right: 0;
     text-align: left;
 }
@@ -172,6 +168,19 @@ div.selected-station-info:hover {
 
 .floating-container {
     border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.800);
+    backdrop-filter: blur(2px);
+}
+
+.floating-container > div {
+    padding: 10px;
+}
+
+.container-title {
+    background-color:rgb(44, 44, 44);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color: white;
 }
 
 .offcanvas-title {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { dateFilterState } from "../GlobalStates";
 import DatePicker from "react-datepicker";
@@ -9,16 +9,20 @@ import { DateFilter } from "../Types/App";
 export default function SelectDate() {
 
     const [dateFilter, setDateFilter] = useRecoilState<DateFilter>(dateFilterState);
+    const [open, setOpen] = useState<boolean>(true);
 
     return(
+        <>
         <div 
             id="date-selector" 
             className="floating-container" 
             style={{position:"absolute",zIndex:1}}
             data-cy="date-selector"
         >
-            <h4>Select date</h4>
-            <div className="date-selector-picker" style={{display:"inline-flex"}}>
+            <div className="container-title">
+                <h4>Select date</h4>
+            </div>
+            <div className="date-selector-picker" style={{display: open ? "inline-flex" : "none"}}>
                 <div
                     data-cy="datepicker-datefrom"
                 >
@@ -55,7 +59,6 @@ export default function SelectDate() {
             <div className="text-center">
                 {dateFilter?.dateFrom || dateFilter?.dateTo ?
                     <Button 
-                        className="mt-2"
                         variant="outline-danger"
                         onClick={() => {
                             setDateFilter({dateFrom: null, dateTo: null});
@@ -67,5 +70,6 @@ export default function SelectDate() {
                 : null}
             </div>
         </div>
+        </>
     )
 }
