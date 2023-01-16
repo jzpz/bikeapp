@@ -22,7 +22,7 @@ export default function CurrentJourney () {
     )
 
     return(
-        <div className="journey-item floating-container">
+        <div className="journey-item floating-container" id="journey-info">
             <div className="text-center" style={{margin:3, display:"inline-flex"}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
                 <h4 

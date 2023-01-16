@@ -5,15 +5,22 @@ import { OrderDirectionButtonProps } from '../Types/App';
 
 export default function OrderDirectionButton({isDescending, handleChange}: OrderDirectionButtonProps): JSX.Element {
     return(
-        <span
+        <Button
             className="order-direction-button"
+            style={{overflow:"hidden"}}
             onClick={() => handleChange(!isDescending)}
+            variant="outline-dark"
+            size="sm"
         >
             {isDescending ?
-                <IoArrowDown size={30} />
+                <span style={{overflow:"hidden"}}>
+                    Descending <IoArrowDown />
+                </span>
             :
-                <IoArrowUp size={30} />
+                <span>
+                    Ascending <IoArrowUp />
+                </span>
             }
-        </span>
+        </Button>
     )
 }

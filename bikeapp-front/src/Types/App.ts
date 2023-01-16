@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Journey } from "./Journey";
+import { Journey, JourneyOrderColumn } from "./Journey";
 import { StationPopularity, StationType } from "./Station";
 export interface OffCanvasStatus {
     journeys: boolean,
@@ -36,6 +36,11 @@ export interface SelectDateProps {
 export interface OrderDirectionButtonProps {
     isDescending: boolean, 
     handleChange: (isDescending: boolean) => void,
+}
+
+export interface OrderJourneysDropdownProps {
+    currentOrderColumn: JourneyOrderColumn,
+    handleChange: (newOrderColumn: JourneyOrderColumn) => void,
 }
 
 export interface PaginationMenuProps {

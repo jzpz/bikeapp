@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import Spinner from 'react-bootstrap/Spinner';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import Pagination from 'react-bootstrap/Pagination';
-import { IoArrowBack, IoArrowForward, IoBicycleOutline, IoTime, IoTimeOutline, IoTimerOutline } from 'react-icons/io5';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getJourneys } from '../Functions/journeys';
 import {
@@ -17,6 +12,10 @@ import { Station, StationType } from '../Types/Station';
 import JourneyListItem from './JourneyListItem';
 import OrderDirectionButton from './OrderDirectionButton';
 import PaginationMenu from './PaginationMenu';
+import Tab from 'react-bootstrap/esm/Tab';
+import Tabs from 'react-bootstrap/esm/Tabs';
+import OrderJourneysDropdown from './OrderJourneysDropdown';
+import Button from 'react-bootstrap/esm/Button';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList() {
@@ -34,6 +33,9 @@ export default function JourneyList() {
     const [loading, setLoading] = useState(true);
     const [orderBy, setOrderBy] = useState<JourneyOrderColumn>(JourneyOrderColumns.departureDate);
     const [orderDescending, setOrderDescending] = useState(false);
+
+    const handleOrderColumnChange = (column: JourneyOrderColumn) => setOrderBy(column);
+    const handleOrderDirectionChange = (isDescending: boolean) => setOrderDescending(isDescending);
 
     // Fetch journeys with params
     useEffect(() => {
@@ -114,10 +116,6 @@ export default function JourneyList() {
         setPage(newPage);
     }
 
-    function handleOrderChange(isDescending: boolean) {
-        setOrderDescending(isDescending);
-    }
-
     function Journeys() {
         if(journeys) {
             const list = journeys.map((journey: Journey) => 
@@ -148,80 +146,71 @@ export default function JourneyList() {
                 closeButton
                 data-cy="journey-list-close"
             >
-            <Offcanvas.Title>
-                {selectedStation && selectedStation.nameLocaleFi}&nbsp;
-                <span className="secondary">
-                    {selectedStation?.nameLocaleSe}
-                </span>
-                <hr />
-                <ButtonGroup>
-                    <Button 
-                        style={{backgroundColor: "#ff036c",border:"none",marginRight:10}}
-                        className={selectedStationType === "departure" ? "active" : ""}
-                        onClick={() => setSelectedStationType("departure")}
-                    >
-                        Departures
-                    </Button>
-                    <Button 
-                        style={{backgroundColor: "#1d63b8",border:"none"}}
-                        className={selectedStationType === "return" ? "active" : ""}
-                        onClick={() => setSelectedStationType("return")}
-                    >
-                        Returns
-                    </Button>
-                </ButtonGroup>
-            </Offcanvas.Title>
+                <Offcanvas.Title>  
+                    {selectedStation ?
+                        <>
+                            <span>
+                                {selectedStation.nameLocaleFi}&nbsp;
+                            </span>
+                            <span className="secondary">
+                                {selectedStation.nameLocaleSe}
+                            </span>
+                        </>
+                    : 
+                        <span>All Journeys</span>
+                    }
+                    <hr />
+                    <div className="tab-buttons" style={{display:"inline-flex", width:"100%"}}>
+                        <Button
+                            onClick={() => setSelectedStationType("departure")}
+                            className={selectedStationType === "departure" ? "active" : ""}
+                            id="departures-tab"
+                        >
+                            Departures
+                        </Button>
+                        <Button
+                            onClick={() => setSelectedStationType("return")}
+                            className={selectedStationType === "return" ? "active" : ""}
+                            id="returns-tab"
+                        >
+                            Returns
+                        </Button>
+                    </div>
+                </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                <div className="journey-list-options pb-2" style={{display:"inline-flex"}}>
-                    <span className="p-1">Order by</span>
-                    <DropdownButton title={orderBy.name}>
-                        <Dropdown.Item
-                            onClick={() => setOrderBy(JourneyOrderColumns.departureDate)}
-                        >
-                            <IoTimeOutline />&nbsp;
-                            {JourneyOrderColumns.departureDate.name}
-                        </Dropdown.Item>
-                        <Dropdown.Item 
-                            onClick={() => setOrderBy(JourneyOrderColumns.departureStationName)}
-                        >
-                            <IoArrowForward />&nbsp;
-                            {JourneyOrderColumns.departureStationName.name}
-                        </Dropdown.Item>
-                        <Dropdown.Item 
-                            onClick={() => setOrderBy(JourneyOrderColumns.returnStationName)}
-                        >
-                            <IoArrowBack />&nbsp;
-                            {JourneyOrderColumns.returnStationName.name}
-                        </Dropdown.Item>
-                        <Dropdown.Item 
-                            onClick={() => setOrderBy(JourneyOrderColumns.distanceCoveredInMeters)}
-                        >
-                            <IoBicycleOutline />&nbsp;
-                            {JourneyOrderColumns.distanceCoveredInMeters.name}
-                        </Dropdown.Item>
-                        <Dropdown.Item 
-                            onClick={() => setOrderBy(JourneyOrderColumns.durationInSeconds)}
-                        >
-                            <IoTimerOutline />&nbsp;
-                            {JourneyOrderColumns.durationInSeconds.name}
-                        </Dropdown.Item>
-                    </DropdownButton>
+                <span className="secondary">
+                    Order by:
+                </span>
+                <div className="journey-list-options pb-2" style={{width:"100%",display:"inline-flex"}}>
+                    {/* Ordering */}
+                    <OrderJourneysDropdown
+                        currentOrderColumn={orderBy}
+                        handleChange={handleOrderColumnChange}
+                    />
                     <OrderDirectionButton
                         isDescending={orderDescending}
-                        handleChange={handleOrderChange}
-                     />
+                        handleChange={handleOrderDirectionChange}
+                    />
                 </div>
                 <div 
                     className="journey-list"
                     data-cy="journey-list"
                 >
-                    <Journeys />
+                    {loading ?
+                        <div className="text-center">
+                            <Spinner style={{alignSelf:"center",marginTop:40}} animation="border" variant="primary" />
+                        </div>
+                    :
+                        <>
+                            <Journeys />
+                            <PaginationMenu 
+                                handlePageSwitch={handlePageSwitch}
+                                currentPage={page}
+                            />
+                        </>
+                    }
                 </div>
-                <PaginationMenu 
-                    handlePageSwitch={handlePageSwitch}
-                    currentPage={page}
-                />
             </Offcanvas.Body>
         </Offcanvas>
     )

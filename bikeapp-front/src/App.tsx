@@ -18,9 +18,7 @@ function App() {
                 <CityMap /> 
                 <JourneyList />
                 <StationList />
-                <div id="journey-info">
-                    <CurrentJourney />
-                </div>
+                <CurrentJourney />
             </RecoilRoot>
         </div>
     );

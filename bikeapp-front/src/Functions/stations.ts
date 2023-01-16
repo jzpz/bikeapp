@@ -28,6 +28,8 @@ export function getStationInfo(stationId: string, dateFrom?: Date, dateTo?: Date
     if(stationId) {
         url += `?stationId=${stationId}`
     }
+
+    console.log("fetch", url)
     
     return new Promise((resolve, reject) => {
         fetch(url)

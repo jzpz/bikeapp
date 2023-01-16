@@ -6,6 +6,8 @@
 
 :root {
     --background-hover: rgb(243, 243, 243);
+    --departure-station: #c40053;
+    --return-station: #003c85;
 }
 
 .App {
@@ -15,11 +17,11 @@
 }
 
 .departure-station {
-    color: #c40053;
+    color: var(--departure-station);
 }
 
 .return-station {
-    color: #003c85;
+    color: var(--return-station);
 }
 
 .secondary {
@@ -56,6 +58,9 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     border-radius: 5px;
+    -webkit-box-shadow: 0 2px 2px silver;
+    -moz-box-shadow: 0 2px 2px silver;
+    box-shadow: 0 2px 2px silver;
 }
 
 .journey-line.active {
@@ -90,7 +95,6 @@ button.active, button:hover {
     right: 0; 
     margin-left: auto; 
     margin-right: auto; 
-    border-radius: 35px;
 }
 
 .selected-station-info {
@@ -108,7 +112,6 @@ div.selected-station-info:hover {
     background-color: white;
     margin: 20px;
     padding: 20px;
-    border-radius: 35px;
     right: 0;
     text-align: left;
 }
@@ -118,6 +121,60 @@ div.selected-station-info:hover {
 }
 
 .order-direction-button {
-    margin: 3px;
     cursor: pointer;
+}
+
+.tab-buttons button, .tab-buttons button:hover {
+    background-color: transparent;
+    border-radius: 0px!important;
+    width: 100%;
+}
+
+.tab-buttons button:hover {
+    border: 1px solid gray;
+}
+
+#departures-tab {
+    color: var(--departure-station);
+    background-color: transparent;
+    border: 1px solid var(--departure-station);
+}
+
+#departures-tab.active {
+    color: white;
+    background-color: var(--departure-station);
+}
+
+#returns-tab {
+    color: var(--return-station);
+    background-color: transparent;
+    border: 1px solid var(--return-station);
+}
+
+#returns-tab.active {
+    color: white;
+    background-color: var(--return-station);
+}
+
+.offcanvas-header {
+    -webkit-box-shadow: 0 1px 3px silver;
+    -moz-box-shadow: 0 1px 3px silver;
+    box-shadow: 0 1px 3px silver;
+    z-index: 1;
+}
+
+.navbar, .floating-container, .dropdown-menu {
+    -webkit-box-shadow: 2px 2px 4px gray;
+    -moz-box-shadow: 2px 2px 4px gray;
+    box-shadow: 2px 2px 4px gray;
+    z-index: 1;
+}
+
+.floating-container {
+    border-radius: 15px;
+    border: 1px solid silver;
+}
+
+.offcanvas-title {
+    width: 90%;
 }

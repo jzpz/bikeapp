@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
@@ -48,36 +48,42 @@ export default function StationList() {
                 let elements: JSX.Element[] = [];
 
                 // Alphabetically group station names by adding first letter as heading
-                if(i === 0 || array[i - 1].nameLocaleFi.charAt(0) !== station.nameLocaleFi.charAt(0)) {
+                let stationFirstLetter = station.nameLocaleFi.charAt(0);
+                if(i === 0 || array[i - 1].nameLocaleFi.charAt(0) !== stationFirstLetter) {
                     elements.push(
-                        <div style={{margin:3}}>
+                        <div 
+                            style={{margin:3}} 
+                            key={"station-list-heading-" + stationFirstLetter}
+                        >
                             <span style={{fontWeight:"bold",color:"#27255c",fontSize:"1.1em"}}>
-                                {station.nameLocaleFi.charAt(0)}
+                                {stationFirstLetter}
                             </span>
                         </div>
                     )
                 }
 
                 elements.push(
-                <div 
-                    onClick={() => {
-                        setSelectedStation(station)
-                        setDepartureStation(station)
-                        setReturnStation(station)
-                        setOffCanvas({...offCanvas, stations: false})
-                    }}
-                    key={"station-list-item" + station.id} 
-                    className="list-item station">
-                    <span>{station.nameLocaleFi} </span>
-                    <span className="secondary">{station.nameLocaleSe}</span>
-                </div>
+                    <div 
+                        onClick={() => {
+                            setSelectedStation(station)
+                            setDepartureStation(station)
+                            setReturnStation(station)
+                            setOffCanvas({...offCanvas, stations: false})
+                        }}
+                        key={"station-list-item" + station.id} 
+                        className="list-item station">
+                        <span>{station.nameLocaleFi} </span>
+                        <span className="secondary">{station.nameLocaleSe}</span>
+                    </div>
                 )
 
                 return elements;
             })
 
             if(list.length > 0) {
-                return <>{list}</>
+                return(
+                    <>{list}</>
+                )
             }
         }
 
@@ -99,25 +105,22 @@ export default function StationList() {
                 closeButton
                 data-cy="station-list-close"
             >
-            <Offcanvas.Title>
-                Station
-            </Offcanvas.Title>
+                <Offcanvas.Title>
+                    Stations
+                    <hr />
+                    <Form.Group className="mb-3" controlId="formStationSearch">
+                        <Form.Control 
+                            value={filterWord}
+                            onChange={(e) => setFilterWord(e.target.value)}
+                            type="text" 
+                            placeholder="Search by name"
+                            data-cy="station-search"
+                        />
+                    </Form.Group>
+                </Offcanvas.Title>
             </Offcanvas.Header>
             {/* Station list and search */}
             <Offcanvas.Body>
-                <Form.Group className="mb-3" controlId="formStationSearch">
-                    <Form.Label>
-                        Search by name
-                    </Form.Label>
-                    <Form.Control 
-                        value={filterWord}
-                        onChange={(e) => setFilterWord(e.target.value)}
-                        type="text" 
-                        placeholder="Type station name"
-                        data-cy="station-search"
-                    />
-                </Form.Group>
-
                 <div className="station-list">
                     <Stations />
                 </div>

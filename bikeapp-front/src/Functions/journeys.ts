@@ -30,7 +30,7 @@ export function getJourneys(params: JourneyParams): Promise<Journey[]> {
         url += "&descending=" + params.descending
     }
 
-    console.log("fetch",url)
+    console.log("fetch", url);
     return new Promise((resolve, reject) => {
         fetch(url)
         .then((response) => response.status === 200 ? response.json() : null)
