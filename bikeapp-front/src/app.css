@@ -28,6 +28,10 @@
     color: rgb(88, 88, 88);
 }
 
+.secondary-dark {
+    color: rgb(169, 169, 169);
+}
+
 body {
     overflow: hidden;
     font-family: NotoSans-Regular!important;

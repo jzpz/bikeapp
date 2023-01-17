@@ -35,3 +35,7 @@ export const JourneyOrderColumns = {
     departureStationName: {column: "departureStationName", name: "Departure Station"},
     returnStationName: {column: "returnStationName", name: "Return Station"},
 };
+
+export interface JourneyStatsProps {
+    journey: Journey,
+}

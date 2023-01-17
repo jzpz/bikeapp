@@ -67,7 +67,7 @@ export default function Navigation() {
                     {selectedStation?.id ? 
                         <>
                             <span>{selectedStation.nameLocaleEn} </span>
-                            <span className="secondary">
+                            <span className="secondary-dark">
                                 {selectedStation.nameLocaleFi}&nbsp;
                                 {selectedStation.nameLocaleSe}
                             </span>

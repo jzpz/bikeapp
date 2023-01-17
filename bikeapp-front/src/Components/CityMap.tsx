@@ -17,6 +17,7 @@ import {
 import { DateFilter, AppSettings } from "../Types/App";
 import { Journey } from "../Types/Journey";
 import { Station, StationInfo } from "../Types/Station";
+import JourneyStats from "./JourneyStats";
 import StationName from "./StationName";
 
 export default function CityMap() {
@@ -146,6 +147,13 @@ export default function CityMap() {
                             <br/>
                             <span className="secondary">
                                 {station.addressLocaleFi}
+                                <hr style={{margin:2}} />
+                                <div style={{fontSize:"0.9em"}}>
+                                    Click to mark as<br/>
+                                    <span className="departure-station">
+                                        departure station
+                                    </span>
+                                </div>
                             </span>
                         </div>
                     </Overlay>
@@ -197,14 +205,7 @@ export default function CityMap() {
                             style={{}}
                             className="map-overlay"
                         >
-                            <span className="journey-item-data">
-                                <IoTimerOutline style={{marginRight:5,marginTop:-3}} /> 
-                                {formatDuration(currentJourney.durationInSeconds)}
-                            </span>
-                            <span className="journey-item-data">
-                                <IoBicycle style={{marginLeft:10,marginRight:5,marginTop:-3}} /> 
-                                {formatDistance(currentJourney.distanceCoveredInMeters)}
-                            </span>
+                            <JourneyStats journey={currentJourney} />
                         </div>
                     </Overlay>
                 }

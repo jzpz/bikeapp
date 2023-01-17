@@ -12,6 +12,7 @@ import {
 import { JourneyListItemProps } from "../Types/App";
 import { Journey } from "../Types/Journey";
 import { Station } from "../Types/Station";
+import JourneyStats from "./JourneyStats";
 
 // List item for journey lists
 export default function JourneyListItem ({journey, selectedStationType}: JourneyListItemProps) {
@@ -77,16 +78,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
             </div>
 
             {/* Journey info */}
-            <div>
-                <span className="journey-item-data">
-                    <IoTimerOutline style={{marginRight:5}} /> 
-                    {formatDuration(journey.durationInSeconds)}
-                </span>
-                <span className="journey-item-data">
-                    <IoBicycle style={{marginLeft:10,marginRight:5}} /> 
-                    {formatDistance(journey.distanceCoveredInMeters)}
-                </span>
-            </div>
+            <JourneyStats journey={journey} />
             <div className="journey-line" 
                 style={{
                     // Color code the journey underline to match station colors
