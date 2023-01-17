@@ -4,7 +4,11 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getJourneys } from '../Functions/journeys';
 import {
-    dateFilterState, departureStationState, offCanvasState, returnStationState, selectedStationState
+    dateFilterState, 
+    departureStationState, 
+    offCanvasState, 
+    returnStationState, 
+    selectedStationState,
 } from '../GlobalStates';
 import { DateFilter, OffCanvasStatus } from '../Types/App';
 import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from '../Types/Journey';
@@ -12,8 +16,6 @@ import { Station, StationType } from '../Types/Station';
 import JourneyListItem from './JourneyListItem';
 import OrderDirectionButton from './OrderDirectionButton';
 import PaginationMenu from './PaginationMenu';
-import Tab from 'react-bootstrap/esm/Tab';
-import Tabs from 'react-bootstrap/esm/Tabs';
 import OrderJourneysDropdown from './OrderJourneysDropdown';
 import Button from 'react-bootstrap/esm/Button';
 

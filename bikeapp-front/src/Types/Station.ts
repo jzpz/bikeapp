@@ -35,5 +35,7 @@ export interface StationInfo {
 export type StationType = "departure" | "return";
 
 export interface StationNameProps {
-    station: Station | StationPopularity,
+    station: Station | StationPopularity | null,
+    fi?: boolean,
+    se?: boolean,
 }

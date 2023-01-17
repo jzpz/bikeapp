@@ -1,4 +1,5 @@
 import React from "react";
+import ToggleButton from "react-bootstrap/ToggleButton";
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -8,8 +9,15 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { formatDistance } from "../Functions/formatValues";
 import { getStation } from "../Functions/stations";
-import { offCanvasState, selectedStationState, departureStationState, returnStationState, stationInfoState } from "../GlobalStates";
-import { OffCanvasStatus, PopularStationItemProps } from "../Types/App";
+import { 
+    offCanvasState, 
+    selectedStationState, 
+    departureStationState, 
+    returnStationState, 
+    stationInfoState,
+    settingsState, 
+} from "../GlobalStates";
+import { AppSettings, OffCanvasStatus, PopularStationItemProps } from "../Types/App";
 import { Station, StationInfo, StationPopularity } from "../Types/Station";
 import StationName from "./StationName";
 
@@ -21,6 +29,7 @@ export default function Navigation() {
     const setDepartureStation = useSetRecoilState<Station | null>(departureStationState);
     const setReturnStation = useSetRecoilState<Station | null>(returnStationState);
     const stationInfo = useRecoilValue<StationInfo | null>(stationInfoState);
+    const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
 
     // Popular stations dropdown item
     const PopularStationItem = ({stationPopularity, selectedStationType}: PopularStationItemProps) => (
@@ -59,7 +68,8 @@ export default function Navigation() {
                         <>
                             <span>{selectedStation.nameLocaleEn} </span>
                             <span className="secondary">
-                                {selectedStation.nameLocaleFi}
+                                {selectedStation.nameLocaleFi}&nbsp;
+                                {selectedStation.nameLocaleSe}
                             </span>
                         </> : <>
                             <span>No station selected</span>
@@ -194,6 +204,18 @@ export default function Navigation() {
                     
                     {/* Position right */}
                     <Nav>
+                        <ToggleButton
+                            id="settings-show-lines"
+                            type="checkbox"
+                            variant="primary"
+                            checked={settings.showLines}
+                            value="1"
+                            onChange={(e) => {
+                                setSettings({...settings, showLines: Boolean(e.currentTarget.checked)})
+                            }}
+                        >
+                            Show lines on map
+                        </ToggleButton>
                         {/* Change station button */}
                         <Button 
                             className="overlay" 

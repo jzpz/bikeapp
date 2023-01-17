@@ -1,6 +1,8 @@
-import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
+import { GeoJson, GeoJsonFeature, Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { IoBicycle, IoTimerOutline } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { formatDistance, formatDuration } from "../Functions/formatValues";
 import { getStationInfo, getStations } from "../Functions/stations";
 import { 
     stationsState, 
@@ -9,8 +11,11 @@ import {
     returnStationState, 
     stationInfoState,
     dateFilterState,
+    settingsState,
+    currentJourneyState,
 } from "../GlobalStates";
-import { DateFilter } from "../Types/App";
+import { DateFilter, AppSettings } from "../Types/App";
+import { Journey } from "../Types/Journey";
 import { Station, StationInfo } from "../Types/Station";
 import StationName from "./StationName";
 
@@ -23,13 +28,14 @@ export default function CityMap() {
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
     const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
-
+    const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
+    const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
     const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
 
-    const stationMapMemo = useMemo(() => <StationMap />, [stations, departureStation, returnStation]);
-
+    const stationMapMemo = useMemo(() => <StationMap />, [stations, departureStation, returnStation, settings.showLines]);
+    
     useEffect(() => {
         getStations()
         .then(data => setStations(data))
@@ -100,6 +106,8 @@ export default function CityMap() {
                 }}
             >
                 <ZoomControl />
+
+                {/* Markers */}
                 {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
                     <Marker 
                         width={markerColor(station) ? 50 : 30} // Make current station larger in map
@@ -123,6 +131,7 @@ export default function CityMap() {
                     />
                 )}
 
+                {/* Marker Infoboxes */}
                 {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
                     <Overlay 
                         anchor={[station.coordinateY, station.coordinateX]}
@@ -130,7 +139,7 @@ export default function CityMap() {
                     >
                         <div 
                             id={"station-infobox" + station.id}
-                            className="selected-station-info"
+                            className="selected-station-info map-overlay"
                             ref={(el: HTMLDivElement) => stationInfoboxRefs.current[i] = el}
                         >
                             <StationName station={station} />
@@ -141,6 +150,64 @@ export default function CityMap() {
                         </div>
                     </Overlay>
                 )}
+
+                {/* Journey line */}
+                {settings.showLines && departureStation && returnStation && 
+                returnStation.id !== departureStation.id &&
+                    <GeoJson
+                        svgAttributes={{
+                            fill: "#1f1f1f",
+                            strokeWidth: "3",
+                            stroke: "#4a4a4a",
+                            r: "20",
+                        }}
+                    >
+                        <GeoJsonFeature
+                            feature={{
+                                type: "Feature",
+                                properties: {},
+                                geometry: {
+                                    coordinates: [
+                                        [
+                                            departureStation?.coordinateX,
+                                            departureStation?.coordinateY
+                                        ],
+                                        [
+                                            returnStation?.coordinateX,
+                                            returnStation?.coordinateY
+                                        ],
+                                    ],
+                                    type: "LineString"
+                                }
+                            }}  
+                        />
+                    </GeoJson>
+                }
+                {/* Journey line infobox */}
+                {settings.showLines && departureStation && returnStation && 
+                returnStation.id !== departureStation.id && currentJourney &&
+                    <Overlay 
+                        anchor={[
+                            (departureStation.coordinateY + returnStation.coordinateY) / 2,
+                            (departureStation.coordinateX + returnStation.coordinateX) / 2,
+                        ]}
+                        offset={[200, 30]}
+                    >
+                        <div 
+                            style={{}}
+                            className="map-overlay"
+                        >
+                            <span className="journey-item-data">
+                                <IoTimerOutline style={{marginRight:5,marginTop:-3}} /> 
+                                {formatDuration(currentJourney.durationInSeconds)}
+                            </span>
+                            <span className="journey-item-data">
+                                <IoBicycle style={{marginLeft:10,marginRight:5,marginTop:-3}} /> 
+                                {formatDistance(currentJourney.distanceCoveredInMeters)}
+                            </span>
+                        </div>
+                    </Overlay>
+                }
             </Map>
         )
     }

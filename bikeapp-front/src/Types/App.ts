@@ -6,7 +6,7 @@ export interface OffCanvasStatus {
     stations: boolean,
 }
 
-export type OffCanvas = {
+export interface OffCanvas {
     offCanvas: OffCanvasStatus,
     setOffCanvas: Dispatch<SetStateAction<OffCanvasStatus>>,
 };
@@ -46,4 +46,8 @@ export interface OrderJourneysDropdownProps {
 export interface PaginationMenuProps {
     handlePageSwitch: (page: number) => void,
     currentPage: number,
+}
+
+export interface AppSettings {
+    showLines: boolean,
 }

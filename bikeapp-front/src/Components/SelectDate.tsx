@@ -9,7 +9,6 @@ import { DateFilter } from "../Types/App";
 export default function SelectDate() {
 
     const [dateFilter, setDateFilter] = useRecoilState<DateFilter>(dateFilterState);
-    const [open, setOpen] = useState<boolean>(true);
 
     return(
         <>
@@ -22,7 +21,7 @@ export default function SelectDate() {
             <div className="container-title">
                 <h4>Select date</h4>
             </div>
-            <div className="date-selector-picker" style={{display: open ? "inline-flex" : "none"}}>
+            <div className="date-selector-picker" style={{display: "inline-flex"}}>
                 <div
                     data-cy="datepicker-datefrom"
                 >
@@ -36,7 +35,7 @@ export default function SelectDate() {
                             else
                                 setDateFilter({...dateFilter, dateFrom: newDate})
                         }}
-                        placeholderText="YYYY-MM-DD"
+                        placeholderText="Select start date"
                     />
                 </div>
                 <div
@@ -52,7 +51,7 @@ export default function SelectDate() {
                             else
                                 setDateFilter({...dateFilter, dateTo: newDate})    
                         }}
-                        placeholderText="YYYY-MM-DD"
+                        placeholderText="Select end date"
                     />
                 </div>
             </div>

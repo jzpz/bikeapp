@@ -1,20 +1,27 @@
 import React from "react";
 import { IoBicycle, IoTimerOutline, IoArrowForward } from 'react-icons/io5';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { formatDateString, formatDistance, formatDuration } from '../Functions/formatValues';
 import { getStation } from '../Functions/stations';
-import { selectedStationState, departureStationState, returnStationState } from "../GlobalStates";
+import { 
+    selectedStationState, 
+    departureStationState, 
+    returnStationState,
+    currentJourneyState, 
+} from "../GlobalStates";
 import { JourneyListItemProps } from "../Types/App";
+import { Journey } from "../Types/Journey";
 import { Station } from "../Types/Station";
 
 // List item for journey lists
 export default function JourneyListItem ({journey, selectedStationType}: JourneyListItemProps) {
 
     // Global states
-    const [selectedStation, setSelectedStation] = useRecoilState<Station | null>(selectedStationState);
+    const setSelectedStation = useSetRecoilState<Station | null>(selectedStationState);
     const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
     const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
-
+    const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
+    
     function selectJourney() {
         if(departureStation?.id !== journey.departureStationId) {
             // Set departure station to departure station of this journey
@@ -35,6 +42,8 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
                     setSelectedStation(data)
             })
         }
+
+        setCurrentJourney(journey);
     }
 
     return(
