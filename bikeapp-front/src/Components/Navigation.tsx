@@ -6,88 +6,30 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Placeholder from 'react-bootstrap/Placeholder';
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { formatDistance } from "../Functions/formatValues";
 import { getStation } from "../Functions/stations";
 import { 
     offCanvasState, 
     currentStationState, 
+    departureStationState, 
+    returnStationState, 
     stationInfoState,
     settingsState, 
 } from "../GlobalStates";
 import { AppSettings, OffCanvasStatus, PopularStationItemProps, CurrentStationState } from "../Types/App";
 import { Station, StationInfo, StationPopularity } from "../Types/Station";
 import StationName from "./StationName";
+import FirstNavbar from "./FirstNavbar";
+import PopularStationsListItem from "./PopularStationsListItem";
 
 export default function Navigation() {
 
     // Global states
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
-    const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
+    const [selectedStation, setSelectedStation] = useRecoilState<CurrentStationState>(currentStationState);
     const stationInfo = useRecoilValue<StationInfo | null>(stationInfoState);
     const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
-
-    // Popular stations dropdown item
-    const PopularStationItem = ({stationPopularity, selectedStationType}: PopularStationItemProps) => (
-        <NavDropdown.Item 
-            key={"popular-station-" + selectedStationType + stationPopularity.id}
-            onClick={() => 
-                getStation(stationPopularity.id)
-                .then(station => {
-                    if(selectedStationType === "departure") {
-                        setCurrentStation({
-                            ...currentStation,
-                            departure: station,
-                            return: currentStation.selected,
-                        });
-                    } else { // return station
-                        setCurrentStation({
-                            ...currentStation,
-                            departure: currentStation.selected,
-                            return: station,
-                        });
-                    }
-                })
-            }
-        >
-            <StationName station={stationPopularity} />
-            <br/>
-            <span className="secondary">
-                {stationPopularity.journeyAmount} journeys
-            </span>
-        </NavDropdown.Item>
-    )
-
-    // Navbar for station name and address
-    const FirstNavbar = () => (
-        <Navbar bg="dark" variant="dark" className="top-nav" style={{height:50}}>
-            <Container fluid>
-
-                {/* Position left */}
-                {/* Station name */}
-                <Navbar.Brand>
-                    {currentStation.selected?.id ? 
-                        <>
-                            <span>{currentStation.selected.nameLocaleEn} </span>
-                            <span className="secondary-dark">
-                                {currentStation.selected.nameLocaleFi}&nbsp;
-                                {currentStation.selected.nameLocaleSe}
-                            </span>
-                        </> : <>
-                            <span>No station selected</span>
-                        </>
-                    }
-                </Navbar.Brand>
-
-                {/* Position right */}
-                {/* Station address */}
-                <Navbar.Text>
-                    {currentStation.selected?.addressLocaleFi}
-                </Navbar.Text>
-
-            </Container>
-        </Navbar>
-    )
 
     // Navbar for station info and buttons
     const SecondNavbar = () => (
@@ -111,7 +53,7 @@ export default function Navigation() {
                         </Button>
 
                         {/* Station info */}
-                        {currentStation.selected?.id ?
+                        {selectedStation.selected?.id ?
                             <>
                             <NavDropdown title="Station Info" id="collasible-nav-dropdown">
                                 <NavDropdown.Item>
@@ -165,13 +107,13 @@ export default function Navigation() {
                                     Most popular departure stations <br/>
                                     for&nbsp;
                                     <span className="return-station">
-                                        <StationName station={currentStation.selected} />
+                                        <StationName station={selectedStation.selected} />
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 {stationInfo && stationInfo.mostPopularDepartureStations?.map((stationPopularity: StationPopularity) => {
                                     return(
-                                        <PopularStationItem 
+                                        <PopularStationsListItem 
                                             key={"popular-departure-station" + stationPopularity.id}
                                             stationPopularity={stationPopularity}
                                             selectedStationType={"departure"} 
@@ -186,13 +128,13 @@ export default function Navigation() {
                                     Most popular return stations<br/>
                                     for&nbsp;
                                     <span className="departure-station">
-                                        <StationName station={currentStation.selected} />
+                                        <StationName station={selectedStation.selected} />
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 {stationInfo && stationInfo.mostPopularReturnStations.map((stationPopularity: StationPopularity) => {
                                     return(
-                                        <PopularStationItem 
+                                        <PopularStationsListItem 
                                             key={"popular-return-station" + stationPopularity.id}
                                             stationPopularity={stationPopularity}
                                             selectedStationType={"return"} 
@@ -237,7 +179,7 @@ export default function Navigation() {
 
     return(
         <div id="navigation">
-            <FirstNavbar />
+            <FirstNavbar station={selectedStation.selected} />
             <SecondNavbar />
         </div>
     )
