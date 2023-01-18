@@ -1,17 +1,12 @@
 import React from 'react';
 import { StationNameProps } from "../Types/Station";
 
-const StationName = ({station, fi, se}: StationNameProps) => (
+const StationName = ({station, en}: StationNameProps) => (
     <span>
-        {station?.nameLocaleEn}&nbsp;
-        {fi &&
+        {station?.nameLocaleFi}
+        {en &&
             <span className="secondary">
-                <br/>{station?.nameLocaleFi}
-            </span>
-        }
-        {se &&
-            <span className="secondary">
-                &nbsp;- {station?.nameLocaleSe}
+                &nbsp;{station?.nameLocaleEn}
             </span>
         }
     </span>

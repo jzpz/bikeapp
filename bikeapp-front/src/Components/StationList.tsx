@@ -73,7 +73,7 @@ export default function StationList() {
                         }}
                         key={"station-list-item" + station.id} 
                         className="list-item station">
-                        <StationName station={station} fi se />
+                        <StationName station={station} en />
                     </div>
                 )
 

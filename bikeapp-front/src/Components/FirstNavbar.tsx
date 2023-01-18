@@ -2,6 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { FirstNavbarProps } from "../Types/App";
+import StationName from "./StationName";
 
 // Navbar for station name and address
 const FirstNavbar = ({station}: FirstNavbarProps) => (
@@ -13,11 +14,7 @@ const FirstNavbar = ({station}: FirstNavbarProps) => (
             <Navbar.Brand>
                 {station ? 
                     <>
-                        <span>{station.nameLocaleEn} </span>
-                        <span className="secondary-dark">
-                            {station.nameLocaleFi}&nbsp;
-                            {station.nameLocaleSe}
-                        </span>
+                        <StationName station={station} en />
                     </> : <>
                         <span>No station selected</span>
                     </>

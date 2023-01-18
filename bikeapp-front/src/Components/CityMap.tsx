@@ -24,7 +24,7 @@ export default function CityMap() {
     const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
     const settings = useRecoilValue<AppSettings>(settingsState);
-    const currentJourney = useRecoilValue<Journey | null>(currentJourneyState);
+    const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
     
     const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
@@ -79,7 +79,9 @@ export default function CityMap() {
                 selected: null,
                 departure: null,
                 return: null,
-            })
+            });
+
+            setCurrentJourney(null);
         }
     }
 

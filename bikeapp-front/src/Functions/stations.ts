@@ -1,13 +1,4 @@
-import { Station, StationInfo } from "../Types/Station";
-
-export function getStation(stationId: string): Promise<Station> {
-    return new Promise((resolve, reject) => {
-        fetch(`http://localhost:8080/station/${stationId}`)
-        .then((response) => response.status === 200 ? response.json() : null)
-        .then((data) => resolve(data))
-        .catch((e) => reject(e));
-    })
-}
+import { Station, StationInfo, StationType } from "../Types/Station";
 
 export function getStations(): Promise<Station[]> {
     return new Promise((resolve, reject) => {
@@ -16,6 +7,21 @@ export function getStations(): Promise<Station[]> {
         .then((data) => resolve(data))
         .catch((e) => reject(e));
     })
+}
+
+/** 
+ * Searches station from global stations array
+ * @returns station
+ */
+export function findStation(stations: Station[], stationId: string): Station | null { 
+    let station;
+    station = stations.find((station, i) => station.id === stationId)
+    
+    if(station) {
+        return station;
+    }
+
+    return null;
 }
 
 /**

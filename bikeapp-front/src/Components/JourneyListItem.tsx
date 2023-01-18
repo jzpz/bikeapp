@@ -1,14 +1,16 @@
 import React from "react";
 import { IoArrowForward } from 'react-icons/io5';
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { formatDateString } from '../Functions/formatValues';
-import { getStation } from '../Functions/stations';
+import { findStation } from "../Functions/stations";
 import { 
     currentStationState, 
-    currentJourneyState, 
+    currentJourneyState,
+    stationsState, 
 } from "../GlobalStates";
 import { JourneyListItemProps, CurrentStationState } from "../Types/App";
 import { Journey } from "../Types/Journey";
+import { Station, StationType } from "../Types/Station";
 import JourneyStats from "./JourneyStats";
 
 // List item for journey lists
@@ -16,44 +18,37 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
 
     // Global states
     const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
+    const stations = useRecoilValue<Station[] | null>(stationsState);
     const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
-    
-    function selectJourney() {
-        if(currentStation.departure?.id !== journey.departureStationId) {
-            // Set departure station to departure station of this journey
-            getStation(journey.departureStationId)
-            .then(departureStation => {
-                setCurrentStation({
-                    ...currentStation,
-                    departure: departureStation,
-                })
 
-                if(selectedStationType === "departure") {
-                    setCurrentStation({
-                        ...currentStation,
-                        selected: departureStation,
-                    })
-                }
-            })
+    function selectJourney() {
+        if(!stations) return;
+
+        let departureStation: Station | null = currentStation.departure;
+        let returnStation: Station | null = currentStation.return;
+        let selectedStation: Station | null = currentStation.selected;
+
+        if(currentStation.departure?.id !== journey.departureStationId) {
+            departureStation = findStation(stations, journey.departureStationId,);
+            console.log(departureStation)
         }
 
         if(currentStation.return?.id !== journey.returnStationId) {
-            // Set return station to return station of this journey
-            getStation(journey.returnStationId)
-            .then(returnStation => {
-                setCurrentStation({
-                    ...currentStation,
-                    return: returnStation,
-                })
-
-                if(selectedStationType === "return") {
-                    setCurrentStation({
-                        ...currentStation,
-                        selected: returnStation,
-                    })
-                }
-            })
+            returnStation = findStation(stations, journey.returnStationId);
+            console.log(departureStation)
         }
+
+        if(selectedStationType === "departure") {
+            selectedStation = departureStation;
+        } else {
+            selectedStation = returnStation;
+        }
+
+        setCurrentStation({
+            selected: selectedStation,
+            departure: departureStation,
+            return: returnStation,
+        })
 
         setCurrentJourney(journey);
     }
