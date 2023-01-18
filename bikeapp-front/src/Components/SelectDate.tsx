@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRecoilState } from "recoil";
 import { dateFilterState } from "../GlobalStates";
 import DatePicker from "react-datepicker";

@@ -1,7 +1,7 @@
 import React from "react";
-import { IoBicycle, IoTimerOutline, IoArrowForward } from 'react-icons/io5';
+import { IoArrowForward } from 'react-icons/io5';
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { formatDateString, formatDistance, formatDuration } from '../Functions/formatValues';
+import { formatDateString } from '../Functions/formatValues';
 import { getStation } from '../Functions/stations';
 import { 
     currentStationState, 

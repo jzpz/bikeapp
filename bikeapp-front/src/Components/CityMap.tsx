@@ -1,14 +1,10 @@
 import { GeoJson, GeoJsonFeature, Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { IoBicycle, IoTimerOutline } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { formatDistance, formatDuration } from "../Functions/formatValues";
 import { getStationInfo, getStations } from "../Functions/stations";
 import { 
     stationsState, 
     currentStationState, 
-    departureStationState, 
-    returnStationState, 
     stationInfoState,
     dateFilterState,
     settingsState,
@@ -27,8 +23,8 @@ export default function CityMap() {
     const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
     const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
-    const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
-    const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
+    const settings = useRecoilValue<AppSettings>(settingsState);
+    const currentJourney = useRecoilValue<Journey | null>(currentJourneyState);
     
     const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});

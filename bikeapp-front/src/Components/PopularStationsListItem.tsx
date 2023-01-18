@@ -3,9 +3,8 @@ import NavDropdown from "react-bootstrap/esm/NavDropdown";
 import StationName from './StationName';
 import { getStation } from '../Functions/stations';
 import { PopularStationItemProps, CurrentStationState } from '../Types/App';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { departureStationState, returnStationState, currentStationState } from '../GlobalStates';
-import { Station } from '../Types/Station';
+import { useRecoilState } from 'recoil';
+import { currentStationState } from '../GlobalStates';
 
 // Popular stations dropdown item
 function PopularStationsListItem ({stationPopularity, selectedStationType}: PopularStationItemProps) {

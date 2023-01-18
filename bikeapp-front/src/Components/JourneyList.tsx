@@ -5,14 +5,12 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { getJourneys } from '../Functions/journeys';
 import {
     dateFilterState, 
-    departureStationState, 
     offCanvasState, 
-    returnStationState, 
     currentStationState,
 } from '../GlobalStates';
 import { DateFilter, OffCanvasStatus, CurrentStationState } from '../Types/App';
 import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from '../Types/Journey';
-import { Station, StationType } from '../Types/Station';
+import { StationType } from '../Types/Station';
 import JourneyListItem from './JourneyListItem';
 import OrderDirectionButton from './OrderDirectionButton';
 import PaginationMenu from './PaginationMenu';

@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { departureStationState, offCanvasState, returnStationState, currentStationState, stationsState } from '../GlobalStates';
+import { offCanvasState, currentStationState, stationsState } from '../GlobalStates';
 import { OffCanvasStatus, CurrentStationState } from '../Types/App';
 import { Station } from '../Types/Station';
 import StationName from './StationName';

@@ -6,19 +6,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Placeholder from 'react-bootstrap/Placeholder';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { formatDistance } from "../Functions/formatValues";
-import { getStation } from "../Functions/stations";
 import { 
     offCanvasState, 
     currentStationState, 
-    departureStationState, 
-    returnStationState, 
     stationInfoState,
     settingsState, 
 } from "../GlobalStates";
-import { AppSettings, OffCanvasStatus, PopularStationItemProps, CurrentStationState } from "../Types/App";
-import { Station, StationInfo, StationPopularity } from "../Types/Station";
+import { AppSettings, OffCanvasStatus, CurrentStationState } from "../Types/App";
+import { StationInfo, StationPopularity } from "../Types/Station";
 import StationName from "./StationName";
 import FirstNavbar from "./FirstNavbar";
 import PopularStationsListItem from "./PopularStationsListItem";
@@ -27,7 +24,7 @@ export default function Navigation() {
 
     // Global states
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
-    const [selectedStation, setSelectedStation] = useRecoilState<CurrentStationState>(currentStationState);
+    const selectedStation = useRecoilValue<CurrentStationState>(currentStationState);
     const stationInfo = useRecoilValue<StationInfo | null>(stationInfoState);
     const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
 
@@ -155,7 +152,7 @@ export default function Navigation() {
                             checked={settings.showLines}
                             value="1"
                             onChange={(e) => {
-                                setSettings({...settings, showLines: Boolean(e.currentTarget.checked)})
+                                setSettings({...settings, showLines: e.currentTarget.checked})
                             }}
                         >
                             Show lines on map

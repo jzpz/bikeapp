@@ -1,8 +1,7 @@
 import React from "react";
 import { IoArrowForward, IoTimeOutline } from 'react-icons/io5';
-import { currentJourneyState, departureStationState, returnStationState, currentStationState } from "../GlobalStates";
+import { currentJourneyState, currentStationState } from "../GlobalStates";
 import { useRecoilValue } from 'recoil';
-import { Station } from "../Types/Station";
 import StationName from "./StationName";
 import JourneyStats from "./JourneyStats";
 import { Journey } from "../Types/Journey";

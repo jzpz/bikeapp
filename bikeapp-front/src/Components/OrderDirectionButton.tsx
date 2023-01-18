@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import Button from "react-bootstrap/Button";
 import { IoArrowDown, IoArrowUp } from "react-icons/io5";
 import { OrderDirectionButtonProps } from '../Types/App';
