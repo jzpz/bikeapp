@@ -6,18 +6,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Placeholder from 'react-bootstrap/Placeholder';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { formatDistance } from "../Functions/formatValues";
 import { getStation } from "../Functions/stations";
 import { 
     offCanvasState, 
-    selectedStationState, 
-    departureStationState, 
-    returnStationState, 
+    currentStationState, 
     stationInfoState,
     settingsState, 
 } from "../GlobalStates";
-import { AppSettings, OffCanvasStatus, PopularStationItemProps } from "../Types/App";
+import { AppSettings, OffCanvasStatus, PopularStationItemProps, CurrentStationState } from "../Types/App";
 import { Station, StationInfo, StationPopularity } from "../Types/Station";
 import StationName from "./StationName";
 
@@ -25,9 +23,7 @@ export default function Navigation() {
 
     // Global states
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
-    const selectedStation = useRecoilValue<Station | null>(selectedStationState);
-    const setDepartureStation = useSetRecoilState<Station | null>(departureStationState);
-    const setReturnStation = useSetRecoilState<Station | null>(returnStationState);
+    const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
     const stationInfo = useRecoilValue<StationInfo | null>(stationInfoState);
     const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
 
@@ -37,13 +33,19 @@ export default function Navigation() {
             key={"popular-station-" + selectedStationType + stationPopularity.id}
             onClick={() => 
                 getStation(stationPopularity.id)
-                .then(data => {
+                .then(station => {
                     if(selectedStationType === "departure") {
-                        setDepartureStation(data);
-                        setReturnStation(selectedStation);
+                        setCurrentStation({
+                            ...currentStation,
+                            departure: station,
+                            return: currentStation.selected,
+                        });
                     } else { // return station
-                        setReturnStation(data)
-                        setDepartureStation(selectedStation)
+                        setCurrentStation({
+                            ...currentStation,
+                            departure: currentStation.selected,
+                            return: station,
+                        });
                     }
                 })
             }
@@ -64,12 +66,12 @@ export default function Navigation() {
                 {/* Position left */}
                 {/* Station name */}
                 <Navbar.Brand>
-                    {selectedStation?.id ? 
+                    {currentStation.selected?.id ? 
                         <>
-                            <span>{selectedStation.nameLocaleEn} </span>
+                            <span>{currentStation.selected.nameLocaleEn} </span>
                             <span className="secondary-dark">
-                                {selectedStation.nameLocaleFi}&nbsp;
-                                {selectedStation.nameLocaleSe}
+                                {currentStation.selected.nameLocaleFi}&nbsp;
+                                {currentStation.selected.nameLocaleSe}
                             </span>
                         </> : <>
                             <span>No station selected</span>
@@ -80,7 +82,7 @@ export default function Navigation() {
                 {/* Position right */}
                 {/* Station address */}
                 <Navbar.Text>
-                    {selectedStation?.addressLocaleFi}
+                    {currentStation.selected?.addressLocaleFi}
                 </Navbar.Text>
 
             </Container>
@@ -109,7 +111,7 @@ export default function Navigation() {
                         </Button>
 
                         {/* Station info */}
-                        {selectedStation?.id ?
+                        {currentStation.selected?.id ?
                             <>
                             <NavDropdown title="Station Info" id="collasible-nav-dropdown">
                                 <NavDropdown.Item>
@@ -163,7 +165,7 @@ export default function Navigation() {
                                     Most popular departure stations <br/>
                                     for&nbsp;
                                     <span className="return-station">
-                                        <StationName station={selectedStation} />
+                                        <StationName station={currentStation.selected} />
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
@@ -184,7 +186,7 @@ export default function Navigation() {
                                     Most popular return stations<br/>
                                     for&nbsp;
                                     <span className="departure-station">
-                                        <StationName station={selectedStation} />
+                                        <StationName station={currentStation.selected} />
                                     </span>
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />

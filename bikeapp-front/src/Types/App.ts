@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Journey, JourneyOrderColumn } from "./Journey";
-import { StationPopularity, StationType } from "./Station";
+import { Station, StationPopularity, StationType } from "./Station";
 export interface OffCanvasStatus {
     journeys: boolean,
     stations: boolean,
@@ -50,4 +50,14 @@ export interface PaginationMenuProps {
 
 export interface AppSettings {
     showLines: boolean,
+}
+
+export interface FirstNavbarProps {
+    station: Station | null,
+}
+
+export interface CurrentStationState {
+    selected: Station | null,
+    departure: Station | null,
+    return: Station | null,
 }

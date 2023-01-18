@@ -6,7 +6,7 @@ import { formatDistance, formatDuration } from "../Functions/formatValues";
 import { getStationInfo, getStations } from "../Functions/stations";
 import { 
     stationsState, 
-    selectedStationState, 
+    currentStationState, 
     departureStationState, 
     returnStationState, 
     stationInfoState,
@@ -14,7 +14,7 @@ import {
     settingsState,
     currentJourneyState,
 } from "../GlobalStates";
-import { DateFilter, AppSettings } from "../Types/App";
+import { DateFilter, AppSettings, CurrentStationState } from "../Types/App";
 import { Journey } from "../Types/Journey";
 import { Station, StationInfo } from "../Types/Station";
 import JourneyStats from "./JourneyStats";
@@ -24,18 +24,17 @@ export default function CityMap() {
 
     // Global states
     const [stations, setStations] = useRecoilState<Station[] | null>(stationsState);
-    const [selectedStation, setSelectedStation] = useRecoilState<Station | null>(selectedStationState);
-    const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
-    const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
+    const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
     const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
     const [settings, setSettings] = useRecoilState<AppSettings>(settingsState);
     const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
+    
     const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
 
-    const stationMapMemo = useMemo(() => <StationMap />, [stations, departureStation, returnStation, settings.showLines]);
+    const stationMapMemo = useMemo(() => <StationMap />, [stations, currentStation.departure, currentStation.return, settings.showLines]);
     
     useEffect(() => {
         getStations()
@@ -48,8 +47,8 @@ export default function CityMap() {
         let cancel = false;
         setStationInfo(null);
 
-        if(selectedStation) {
-            getStationInfo(selectedStation.id)
+        if(currentStation.selected) {
+            getStationInfo(currentStation.selected.id)
             .then(data => {
                 if(!cancel)
                     setStationInfo(data)
@@ -60,13 +59,13 @@ export default function CityMap() {
         return () => {
             cancel = true;
         }
-    }, [selectedStation, dateFilter]);
+    }, [currentStation.selected, dateFilter]);
 
     // Determines if a marker is departure/return station and returns color or null
     function markerColor(station: Station | null): string | null {
-        if(station && departureStation?.id === station.id) {
+        if(station && currentStation.departure?.id === station.id) {
             return "#ff036c";
-        } else if(station && returnStation?.id === station.id) {
+        } else if(station && currentStation.return?.id === station.id) {
             return "#1d63b8";
         }
         return null;
@@ -74,13 +73,17 @@ export default function CityMap() {
 
     function selectStation(station: Station | null) {
         if(station) {
-            setSelectedStation(station);
-            setDepartureStation(station);
-            setReturnStation(station);
+            setCurrentStation({
+                selected: station,
+                departure: station,
+                return: station,
+            })
         } else {
-            setSelectedStation(null);
-            setDepartureStation(null);
-            setReturnStation(null);
+            setCurrentStation({
+                selected: null,
+                departure: null,
+                return: null,
+            })
         }
     }
 
@@ -115,7 +118,7 @@ export default function CityMap() {
                         anchor={[station.coordinateY, station.coordinateX]} 
                         key={"station-marker" + station.id}
                         onClick={() => {
-                            if(selectedStation && selectedStation.id === station.id) {
+                            if(currentStation.selected && currentStation.selected.id === station.id) {
                                 selectStation(null)
                             } else {
                                 selectStation(station)
@@ -160,8 +163,8 @@ export default function CityMap() {
                 )}
 
                 {/* Journey line */}
-                {settings.showLines && departureStation && returnStation && 
-                returnStation.id !== departureStation.id &&
+                {settings.showLines && currentStation.departure && currentStation.return && 
+                currentStation.return.id !== currentStation.departure.id &&
                     <GeoJson
                         svgAttributes={{
                             fill: "#1f1f1f",
@@ -177,12 +180,12 @@ export default function CityMap() {
                                 geometry: {
                                     coordinates: [
                                         [
-                                            departureStation?.coordinateX,
-                                            departureStation?.coordinateY
+                                            currentStation.departure?.coordinateX,
+                                            currentStation.departure?.coordinateY
                                         ],
                                         [
-                                            returnStation?.coordinateX,
-                                            returnStation?.coordinateY
+                                            currentStation.return?.coordinateX,
+                                            currentStation.return?.coordinateY
                                         ],
                                     ],
                                     type: "LineString"
@@ -192,12 +195,12 @@ export default function CityMap() {
                     </GeoJson>
                 }
                 {/* Journey line infobox */}
-                {settings.showLines && departureStation && returnStation && 
-                returnStation.id !== departureStation.id && currentJourney &&
+                {settings.showLines && currentStation.departure && currentStation.return && 
+                currentStation.return.id !== currentStation.departure.id && currentJourney &&
                     <Overlay 
                         anchor={[
-                            (departureStation.coordinateY + returnStation.coordinateY) / 2,
-                            (departureStation.coordinateX + returnStation.coordinateX) / 2,
+                            (currentStation.departure.coordinateY + currentStation.return.coordinateY) / 2,
+                            (currentStation.departure.coordinateX + currentStation.return.coordinateX) / 2,
                         ]}
                         offset={[200, 30]}
                     >

@@ -1,6 +1,6 @@
 import React from "react";
 import { IoArrowForward, IoTimeOutline } from 'react-icons/io5';
-import { currentJourneyState, departureStationState, returnStationState, selectedStationState } from "../GlobalStates";
+import { currentJourneyState, departureStationState, returnStationState, currentStationState } from "../GlobalStates";
 import { useRecoilValue } from 'recoil';
 import { Station } from "../Types/Station";
 import StationName from "./StationName";
@@ -8,20 +8,19 @@ import JourneyStats from "./JourneyStats";
 import { Journey } from "../Types/Journey";
 import { Col, Row } from "react-bootstrap";
 import { formatDateString } from "../Functions/formatValues";
+import { CurrentStationState } from "../Types/App";
 
 // Displays currently selected journey details
 export default function CurrentJourney () {
 
     // Global states
-    const selectedStation = useRecoilValue<Station | null>(selectedStationState);
-    const departureStation = useRecoilValue<Station | null>(departureStationState);
-    const returnStation = useRecoilValue<Station | null>(returnStationState);
+    const currentStation = useRecoilValue<CurrentStationState>(currentStationState);
     const currentJourney = useRecoilValue<Journey | null>(currentJourneyState);
     
     return(
         <div className="floating-container" id="journey-info">
             <div className="container-title">
-                {selectedStation && currentJourney ? 
+                {currentStation.selected && currentJourney ? 
                     <Row>
                         <Col>
                             <h5 className="secondary-dark">
@@ -46,14 +45,14 @@ export default function CurrentJourney () {
                 }
             </div>
             {/* Add classnames for colorcoding (red=departure, blue=return)*/}
-            {selectedStation ? 
+            {currentStation.selected ? 
                 <>
                     <div style={{display:"inline-flex"}}>
                         <div
                             className="journey-info-content"
                             style={{backgroundColor:"var(--departure-station)",color:"white",width:400}}
                         >
-                                <h2><StationName station={departureStation} /></h2>
+                                <h2><StationName station={currentStation.departure} /></h2>
                         </div>
                         <div className="journey-info-content">
                             <IoArrowForward size={50} style={{marginRight:5,marginLeft:5,marginBottom:3,overflow:"hidden"}} />
@@ -62,7 +61,7 @@ export default function CurrentJourney () {
                             className="journey-info-content"
                             style={{backgroundColor:"var(--return-station)",color:"white",width:400}}
                         >
-                            <h2><StationName station={returnStation} /></h2>
+                            <h2><StationName station={currentStation.return} /></h2>
                         </div>
                     </div>
                 </>

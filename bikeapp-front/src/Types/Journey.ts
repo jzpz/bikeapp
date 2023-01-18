@@ -14,8 +14,8 @@ export interface Journey {
 
 export interface JourneyParams {
     page: number, 
-    selectedStation?: Station, 
-    selectedStationType?: StationType,
+    station?: Station, 
+    stationType?: StationType,
     dateFrom?: Date, 
     dateTo?: Date,
     orderBy?: string,

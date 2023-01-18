@@ -4,43 +4,54 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { formatDateString, formatDistance, formatDuration } from '../Functions/formatValues';
 import { getStation } from '../Functions/stations';
 import { 
-    selectedStationState, 
-    departureStationState, 
-    returnStationState,
+    currentStationState, 
     currentJourneyState, 
 } from "../GlobalStates";
-import { JourneyListItemProps } from "../Types/App";
+import { JourneyListItemProps, CurrentStationState } from "../Types/App";
 import { Journey } from "../Types/Journey";
-import { Station } from "../Types/Station";
 import JourneyStats from "./JourneyStats";
 
 // List item for journey lists
 export default function JourneyListItem ({journey, selectedStationType}: JourneyListItemProps) {
 
     // Global states
-    const setSelectedStation = useSetRecoilState<Station | null>(selectedStationState);
-    const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
-    const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
+    const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
     const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
     
     function selectJourney() {
-        if(departureStation?.id !== journey.departureStationId) {
+        if(currentStation.departure?.id !== journey.departureStationId) {
             // Set departure station to departure station of this journey
             getStation(journey.departureStationId)
-            .then(data => {
-                setDepartureStation(data)
-                if(selectedStationType === "departure")
-                    setSelectedStation(data)
+            .then(departureStation => {
+                setCurrentStation({
+                    ...currentStation,
+                    departure: departureStation,
+                })
+
+                if(selectedStationType === "departure") {
+                    setCurrentStation({
+                        ...currentStation,
+                        selected: departureStation,
+                    })
+                }
             })
         }
 
-        if(returnStation?.id !== journey.returnStationId) {
+        if(currentStation.return?.id !== journey.returnStationId) {
             // Set return station to return station of this journey
             getStation(journey.returnStationId)
-            .then(data => {
-                setReturnStation(data)
-                if(selectedStationType === "return")
-                    setSelectedStation(data)
+            .then(returnStation => {
+                setCurrentStation({
+                    ...currentStation,
+                    return: returnStation,
+                })
+
+                if(selectedStationType === "return") {
+                    setCurrentStation({
+                        ...currentStation,
+                        selected: returnStation,
+                    })
+                }
             })
         }
 
@@ -63,14 +74,14 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
             <div className="text-center" style={{padding:3}}>
                 {/* Add classnames for colorcoding (red=departure, blue=return)*/}
                 <span 
-                    className={journey.departureStationId === departureStation?.id ? "departure-station" : ""} 
+                    className={journey.departureStationId === currentStation.departure?.id ? "departure-station" : ""} 
                     style={{fontWeight:"bold"}}
                 >
                     {journey.departureStationName}
                 </span>
                 <IoArrowForward size={18} style={{marginRight:5,marginLeft:5}} />
                 <span 
-                    className={`float-right ${journey.returnStationId === returnStation?.id ? "return-station": ""}`}
+                    className={`float-right ${journey.returnStationId === currentStation.return?.id ? "return-station": ""}`}
                     style={{fontWeight:"bold"}}
                     >
                         {journey.returnStationName}
@@ -84,8 +95,8 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
                     // Color code the journey underline to match station colors
                     backgroundImage: 
                         `linear-gradient(to right, 
-                            ${journey.departureStationId === departureStation?.id ? "#ff036c" : "darkgray"},
-                            ${journey.returnStationId === returnStation?.id ? "#1d63b8" : "darkgray"}`
+                            ${journey.departureStationId === currentStation.departure?.id ? "#ff036c" : "darkgray"},
+                            ${journey.returnStationId === currentStation.return?.id ? "#1d63b8" : "darkgray"}`
                 }}
             />
         </div>

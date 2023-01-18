@@ -9,11 +9,11 @@ export function getJourneys(params: JourneyParams): Promise<Journey[]> {
 
     // Fetch journeys from the selected station
     // fetch all if no station is specified
-    if(params.selectedStation) {
-        if(params.selectedStationType === "departure") {
-            url += "&departureStationId=" + params.selectedStation.id
+    if(params.station) {
+        if(params.stationType === "departure") {
+            url += "&departureStationId=" + params.station.id
         } else {
-            url += "&returnStationId=" + params.selectedStation.id
+            url += "&returnStationId=" + params.station.id
         }
     }
 

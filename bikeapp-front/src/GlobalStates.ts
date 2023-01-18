@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { DateFilter, OffCanvasStatus, AppSettings } from "./Types/App";
+import { DateFilter, OffCanvasStatus, AppSettings, CurrentStationState } from "./Types/App";
 import { Journey } from "./Types/Journey";
 import { Station, StationInfo } from "./Types/Station";
 
@@ -11,9 +11,13 @@ export const stationsState = atom({
     default: null as Station[] | null,
 });
 
-export const selectedStationState = atom({
-    key: 'selectedStationState' as string,
-    default: null as Station | null,
+export const currentStationState = atom({
+    key: 'currentStationState' as string,
+    default: {
+        selected: null,
+        departure: null,
+        return: null,
+    } as CurrentStationState,
 });
 
 export const departureStationState = atom({

@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { departureStationState, offCanvasState, returnStationState, selectedStationState, stationsState } from '../GlobalStates';
-import { OffCanvasStatus } from '../Types/App';
+import { departureStationState, offCanvasState, returnStationState, currentStationState, stationsState } from '../GlobalStates';
+import { OffCanvasStatus, CurrentStationState } from '../Types/App';
 import { Station } from '../Types/Station';
 import StationName from './StationName';
 
@@ -13,9 +13,7 @@ export default function StationList() {
     // Global states
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
     const stations = useRecoilValue<Station[] | null>(stationsState);
-    const setSelectedStation = useSetRecoilState<Station | null>(selectedStationState);
-    const setDepartureStation = useSetRecoilState<Station | null>(departureStationState);
-    const setReturnStation = useSetRecoilState<Station | null>(returnStationState);
+    const setCurrentStation = useSetRecoilState<CurrentStationState>(currentStationState);
 
     const [filterWord, setFilterWord] = useState('');
 
@@ -66,9 +64,11 @@ export default function StationList() {
                 elements.push(
                     <div 
                         onClick={() => {
-                            setSelectedStation(station)
-                            setDepartureStation(station)
-                            setReturnStation(station)
+                            setCurrentStation({
+                                selected: station,
+                                departure: station,
+                                return: station,
+                            });
                             setOffCanvas({...offCanvas, stations: false})
                         }}
                         key={"station-list-item" + station.id} 

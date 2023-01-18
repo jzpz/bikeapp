@@ -8,9 +8,9 @@ import {
     departureStationState, 
     offCanvasState, 
     returnStationState, 
-    selectedStationState,
+    currentStationState,
 } from '../GlobalStates';
-import { DateFilter, OffCanvasStatus } from '../Types/App';
+import { DateFilter, OffCanvasStatus, CurrentStationState } from '../Types/App';
 import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from '../Types/Journey';
 import { Station, StationType } from '../Types/Station';
 import JourneyListItem from './JourneyListItem';
@@ -24,9 +24,7 @@ export default function JourneyList() {
 
     // Global states
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
-    const [departureStation, setDepartureStation] = useRecoilState<Station | null>(departureStationState);
-    const [returnStation, setReturnStation] = useRecoilState<Station | null>(returnStationState);
-    const selectedStation = useRecoilValue<Station | null>(selectedStationState);
+    const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
     const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
 
     const [journeys, setJourneys] = useState<Journey[] | null>(null);
@@ -49,15 +47,15 @@ export default function JourneyList() {
 
             let params: JourneyParams = {
                 page: page,
-                selectedStationType: selectedStationType,
+                stationType: selectedStationType,
                 orderBy: orderBy.column,
                 descending: orderDescending,
             };
 
-            if(selectedStation)
+            if(currentStation.selected)
                 params = {
                     ...params, 
-                    selectedStation: selectedStation, 
+                    station: currentStation.selected, 
                 }
 
             if(dateFilter.dateFrom && dateFilter.dateTo) 
@@ -81,7 +79,7 @@ export default function JourneyList() {
             cancel = true;
         }
     }, [
-        selectedStation, 
+        currentStation.selected, 
         selectedStationType, 
         page, 
         offCanvas, 
@@ -96,19 +94,17 @@ export default function JourneyList() {
         setJourneys(null)
         setPage(0)
         setSelectedStationType("departure");
-    }, [selectedStation]);
+    }, [currentStation.selected]);
 
     useEffect(() => {
         setJourneys(null)
         setPage(0)
 
-        if(selectedStationType === "departure") {
-            setDepartureStation(returnStation);
-            setReturnStation(departureStation);
-        } else {
-            setReturnStation(departureStation);
-            setDepartureStation(returnStation);
-        }
+        setCurrentStation({
+            ...currentStation, 
+            departure: currentStation.return, 
+            return: currentStation.departure,
+        });
     }, [selectedStationType]);
 
     function handlePageSwitch(page: number) {
@@ -136,7 +132,7 @@ export default function JourneyList() {
             )
         }
 
-        return null;
+        return null; // loading
     }
 
     return(
@@ -149,13 +145,13 @@ export default function JourneyList() {
                 data-cy="journey-list-close"
             >
                 <Offcanvas.Title>  
-                    {selectedStation ?
+                    {currentStation.selected ?
                         <>
                             <span>
-                                {selectedStation.nameLocaleEn}&nbsp;
+                                {currentStation.selected.nameLocaleEn}&nbsp;
                             </span>
                             <span className="secondary">
-                                {selectedStation.nameLocaleFi}
+                                {currentStation.selected.nameLocaleFi}
                             </span>
                         </>
                     : 
