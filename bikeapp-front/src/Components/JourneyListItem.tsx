@@ -1,6 +1,6 @@
 import React from "react";
 import { IoArrowForward } from 'react-icons/io5';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { formatDateString } from '../Functions/formatValues';
 import { findStation } from "../Functions/stations";
 import { 
@@ -10,7 +10,7 @@ import {
 } from "../GlobalStates";
 import { JourneyListItemProps, CurrentStationState } from "../Types/App";
 import { Journey } from "../Types/Journey";
-import { Station, StationType } from "../Types/Station";
+import { Station } from "../Types/Station";
 import JourneyStats from "./JourneyStats";
 
 // List item for journey lists
@@ -19,7 +19,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
     // Global states
     const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
     const stations = useRecoilValue<Station[] | null>(stationsState);
-    const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
+    const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
 
     function selectJourney() {
         if(!stations) return;
@@ -30,12 +30,10 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
 
         if(currentStation.departure?.id !== journey.departureStationId) {
             departureStation = findStation(stations, journey.departureStationId,);
-            console.log(departureStation)
         }
 
         if(currentStation.return?.id !== journey.returnStationId) {
             returnStation = findStation(stations, journey.returnStationId);
-            console.log(departureStation)
         }
 
         if(selectedStationType === "departure") {
@@ -56,11 +54,11 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
     return(
         <div 
             onClick={() => selectJourney()}
-            className="list-item journey-item"
+            className={`list-item journey-item ${currentJourney?.id === journey.id && "active"}`}
         >
             {/* Departure date */}
             <div>
-                <span className="secondary" title="Departed at">
+                <span className="secondary" title={"Departed at " + journey.departureDate}>
                     {formatDateString(journey.departureDate)}
                 </span>
             </div>

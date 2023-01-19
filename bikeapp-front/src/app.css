@@ -50,6 +50,10 @@ body {
     cursor: pointer;
 }
 
+.list-item.active {
+    background-color: rgb(236, 245, 255);
+}
+
 /* Currently selected station marker */
 .pigeon-click-block.active {
     z-index:2;

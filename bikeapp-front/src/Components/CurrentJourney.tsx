@@ -19,48 +19,62 @@ export default function CurrentJourney () {
     return(
         <div className="floating-container" id="journey-info">
             <div className="container-title">
-                {currentStation.selected && currentJourney ? 
+                {currentStation.selected ?
                     <Row>
-                        <Col>
-                            <h5 className="secondary-dark">
-                                <IoTimeOutline />&nbsp;
-                                {formatDateString(currentJourney.departureDate)}
-                            </h5>
-                        </Col>
-                        <Col>
-                            <h4>
-                                <JourneyStats journey={currentJourney} />
-                            </h4>
-                        </Col>
-                        <Col>
-                            <h5 className="secondary-dark">
-                                <IoTimeOutline />&nbsp;
-                                {formatDateString(currentJourney.returnDate)}
-                            </h5>
-                        </Col>
+                        {currentJourney ?
+                            <>
+                                <Col xs={3}>
+                                    <h5 className="secondary-dark">
+                                        <IoTimeOutline />&nbsp;
+                                        {formatDateString(currentJourney.departureDate)}
+                                    </h5>
+                                </Col>
+                                <Col xs={6}>
+                                    <h4>
+                                        <JourneyStats journey={currentJourney} />
+                                    </h4>
+                                </Col>
+                                <Col xs={3}>
+                                    <h5 className="secondary-dark">
+                                        <IoTimeOutline />&nbsp;
+                                        {formatDateString(currentJourney.returnDate)}
+                                    </h5>
+                                </Col>
+                            </>
+                        :
+                            <Col>
+                                <h4>No journey selected</h4>
+                            </Col>
+                        }
                     </Row>
                 :
                     <h4>Click a station marker on the map</h4>
                 }
             </div>
-            {/* Add classnames for colorcoding (red=departure, blue=return)*/}
+
             {currentStation.selected ? 
                 <>
                     <div style={{display:"inline-flex"}}>
+                        {/* Departure station name */}
                         <div
                             className="journey-info-content"
                             style={{backgroundColor:"var(--departure-station)",color:"white",width:400}}
                         >
-                                <h2><StationName station={currentStation.departure} /></h2>
+                            <h2 style={{fontWeight:"bold"}}>
+                                <StationName station={currentStation.departure} />
+                            </h2>
                         </div>
                         <div className="journey-info-content">
                             <IoArrowForward size={50} style={{marginRight:5,marginLeft:5,marginBottom:3,overflow:"hidden"}} />
                         </div>
+                        {/* Departure station name */}
                         <div 
                             className="journey-info-content"
                             style={{backgroundColor:"var(--return-station)",color:"white",width:400}}
                         >
-                            <h2><StationName station={currentStation.return} /></h2>
+                            <h2 style={{fontWeight:"bold"}}>
+                                <StationName station={currentStation.return} />
+                            </h2>
                         </div>
                     </div>
                 </>

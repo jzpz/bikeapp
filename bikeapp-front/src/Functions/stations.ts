@@ -5,7 +5,10 @@ export function getStations(): Promise<Station[]> {
         fetch("http://localhost:8080/stations")
         .then((response) => response.status === 200 ? response.json() : null)
         .then((data) => resolve(data))
-        .catch((e) => reject(e));
+        .catch((e) => {
+            console.count("Unable to connect to backend, trying again");
+            resolve(getStations()); // retry
+        });
     })
 }
 

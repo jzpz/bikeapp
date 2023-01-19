@@ -1,7 +1,7 @@
 import { Station, StationType } from "./Station";
 
 export interface Journey {
-    id: bigint;
+    id: number,
     departureDate: string,
     returnDate: string,
     departureStationId: string,
