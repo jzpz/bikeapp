@@ -16,6 +16,7 @@ import OrderDirectionButton from './OrderDirectionButton';
 import PaginationMenu from './PaginationMenu';
 import OrderJourneysDropdown from './OrderJourneysDropdown';
 import Button from 'react-bootstrap/esm/Button';
+import StationName from './StationName';
 
 // An offcanvas view that contains all journeys
 export default function JourneyList() {
@@ -144,14 +145,7 @@ export default function JourneyList() {
             >
                 <Offcanvas.Title>  
                     {currentStation.selected ?
-                        <>
-                            <span>
-                                {currentStation.selected.nameLocaleEn}&nbsp;
-                            </span>
-                            <span className="secondary">
-                                {currentStation.selected.nameLocaleFi}
-                            </span>
-                        </>
+                        <StationName station={currentStation.selected} en />
                     : 
                         <span>All Journeys</span>
                     }

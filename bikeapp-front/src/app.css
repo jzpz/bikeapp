@@ -127,7 +127,7 @@ div.selected-station-info:hover {
     margin: 5px;
 }
 
-.order-direction-button {
+.settings-badge:hover {
     cursor: pointer;
 }
 
@@ -194,3 +194,4 @@ div.selected-station-info:hover {
 .offcanvas-title {
     width: 90%;
 }
+

@@ -19,6 +19,8 @@ import { StationInfo, StationPopularity } from "../Types/Station";
 import StationName from "./StationName";
 import FirstNavbar from "./FirstNavbar";
 import PopularStationsListItem from "./PopularStationsListItem";
+import Badge from "react-bootstrap/Badge";
+import { RiCheckboxBlankLine, RiCheckboxLine } from "react-icons/ri";
 
 export default function Navigation() {
 
@@ -145,28 +147,51 @@ export default function Navigation() {
                     
                     {/* Position right */}
                     <Nav>
-                        <ToggleButton
-                            id="settings-show-lines"
-                            type="checkbox"
-                            variant="primary"
-                            checked={settings.showLines}
-                            value="1"
-                            onChange={(e) => {
-                                setSettings({...settings, showLines: e.currentTarget.checked})
-                            }}
-                        >
-                            Show lines on map
-                        </ToggleButton>
+                        <Nav.Item style={{paddingRight:30}}>
+                            <span style={{fontSize:"1.3em"}}>
+                                <Badge 
+                                    className="settings-badge"
+                                    pill 
+                                    bg={settings.showMarkers ? "primary" : "secondary"}
+                                    style={{marginRight:10}}
+                                    onClick={() => setSettings({...settings, showMarkers: !settings.showMarkers})}
+                                >
+                                    {settings.showMarkers ?
+                                        <RiCheckboxLine />
+                                    :
+                                        <RiCheckboxBlankLine />
+                                    }
+                                    &nbsp;Show markers
+                                </Badge>
+                                <Badge 
+                                    className="settings-badge"
+                                    pill 
+                                    bg={settings.showLines ? "primary" : "secondary"}
+                                    style={{marginRight:10}}
+                                    onClick={() => setSettings({...settings, showLines: !settings.showLines})}
+                                >
+                                    {settings.showLines ?
+                                        <RiCheckboxLine />
+                                    :
+                                        <RiCheckboxBlankLine />
+                                    }
+                                    &nbsp;Show line
+                                </Badge>
+                            </span>
+                        </Nav.Item>
+
                         {/* Change station button */}
-                        <Button 
-                            className="overlay" 
-                            variant="dark" 
-                            onClick={() => setOffCanvas({...offCanvas, stations: true})}
-                            style={{backgroundColor:"#66aacc", border:"none"}}
-                            data-cy="change-station"
-                        >
-                            Change Station
-                        </Button>
+                        <Nav.Item>
+                            <Button 
+                                className="overlay" 
+                                variant="dark" 
+                                onClick={() => setOffCanvas({...offCanvas, stations: true})}
+                                style={{backgroundColor:"#66aacc", border:"none"}}
+                                data-cy="change-station"
+                            >
+                                Change Station
+                            </Button>
+                        </Nav.Item>
                     </Nav>
 
                 </Navbar.Collapse>

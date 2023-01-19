@@ -50,6 +50,7 @@ export interface PaginationMenuProps {
 
 export interface AppSettings {
     showLines: boolean,
+    showMarkers: boolean,
 }
 
 export interface FirstNavbarProps {

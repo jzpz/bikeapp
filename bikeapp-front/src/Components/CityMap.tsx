@@ -30,7 +30,13 @@ export default function CityMap() {
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
 
-    const stationMapMemo = useMemo(() => <StationMap />, [stations, currentStation.departure, currentStation.return, settings.showLines]);
+    const stationMapMemo = useMemo(() => <StationMap />, [
+        stations, 
+        currentStation.departure, 
+        currentStation.return, 
+        settings.showLines,
+        settings.showMarkers,
+    ]);
     
     useEffect(() => {
         getStations()
@@ -110,28 +116,36 @@ export default function CityMap() {
                 <ZoomControl />
 
                 {/* Markers */}
-                {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
-                    <Marker 
-                        width={markerColor(station) ? 50 : 30} // Make current station larger in map
-                        anchor={[station.coordinateY, station.coordinateX]} 
-                        key={"station-marker" + station.id}
-                        onClick={() => {
-                            if(currentStation.selected && currentStation.selected.id === station.id) {
-                                selectStation(null)
-                            } else {
-                                selectStation(station)
-                            }
-                        }}
-                        color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
-                        className={markerColor(station) ? "active" : ""} // Add class to active station
-                        onMouseOver={() => {
-                            stationInfoboxRefs.current[i].style.display = "block";
-                        }}
-                        onMouseOut={() => {
-                            stationInfoboxRefs.current[i].style.display = "none";
-                        }}
-                    />
-                )}
+                {stations && stations.map((station: Station, i: number) => {// Get all stations and mark them
+                    if(settings.showMarkers || (
+                        currentStation?.selected?.id === station.id ||
+                        currentStation?.departure?.id === station.id ||
+                        currentStation?.return?.id === station.id
+                    )) {
+                        return(
+                            <Marker 
+                                width={markerColor(station) ? 50 : 30} // Make current station larger in map
+                                anchor={[station.coordinateY, station.coordinateX]} 
+                                key={"station-marker" + station.id}
+                                onClick={() => {
+                                    if(currentStation.selected && currentStation.selected.id === station.id) {
+                                        selectStation(null)
+                                    } else {
+                                        selectStation(station)
+                                    }
+                                }}
+                                color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
+                                className={markerColor(station) ? "active" : ""} // Add class to active station
+                                onMouseOver={() => {
+                                    stationInfoboxRefs.current[i].style.display = "block";
+                                }}
+                                onMouseOut={() => {
+                                    stationInfoboxRefs.current[i].style.display = "none";
+                                }}
+                            />
+                        )
+                    }
+                })}
 
                 {/* Marker Infoboxes */}
                 {stations && stations.map((station: Station, i: number) => // Get all stations and mark them
@@ -192,6 +206,7 @@ export default function CityMap() {
                         />
                     </GeoJson>
                 }
+                
                 {/* Journey line infobox */}
                 {settings.showLines && currentStation.departure && currentStation.return && 
                 currentStation.return.id !== currentStation.departure.id && currentJourney &&

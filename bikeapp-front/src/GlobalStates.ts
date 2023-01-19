@@ -52,5 +52,8 @@ export const stationInfoState = atom({
 
 export const settingsState = atom({
     key: 'settingsState' as string,
-    default: {showLines: true} as AppSettings,
+    default: {
+        showLines: true, 
+        showMarkers: true,
+    } as AppSettings,
 })
