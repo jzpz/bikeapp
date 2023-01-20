@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.jp.bike.model.Journey;
 
-public interface JourneyRepository extends PagingAndSortingRepository<Journey, Integer> {
+public interface JourneyRepository extends JpaRepository<Journey, Integer> {
     Journey findById(int id);
 
     Page<Journey> findAll(
@@ -35,8 +35,6 @@ public interface JourneyRepository extends PagingAndSortingRepository<Journey, I
 
     Page<Journey> findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
         String departureStationId, String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
-
-    Long count();
 
     Long countByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
         LocalDateTime dateFrom, LocalDateTime dateTo);

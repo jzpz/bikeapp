@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,17 +47,18 @@ public class StationController {
 		
 	}
 
-	// Returns a single station
+	// Get single station
+	// Not implemented in frontend
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/station/{id}")
 	public ResponseEntity<Station> getById(@PathVariable("id") String id) {
 		Station station = srepository.findById(id);
 
-		if(station == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} else {
+		if(station != null) {
 			return new ResponseEntity<Station>(station, new HttpHeaders(), HttpStatus.OK);
 		}
+		
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	// Returns information about station - most popular departures/returns, average journeys, journey count

@@ -19,7 +19,7 @@ public class Station {
 	private String cityLocaleFi;
 	private String cityLocaleSe;
 	private String operator;
-	private String capacity;
+	private Long capacity;
 	@Column(name = "coordinate_x")
 	private Double coordinateX;
 	@Column(name = "coordinate_y")
@@ -29,7 +29,7 @@ public class Station {
 
 	public Station(Integer fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, 
 			String addressLocaleFi, String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, 
-			String operator, String capacity, Double coordinateX, Double coordinateY) {
+			String operator, Long capacity, Double coordinateX, Double coordinateY) {
 		this.fid = fid;
 		this.id = id;
 		this.nameLocaleFi = nameLocaleFi;
@@ -85,7 +85,7 @@ public class Station {
 		return operator;
 	}
 
-	public String getCapacity() {
+	public Long getCapacity() {
 		return capacity;
 	}
 
