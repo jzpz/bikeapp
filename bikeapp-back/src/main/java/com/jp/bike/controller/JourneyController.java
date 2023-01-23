@@ -32,7 +32,7 @@ public class JourneyController {
 	JourneyRepository repository;
 
 	// Returns paginated list of journeys
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin
 	@GetMapping("/journeys")
 	public ResponseEntity<List<Journey>> getPaginated(
 			@RequestParam(defaultValue = "0") Integer page, 
@@ -122,7 +122,7 @@ public class JourneyController {
 
 	// Get single journey
 	// Not implemented in frontend
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin
 	@GetMapping("/journey/{id}")
 	public ResponseEntity<Optional<Journey>> getById(@PathVariable("id") Integer id) {
 		Optional<Journey> journey = repository.findById(id);

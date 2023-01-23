@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +32,7 @@ public class StationController {
 	JourneyRepository jrepository;
 
 	// Returns list of stations
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin
 	@GetMapping("/stations")
 	public ResponseEntity<List<Station>> getAll() {
 
@@ -49,7 +47,7 @@ public class StationController {
 
 	// Get single station
 	// Not implemented in frontend
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin
 	@GetMapping("/station/{id}")
 	public ResponseEntity<Station> getById(@PathVariable("id") String id) {
 		Station station = srepository.findById(id);
@@ -62,7 +60,7 @@ public class StationController {
 	}
 
 	// Returns information about station - most popular departures/returns, average journeys, journey count
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin
 	@GetMapping("/stationinfo")
 	public ResponseEntity<HashMap<String, Object>> getInfo(
 		@RequestParam(name="stationId", required=false) String stationId,
