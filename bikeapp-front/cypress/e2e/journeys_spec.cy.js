@@ -1,6 +1,6 @@
 describe('Test select journey', () => {
     it('selects and views journey on map', () => {
-        cy.intercept('http://localhost:8080/journeys').as('getJourneys');
+        cy.intercept({pathname: '/journeys'}).as('getJourneys');
 
         cy.visit('http://localhost:3000');
 
