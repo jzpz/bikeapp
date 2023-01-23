@@ -175,7 +175,7 @@ export default function CityMap() {
 
                 {/* Journey line */}
                 {settings.showLines && currentStation.departure && currentStation.return && 
-                currentStation.return.id !== currentStation.departure.id &&
+                currentStation.return.id !== currentStation.departure.id && currentJourney &&
                     <GeoJson
                         svgAttributes={{
                             fill: "#1f1f1f",

@@ -13,11 +13,9 @@ const FirstNavbar = ({station}: FirstNavbarProps) => (
             {/* Station name */}
             <Navbar.Brand>
                 {station ? 
-                    <>
-                        <StationName station={station} en />
-                    </> : <>
-                        <span>No station selected</span>
-                    </>
+                    <StationName station={station} en />
+                :
+                    <span>No station selected</span>
                 }
             </Navbar.Brand>
 

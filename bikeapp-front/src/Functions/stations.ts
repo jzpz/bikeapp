@@ -1,4 +1,4 @@
-import { Station, StationInfo, StationType } from "../Types/Station";
+import { Station, StationInfo } from "../Types/Station";
 import apiUrl from "../api";
 
 export function getStations(): Promise<Station[]> {

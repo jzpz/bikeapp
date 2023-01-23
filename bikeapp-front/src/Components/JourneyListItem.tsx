@@ -29,7 +29,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
         let selectedStation: Station | null = currentStation.selected;
 
         if(currentStation.departure?.id !== journey.departureStationId) {
-            departureStation = findStation(stations, journey.departureStationId,);
+            departureStation = findStation(stations, journey.departureStationId);
         }
 
         if(currentStation.return?.id !== journey.returnStationId) {

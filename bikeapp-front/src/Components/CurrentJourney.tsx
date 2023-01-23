@@ -53,37 +53,35 @@ export default function CurrentJourney () {
             </div>
 
             {currentStation.selected ? 
-                <>
-                    <div style={{display:"inline-flex"}}>
-                        {/* Departure station name */}
-                        <div
-                            className="journey-info-content"
-                            style={{backgroundColor:"var(--departure-station)",color:"white",width:400}}
+                <div style={{display:"inline-flex"}}>
+                    {/* Departure station name */}
+                    <div
+                        className="journey-info-content"
+                        style={{backgroundColor:"var(--departure-station)",color:"white",width:400}}
+                    >
+                        <h2 
+                            style={{fontWeight:"bold"}}
+                            data-cy="current-journey-departure-station"
                         >
-                            <h2 
-                                style={{fontWeight:"bold"}}
-                                data-cy="current-journey-departure-station"
-                            >
-                                <StationName station={currentStation.departure} />
-                            </h2>
-                        </div>
-                        <div className="journey-info-content">
-                            <IoArrowForward size={50} style={{marginRight:5,marginLeft:5,marginBottom:3,overflow:"hidden"}} />
-                        </div>
-                        {/* Departure station name */}
-                        <div 
-                            className="journey-info-content"
-                            style={{backgroundColor:"var(--return-station)",color:"white",width:400}}
-                        >
-                            <h2 
-                                style={{fontWeight:"bold"}}
-                                data-cy="current-journey-return-station"
-                            >
-                                <StationName station={currentStation.return} />
-                            </h2>
-                        </div>
+                            <StationName station={currentStation.departure} />
+                        </h2>
                     </div>
-                </>
+                    <div className="journey-info-content">
+                        <IoArrowForward size={50} style={{marginRight:5,marginLeft:5,marginBottom:3,overflow:"hidden"}} />
+                    </div>
+                    {/* Departure station name */}
+                    <div 
+                        className="journey-info-content"
+                        style={{backgroundColor:"var(--return-station)",color:"white",width:400}}
+                    >
+                        <h2 
+                            style={{fontWeight:"bold"}}
+                            data-cy="current-journey-return-station"
+                        >
+                            <StationName station={currentStation.return} />
+                        </h2>
+                    </div>
+                </div>
             : null}
         </div>
     )
