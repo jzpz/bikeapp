@@ -18,7 +18,7 @@ export default function CurrentJourney () {
     
     return(
         <div className="floating-container" id="journey-info">
-            <div className="container-title">
+            <div className="container-title" data-cy="current-journey-data">
                 {currentStation.selected ?
                     <Row>
                         {currentJourney ?
@@ -60,7 +60,10 @@ export default function CurrentJourney () {
                             className="journey-info-content"
                             style={{backgroundColor:"var(--departure-station)",color:"white",width:400}}
                         >
-                            <h2 style={{fontWeight:"bold"}}>
+                            <h2 
+                                style={{fontWeight:"bold"}}
+                                data-cy="current-journey-departure-station"
+                            >
                                 <StationName station={currentStation.departure} />
                             </h2>
                         </div>
@@ -72,7 +75,10 @@ export default function CurrentJourney () {
                             className="journey-info-content"
                             style={{backgroundColor:"var(--return-station)",color:"white",width:400}}
                         >
-                            <h2 style={{fontWeight:"bold"}}>
+                            <h2 
+                                style={{fontWeight:"bold"}}
+                                data-cy="current-journey-return-station"
+                            >
                                 <StationName station={currentStation.return} />
                             </h2>
                         </div>

@@ -54,11 +54,15 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
     return(
         <div 
             onClick={() => selectJourney()}
-            className={`list-item journey-item ${currentJourney?.id === journey.id && "active"}`}
+            className={`list-item journey-item${currentJourney?.id === journey.id ? " active" : ""}`}
+            data-cy="journey-list-item"
         >
             {/* Departure date */}
             <div>
-                <span className="secondary" title={"Departed at " + journey.departureDate}>
+                <span 
+                    className="secondary" 
+                    title={"Departed at " + journey.departureDate}
+                >
                     {formatDateString(journey.departureDate)}
                 </span>
             </div>
@@ -69,15 +73,17 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
                 <span 
                     className={journey.departureStationId === currentStation.departure?.id ? "departure-station" : ""} 
                     style={{fontWeight:"bold"}}
+                    data-cy="departure-station"
                 >
                     {journey.departureStationName}
                 </span>
                 <IoArrowForward size={18} style={{marginRight:5,marginLeft:5}} />
                 <span 
-                    className={`float-right ${journey.returnStationId === currentStation.return?.id ? "return-station": ""}`}
+                    className={`float-right${journey.returnStationId === currentStation.return?.id ? " return-station": ""}`}
                     style={{fontWeight:"bold"}}
-                    >
-                        {journey.returnStationName}
+                    data-cy="return-station"
+                >
+                    {journey.returnStationName}
                 </span>
             </div>
 

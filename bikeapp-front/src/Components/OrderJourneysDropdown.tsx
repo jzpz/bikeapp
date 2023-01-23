@@ -11,6 +11,7 @@ const OrderJourneysDropdown = ({currentOrderColumn, handleChange}: OrderJourneys
         title={currentOrderColumn.name}
         size="sm"
         variant="outline-dark"
+        data-cy="order-column-button"
     >
         <Dropdown.Item
             onClick={() => handleChange(JourneyOrderColumns.departureDate)}

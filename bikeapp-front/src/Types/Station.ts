@@ -1,5 +1,5 @@
 export interface Station {
-    fid: bigint,
+    fid: number,
     id: string,
     nameLocaleFi: string,
     nameLocaleSe: string,
@@ -10,7 +10,7 @@ export interface Station {
     cityLocaleFi: string,
     cityLocaleSe: string,
     operator: string,
-    capacity: bigint,
+    capacity: number,
     coordinateX: number,
     coordinateY: number
 }

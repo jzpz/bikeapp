@@ -11,6 +11,7 @@ export default function OrderDirectionButton({isDescending, handleChange}: Order
             onClick={() => handleChange(!isDescending)}
             variant="outline-dark"
             size="sm"
+            data-cy="order-direction-button"
         >
             {isDescending ?
                 <span style={{overflow:"hidden"}}>

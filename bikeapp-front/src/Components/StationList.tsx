@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { offCanvasState, currentStationState, stationsState } from '../GlobalStates';
+import { offCanvasState, currentStationState, stationsState, currentJourneyState } from '../GlobalStates';
 import { OffCanvasStatus, CurrentStationState } from '../Types/App';
+import { Journey } from '../Types/Journey';
 import { Station } from '../Types/Station';
 import StationName from './StationName';
 
@@ -14,17 +15,18 @@ export default function StationList() {
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
     const stations = useRecoilValue<Station[] | null>(stationsState);
     const setCurrentStation = useSetRecoilState<CurrentStationState>(currentStationState);
+    const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
 
     const [filterWord, setFilterWord] = useState('');
 
-    function filterStationsList(list: Station[]): Station[] {
+    function filteredStationsList(list: Station[]): Station[] {
         return list.filter((station: Station) => 
             station.nameLocaleEn.toLowerCase().includes(filterWord.toLowerCase()) ||
             station.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase())
         )
     }
 
-    function sortStationsList(list: Station[]): Station[] {
+    function sortedStationsList(list: Station[]): Station[] {
         return [...list].sort((a: Station, b: Station) => {
             const a_NameLocaleEn = a.nameLocaleEn.toLowerCase();
             const b_NameLocaleEn = b.nameLocaleEn.toLowerCase();
@@ -42,7 +44,7 @@ export default function StationList() {
     // Make JSX list from array
     function Stations(): JSX.Element {
         if(stations) {
-            const list = filterStationsList(sortStationsList(stations))
+            const list = filteredStationsList(sortedStationsList(stations))
             .map((station: Station, i: number, array: Station[]) => {
                 let elements: JSX.Element[] = [];
 
@@ -69,10 +71,13 @@ export default function StationList() {
                                 departure: station,
                                 return: station,
                             });
-                            setOffCanvas({...offCanvas, stations: false})
+                            setOffCanvas({...offCanvas, stations: false});
+                            setCurrentJourney(null);
                         }}
                         key={"station-list-item" + station.id} 
-                        className="list-item station">
+                        className="list-item station"
+                        data-cy="station-list-item"
+                    >
                         <StationName station={station} en />
                     </div>
                 )

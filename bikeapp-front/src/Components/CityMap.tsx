@@ -86,9 +86,8 @@ export default function CityMap() {
                 departure: null,
                 return: null,
             });
-
-            setCurrentJourney(null);
         }
+        setCurrentJourney(null);
     }
 
     function StationMap() { 

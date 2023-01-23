@@ -1,11 +1,12 @@
 import { Journey, JourneyParams } from "../Types/Journey";
 import { dateToString } from "./formatValues";
+import apiUrl from "../api";
 
 /**
  * @returns Journey promise
  */
 export function getJourneys(params: JourneyParams): Promise<Journey[]> {
-    let url = `http://localhost:8080/journeys?page=${params.page}`;
+    let url = `${apiUrl}/journeys?page=${params.page}`;
 
     // Fetch journeys from the selected station
     // fetch all if no station is specified
