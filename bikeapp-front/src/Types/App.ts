@@ -1,3 +1,4 @@
+import { Settings } from "http2";
 import { Dispatch, SetStateAction } from "react";
 import { Journey, JourneyOrderColumn } from "./Journey";
 import { Station, StationPopularity, StationType } from "./Station";
@@ -61,4 +62,14 @@ export interface CurrentStationState {
     selected: Station | null,
     departure: Station | null,
     return: Station | null,
+}
+
+export interface JourneyListProps {
+    journeys: Journey[] | null,
+    loading: boolean,
+    selectedStationType: StationType,
+}
+
+export interface StationListProps {
+    filterWord: string,
 }

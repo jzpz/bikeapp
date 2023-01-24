@@ -3,11 +3,11 @@ import './app.css';
 import React from "react";
 import CityMap from './Components/CityMap';
 import CurrentJourney from './Components/CurrentJourney';
-import JourneyList from './Components/JourneyList';
-import StationList from './Components/StationList';
+import Stations from './Components/Stations';
 import Navigation from './Components/Navigation';
 import { RecoilRoot } from 'recoil';
 import SelectDate from './Components/SelectDate';
+import Journeys from './Components/Journeys';
 
 function App() {
     return(
@@ -16,8 +16,8 @@ function App() {
                 <Navigation />
                 <SelectDate />
                 <CityMap /> 
-                <JourneyList />
-                <StationList />
+                <Journeys />
+                <Stations />
                 <CurrentJourney />
             </RecoilRoot>
         </div>

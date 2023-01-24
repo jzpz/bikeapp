@@ -1,135 +1,70 @@
-import React, { useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { offCanvasState, currentStationState, stationsState, currentJourneyState } from '../GlobalStates';
-import { OffCanvasStatus, CurrentStationState } from '../Types/App';
-import { Journey } from '../Types/Journey';
-import { Station } from '../Types/Station';
-import StationName from './StationName';
+import React from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { filterStationList, sortStationList } from "../Functions/stationList";
+import { currentJourneyState, currentStationState, offCanvasState, stationsState } from "../GlobalStates";
+import { CurrentStationState, OffCanvasStatus, StationListProps } from "../Types/App";
+import { Journey } from "../Types/Journey";
+import { Station } from "../Types/Station";
+import StationName from "./StationName";
 
-// An offcanvas view that contains all stations
-export default function StationList() {
-    
-    // Global states
-    const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
+export default function StationList({filterWord}: StationListProps): JSX.Element {
     const stations = useRecoilValue<Station[] | null>(stationsState);
     const setCurrentStation = useSetRecoilState<CurrentStationState>(currentStationState);
     const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
+    const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
 
-    const [filterWord, setFilterWord] = useState('');
+    if(stations) {
+        const list = filterStationList(sortStationList(stations), filterWord)
+        .map((station: Station, i: number, array: Station[]) => {
+            let elements: JSX.Element[] = [];
 
-    function filteredStationsList(list: Station[]): Station[] {
-        return list.filter((station: Station) => 
-            station.nameLocaleEn.toLowerCase().includes(filterWord.toLowerCase()) ||
-            station.nameLocaleFi.toLowerCase().includes(filterWord.toLowerCase())
-        )
-    }
-
-    function sortedStationsList(list: Station[]): Station[] {
-        return [...list].sort((a: Station, b: Station) => {
-            const a_NameLocaleEn = a.nameLocaleEn.toLowerCase();
-            const b_NameLocaleEn = b.nameLocaleEn.toLowerCase();
-
-            if(a_NameLocaleEn < b_NameLocaleEn) {
-                return -1;
-            } else if(a_NameLocaleEn > b_NameLocaleEn) {
-                return 1;
-            }
-            
-            return 0;
-        });
-    }
-
-    // Make JSX list from array
-    function Stations(): JSX.Element {
-        if(stations) {
-            const list = filteredStationsList(sortedStationsList(stations))
-            .map((station: Station, i: number, array: Station[]) => {
-                let elements: JSX.Element[] = [];
-
-                // Alphabetically group station names by adding first letter as heading
-                let stationFirstLetter = station.nameLocaleEn.charAt(0);
-                if(i === 0 || array[i - 1].nameLocaleEn.charAt(0) !== stationFirstLetter) {
-                    elements.push(
-                        <div 
-                            style={{margin:3}} 
-                            key={"station-list-heading-" + stationFirstLetter}
-                        >
-                            <span style={{fontWeight:"bold",color:"#27255c",fontSize:"1.1em"}}>
-                                {stationFirstLetter}
-                            </span>
-                        </div>
-                    )
-                }
-
+            // Alphabetically group station names by adding first letter as heading
+            let stationFirstLetter = station.nameLocaleEn.charAt(0);
+            if(i === 0 || array[i - 1].nameLocaleEn.charAt(0) !== stationFirstLetter) {
                 elements.push(
                     <div 
-                        onClick={() => {
-                            setCurrentStation({
-                                selected: station,
-                                departure: station,
-                                return: station,
-                            });
-                            setOffCanvas({...offCanvas, stations: false});
-                            setCurrentJourney(null);
-                        }}
-                        key={"station-list-item" + station.id} 
-                        className="list-item station"
-                        data-cy="station-list-item"
+                        style={{margin:3}} 
+                        key={"station-list-heading-" + stationFirstLetter}
                     >
-                        <StationName station={station} en />
+                        <span style={{fontWeight:"bold",color:"#27255c",fontSize:"1.1em"}}>
+                            {stationFirstLetter}
+                        </span>
                     </div>
                 )
-
-                return elements;
-            })
-
-            if(list.length > 0) {
-                return(
-                    <>{list}</>
-                )
             }
-        }
 
-        return(
-            <span>
-                No stations match the specified filter
-            </span>
-        )
+            elements.push(
+                <div 
+                    onClick={() => {
+                        setCurrentStation({
+                            selected: station,
+                            departure: station,
+                            return: station,
+                        });
+                        setOffCanvas({...offCanvas, stations: false});
+                        setCurrentJourney(null);
+                    }}
+                    key={"station-list-item" + station.id} 
+                    className="list-item station"
+                    data-cy="station-list-item"
+                >
+                    <StationName station={station} en />
+                </div>
+            )
+
+            return elements;
+        })
+
+        if(list.length > 0) {
+            return(
+                <>{list}</>
+            )
+        }
     }
 
     return(
-        <Offcanvas 
-            placement="end" 
-            show={offCanvas.stations} 
-            onHide={() => setOffCanvas({...offCanvas, stations: false})}
-            data-cy="offcanvas-stations"
-        >
-            <Offcanvas.Header 
-                closeButton
-                data-cy="station-list-close"
-            >
-                <Offcanvas.Title>
-                    Stations
-                    <hr />
-                    <Form.Group className="mb-3" controlId="formStationSearch">
-                        <Form.Control 
-                            value={filterWord}
-                            onChange={(e) => setFilterWord(e.target.value)}
-                            type="text" 
-                            placeholder="Search by name"
-                            data-cy="station-search"
-                        />
-                    </Form.Group>
-                </Offcanvas.Title>
-            </Offcanvas.Header>
-            {/* Station list and search */}
-            <Offcanvas.Body>
-                <div className="station-list">
-                    <Stations />
-                </div>
-            </Offcanvas.Body>
-        </Offcanvas>
+        <span>
+            No stations match the specified filter
+        </span>
     )
 }

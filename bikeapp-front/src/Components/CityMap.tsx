@@ -1,6 +1,7 @@
 import { GeoJson, GeoJsonFeature, Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { getMarkerColor } from "../Functions/getMarkerColor";
 import { getStationInfo, getStations } from "../Functions/stations";
 import { 
     stationsState, 
@@ -29,19 +30,12 @@ export default function CityMap() {
     const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
-
-    const stationMapMemo = useMemo(() => <StationMap />, [
-        stations, 
-        currentStation.departure, 
-        currentStation.return, 
-        settings.showLines,
-        settings.showMarkers,
-    ]);
     
     useEffect(() => {
-        getStations()
-        .then(data => setStations(data))
-        .catch(e => setError(e));
+        if(!stations)
+            getStations()
+            .then(data => setStations(data))
+            .catch(e => setError(e));
     }, []);
 
     // Fetch station info (avg journeys, top stations) on station select
@@ -63,55 +57,36 @@ export default function CityMap() {
         }
     }, [currentStation.selected, dateFilter]);
 
-    // Determines if a marker is departure/return station and returns color or null
-    function markerColor(station: Station | null): string | null {
-        if(station && currentStation.departure?.id === station.id) {
-            return "#ff036c";
-        } else if(station && currentStation.return?.id === station.id) {
-            return "#1d63b8";
-        }
-        return null;
+    if(!stations) {
+        if(!error) 
+            return <span>Loading map...</span>
+        else 
+            return <span>An error occurred while loading the map: {error}</span>
     }
 
-    function selectStation(station: Station | null) {
-        if(station) {
-            setCurrentStation({
-                selected: station,
-                departure: station,
-                return: station,
-            })
-        } else {
-            setCurrentStation({
-                selected: null,
-                departure: null,
-                return: null,
-            });
-        }
-        setCurrentJourney(null);
-    }
-
-    function StationMap() { 
-        if(!stations) {
-            if(!error) 
-                return <span>Loading map...</span>
-            else 
-                return <span>An error occurred while loading the map: {error}</span>
-        }
-
-        return(
-            // Need to rerender the map on station change, otherwise markers dont work
+    return (
+        <div 
+            className="map-container"
+            data-cy="map-container"
+        >
             <Map 
                 height={window.innerHeight - 110} // Height excluding top nav
                 defaultZoom={currentMapSettings.zoom} 
                 minZoom={11} // Max zoom out distance
                 center={currentMapSettings.center}
                 onClick={() => {
-                    selectStation(null)
+                    setCurrentStation({
+                        selected: null,
+                        departure: null,
+                        return: null,
+                    });
+                    setCurrentJourney(null);
                 }}
                 onBoundsChanged={(e) => { // Keep the settings when map rerenders
                     setCurrentMapSettings({...currentMapSettings, zoom: e.zoom, center: e.center})
                 }}
             >
+                {/* Map elements need to be direct children */}
                 <ZoomControl />
 
                 {/* Markers */}
@@ -123,18 +98,27 @@ export default function CityMap() {
                     )) {
                         return(
                             <Marker 
-                                width={markerColor(station) ? 50 : 30} // Make current station larger in map
+                                width={getMarkerColor(station, currentStation) ? 50 : 30} // Make current station larger in map
                                 anchor={[station.coordinateY, station.coordinateX]} 
                                 key={"station-marker" + station.id}
                                 onClick={() => {
                                     if(currentStation.selected && currentStation.selected.id === station.id) {
-                                        selectStation(null)
+                                        setCurrentStation({
+                                            selected: station,
+                                            departure: station,
+                                            return: station,
+                                        });
                                     } else {
-                                        selectStation(station)
+                                        setCurrentStation({
+                                            selected: station,
+                                            departure: station,
+                                            return: station,
+                                        });
                                     }
+                                    setCurrentJourney(null);
                                 }}
-                                color={markerColor(station) ?? "#66aacc"} // Mark current and departure stations
-                                className={markerColor(station) ? "active" : ""} // Add class to active station
+                                color={getMarkerColor(station, currentStation) ?? "#66aacc"} // Mark current and departure stations
+                                className={getMarkerColor(station, currentStation) ? "active" : ""} // Add class to active station
                                 onMouseOver={() => {
                                     stationInfoboxRefs.current[i].style.display = "block";
                                 }}
@@ -225,15 +209,6 @@ export default function CityMap() {
                     </Overlay>
                 }
             </Map>
-        )
-    }
-
-    return (
-        <div 
-            className="map-container"
-            data-cy="map-container"
-        >
-            {stationMapMemo}
         </div>
     )
 }

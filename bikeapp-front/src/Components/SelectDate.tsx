@@ -7,7 +7,6 @@ import { IoClose } from "react-icons/io5";
 import { DateFilter } from "../Types/App";
 
 export default function SelectDate() {
-
     const [dateFilter, setDateFilter] = useRecoilState<DateFilter>(dateFilterState);
 
     return(
