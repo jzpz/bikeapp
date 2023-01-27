@@ -1,17 +1,18 @@
 import React from 'react';
 import NavDropdown from "react-bootstrap/esm/NavDropdown";
-import StationName from './StationName';
+import { useRecoilState } from 'recoil';
 import { findStation } from '../Functions/stations';
-import { PopularStationItemProps, CurrentStationState } from '../Types/App';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentStationState, stationsState } from '../GlobalStates';
+import { currentStationState } from '../GlobalStates';
+import useStations from '../Hooks/useStations';
+import { CurrentStationState, PopularStationItemProps } from '../Types/App';
 import { Station } from '../Types/Station';
+import StationName from './StationName';
 
 // Popular stations dropdown item
 function PopularStationsListItem ({stationPopularity, selectedStationType}: PopularStationItemProps) {
     
     const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
-    const stations = useRecoilValue<Station[] | null>(stationsState);
+    const stations = useStations();
 
     function selectJourney(station: Station | null) {
         if(!station) return;

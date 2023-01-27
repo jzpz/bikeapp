@@ -3,15 +3,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getJourneys } from '../Functions/journeys';
-import {
-    dateFilterState, 
-    offCanvasState, 
-    currentStationState,
-} from '../GlobalStates';
+import { dateFilterState, offCanvasState, currentStationState,} from '../GlobalStates';
 import { DateFilter, OffCanvasStatus, CurrentStationState } from '../Types/App';
 import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from '../Types/Journey';
 import { StationType } from '../Types/Station';
-import JourneyListItem from './JourneyListItem';
 import OrderDirectionButton from './OrderDirectionButton';
 import PaginationMenu from './PaginationMenu';
 import OrderJourneysDropdown from './OrderJourneysDropdown';
@@ -98,16 +93,18 @@ export default function Journeys() {
         setSelectedStationType("departure");
     }, [currentStation.selected]);
 
-    useEffect(() => {
-        setJourneys(null)
-        setPage(0)
-
-        setCurrentStation({
-            ...currentStation, 
-            departure: currentStation.return, 
-            return: currentStation.departure,
-        });
-    }, [selectedStationType]);
+    function switchDepartureAndReturn(type: StationType) {
+        if(selectedStationType !== type) {
+            setSelectedStationType(type);
+            setJourneys(null);
+            setPage(0);
+            setCurrentStation({
+                ...currentStation, 
+                departure: currentStation.return, 
+                return: currentStation.departure,
+            });
+        }
+    }
 
     return(
         <Offcanvas 
@@ -127,14 +124,14 @@ export default function Journeys() {
                     <hr />
                     <div className="tab-buttons" style={{display:"inline-flex", width:"100%"}}>
                         <Button
-                            onClick={() => setSelectedStationType("departure")}
+                            onClick={() => switchDepartureAndReturn("departure")}
                             className={selectedStationType === "departure" ? "active" : ""}
                             id="departures-tab"
                         >
                             Departures
                         </Button>
                         <Button
-                            onClick={() => setSelectedStationType("return")}
+                            onClick={() => switchDepartureAndReturn("return")}
                             className={selectedStationType === "return" ? "active" : ""}
                             id="returns-tab"
                         >

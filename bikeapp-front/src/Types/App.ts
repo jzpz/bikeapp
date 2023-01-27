@@ -1,4 +1,3 @@
-import { Settings } from "http2";
 import { Dispatch, SetStateAction } from "react";
 import { Journey, JourneyOrderColumn } from "./Journey";
 import { Station, StationPopularity, StationType } from "./Station";

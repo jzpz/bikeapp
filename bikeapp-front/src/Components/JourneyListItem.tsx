@@ -1,13 +1,10 @@
 import React from "react";
 import { IoArrowForward } from 'react-icons/io5';
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { formatDateString } from '../Functions/formatValues';
 import { findStation } from "../Functions/stations";
-import { 
-    currentStationState, 
-    currentJourneyState,
-    stationsState, 
-} from "../GlobalStates";
+import { currentStationState, currentJourneyState } from "../GlobalStates";
+import useStations from "../Hooks/useStations";
 import { JourneyListItemProps, CurrentStationState } from "../Types/App";
 import { Journey } from "../Types/Journey";
 import { Station } from "../Types/Station";
@@ -18,7 +15,7 @@ export default function JourneyListItem ({journey, selectedStationType}: Journey
 
     // Global states
     const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
-    const stations = useRecoilValue<Station[] | null>(stationsState);
+    const stations = useStations();
     const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
 
     function selectJourney() {

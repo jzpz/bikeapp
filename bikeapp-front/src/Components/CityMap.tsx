@@ -2,27 +2,20 @@ import { GeoJson, GeoJsonFeature, Map, Marker, Overlay, ZoomControl } from "pige
 import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { getMarkerColor } from "../Functions/getMarkerColor";
-import { getStationInfo, getStations } from "../Functions/stations";
-import { 
-    stationsState, 
-    currentStationState, 
-    stationInfoState,
-    dateFilterState,
-    settingsState,
-    currentJourneyState,
-} from "../GlobalStates";
-import { DateFilter, AppSettings, CurrentStationState } from "../Types/App";
+import { getStationInfo } from "../Functions/stations";
+import { currentStationState, stationInfoState,settingsState,currentJourneyState } from "../GlobalStates";
+import { AppSettings, CurrentStationState } from "../Types/App";
 import { Journey } from "../Types/Journey";
 import { Station, StationInfo } from "../Types/Station";
 import JourneyStats from "./JourneyStats";
 import StationName from "./StationName";
+import useStations from "../Hooks/useStations";
 
 export default function CityMap() {
 
     // Global states
-    const [stations, setStations] = useRecoilState<Station[] | null>(stationsState);
+    const stations = useStations();
     const [currentStation, setCurrentStation] = useRecoilState<CurrentStationState>(currentStationState);
-    const dateFilter = useRecoilValue<DateFilter>(dateFilterState);
     const setStationInfo = useSetRecoilState<StationInfo | null>(stationInfoState);
     const settings = useRecoilValue<AppSettings>(settingsState);
     const [currentJourney, setCurrentJourney] = useRecoilState<Journey | null>(currentJourneyState);
@@ -30,13 +23,6 @@ export default function CityMap() {
     const [error, setError] = useState<string | null>(null);
     const [currentMapSettings, setCurrentMapSettings] = useState({zoom: 12, center: [60.21, 24.95] as [number, number]});
     const stationInfoboxRefs = useRef<HTMLDivElement[]>([]);
-    
-    useEffect(() => {
-        if(!stations)
-            getStations()
-            .then(data => setStations(data))
-            .catch(e => setError(e));
-    }, []);
 
     // Fetch station info (avg journeys, top stations) on station select
     useEffect(() => {
@@ -47,7 +33,7 @@ export default function CityMap() {
             getStationInfo(currentStation.selected.id)
             .then(data => {
                 if(!cancel)
-                    setStationInfo(data)
+                    setStationInfo(data);
             })
             .catch(e => setError(e));
         }
@@ -55,7 +41,7 @@ export default function CityMap() {
         return () => {
             cancel = true;
         }
-    }, [currentStation.selected, dateFilter]);
+    }, [currentStation.selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if(!stations) {
         if(!error) 
@@ -90,7 +76,7 @@ export default function CityMap() {
                 <ZoomControl />
 
                 {/* Markers */}
-                {stations && stations.map((station: Station, i: number) => {// Get all stations and mark them
+                {stations && stations?.map((station: Station, i: number) => {// Get all stations and mark them
                     if(settings.showMarkers || (
                         currentStation?.selected?.id === station.id ||
                         currentStation?.departure?.id === station.id ||
@@ -128,6 +114,7 @@ export default function CityMap() {
                             />
                         )
                     }
+                    return null;
                 })}
 
                 {/* Marker Infoboxes */}

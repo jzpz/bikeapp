@@ -56,4 +56,4 @@ export const settingsState = atom({
         showLines: true, 
         showMarkers: true,
     } as AppSettings,
-})
+});

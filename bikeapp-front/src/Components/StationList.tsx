@@ -1,14 +1,15 @@
 import React from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { filterStationList, sortStationList } from "../Functions/stationList";
-import { currentJourneyState, currentStationState, offCanvasState, stationsState } from "../GlobalStates";
+import { currentJourneyState, currentStationState, offCanvasState } from "../GlobalStates";
 import { CurrentStationState, OffCanvasStatus, StationListProps } from "../Types/App";
 import { Journey } from "../Types/Journey";
 import { Station } from "../Types/Station";
 import StationName from "./StationName";
+import useStations from "../Hooks/useStations";
 
 export default function StationList({filterWord}: StationListProps): JSX.Element {
-    const stations = useRecoilValue<Station[] | null>(stationsState);
+    const stations = useStations();
     const setCurrentStation = useSetRecoilState<CurrentStationState>(currentStationState);
     const setCurrentJourney = useSetRecoilState<Journey | null>(currentJourneyState);
     const [offCanvas, setOffCanvas] = useRecoilState<OffCanvasStatus>(offCanvasState);
