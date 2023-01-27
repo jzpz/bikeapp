@@ -2,8 +2,8 @@ import React from 'react';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { IoArrowBack, IoArrowForward, IoBicycleOutline, IoTimeOutline, IoTimerOutline } from 'react-icons/io5';
-import { OrderJourneysDropdownProps } from "../Types/App";
-import { JourneyOrderColumns } from "../Types/Journey";
+import { OrderJourneysDropdownProps } from "../../Types/App";
+import { JourneyOrderColumns } from "../../Types/Journey";
 
 const OrderJourneysDropdown = ({currentOrderColumn, handleChange}: OrderJourneysDropdownProps) => (
     <DropdownButton 

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState } from 'recoil';
-import { offCanvasState } from '../GlobalStates';
-import { OffCanvasStatus } from '../Types/App';
+import { offCanvasState } from '../../GlobalStates';
+import { OffCanvasStatus } from '../../Types/App';
 import StationList from './StationList';
 
 // An offcanvas view that contains all stations

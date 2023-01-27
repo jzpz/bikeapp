@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getJourneys } from '../Functions/journeys';
-import { dateFilterState, offCanvasState, currentStationState,} from '../GlobalStates';
-import { DateFilter, OffCanvasStatus, CurrentStationState } from '../Types/App';
-import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from '../Types/Journey';
-import { StationType } from '../Types/Station';
-import OrderDirectionButton from './OrderDirectionButton';
-import PaginationMenu from './PaginationMenu';
+import { getJourneys } from '../../Functions/journeys';
+import { dateFilterState, offCanvasState, currentStationState,} from '../../GlobalStates';
+import { DateFilter, OffCanvasStatus, CurrentStationState } from '../../Types/App';
+import { Journey, JourneyOrderColumn, JourneyOrderColumns, JourneyParams } from '../../Types/Journey';
+import { StationType } from '../../Types/Station';
+import OrderDirectionButton from '../OrderDirectionButton';
+import PaginationMenu from '../PaginationMenu';
 import OrderJourneysDropdown from './OrderJourneysDropdown';
 import Button from 'react-bootstrap/esm/Button';
-import StationName from './StationName';
-import { getPageNum } from '../Functions/getPageNum';
+import StationName from '../StationName';
+import { getPageNum } from '../../Functions/getPageNum';
 import JourneyList from './JourneyList';
 
 // An offcanvas view that contains all journeys

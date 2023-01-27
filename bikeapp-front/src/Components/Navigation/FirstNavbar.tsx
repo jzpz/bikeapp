@@ -1,8 +1,8 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { FirstNavbarProps } from "../Types/App";
-import StationName from "./StationName";
+import { FirstNavbarProps } from "../../Types/App";
+import StationName from "../StationName";
 
 // Navbar for station name and address
 const FirstNavbar = ({station}: FirstNavbarProps) => (

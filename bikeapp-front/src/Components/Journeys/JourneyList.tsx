@@ -1,6 +1,6 @@
 import React from "react";
-import { JourneyListProps } from "../Types/App";
-import { Journey } from "../Types/Journey";
+import { JourneyListProps } from "../../Types/App";
+import { Journey } from "../../Types/Journey";
 import JourneyListItem from "./JourneyListItem";
 
 export default function JourneyList({journeys, loading, selectedStationType}: JourneyListProps) {

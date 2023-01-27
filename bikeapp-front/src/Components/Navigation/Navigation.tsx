@@ -6,16 +6,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { useRecoilState, useRecoilValue } from "recoil";
-import { formatDistance } from "../Functions/formatValues";
+import { formatDistance } from "../../Functions/formatValues";
 import { 
     offCanvasState, 
     currentStationState, 
     stationInfoState,
     settingsState, 
-} from "../GlobalStates";
-import { AppSettings, OffCanvasStatus, CurrentStationState } from "../Types/App";
-import { StationInfo, StationPopularity } from "../Types/Station";
-import StationName from "./StationName";
+} from "../../GlobalStates";
+import { AppSettings, OffCanvasStatus, CurrentStationState } from "../../Types/App";
+import { StationInfo, StationPopularity } from "../../Types/Station";
+import StationName from "../StationName";
 import FirstNavbar from "./FirstNavbar";
 import PopularStationsListItem from "./PopularStationsListItem";
 import Badge from "react-bootstrap/Badge";

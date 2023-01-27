@@ -1,14 +1,14 @@
 import React from "react";
 import { IoArrowForward } from 'react-icons/io5';
 import { useRecoilState } from "recoil";
-import { formatDateString } from '../Functions/formatValues';
-import { findStation } from "../Functions/stations";
-import { currentStationState, currentJourneyState } from "../GlobalStates";
-import useStations from "../Hooks/useStations";
-import { JourneyListItemProps, CurrentStationState } from "../Types/App";
-import { Journey } from "../Types/Journey";
-import { Station } from "../Types/Station";
-import JourneyStats from "./JourneyStats";
+import { formatDateString } from '../../Functions/formatValues';
+import { findStation } from "../../Functions/stations";
+import { currentStationState, currentJourneyState } from "../../GlobalStates";
+import useStations from "../../Hooks/useStations";
+import { JourneyListItemProps, CurrentStationState } from "../../Types/App";
+import { Journey } from "../../Types/Journey";
+import { Station } from "../../Types/Station";
+import JourneyStats from "../JourneyStats";
 
 // List item for journey lists
 export default function JourneyListItem ({journey, selectedStationType}: JourneyListItemProps) {
