@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +35,7 @@ public class StationController {
 	@GetMapping("/stations")
 	public ResponseEntity<List<Station>> getAll() {
 
-		List<Station> stations = srepository.findAll();
+		final List<Station> stations = srepository.findAll();
 		if(stations.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} else {
@@ -50,7 +49,7 @@ public class StationController {
 	@CrossOrigin
 	@GetMapping("/station/{id}")
 	public ResponseEntity<Station> getById(@PathVariable("id") String id) {
-		Station station = srepository.findById(id);
+		final Station station = srepository.findById(id);
 
 		if(station != null) {
 			return new ResponseEntity<Station>(station, new HttpHeaders(), HttpStatus.OK);

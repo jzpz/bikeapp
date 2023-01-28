@@ -19,7 +19,7 @@ public class Station {
 	private String cityLocaleFi;
 	private String cityLocaleSe;
 	private String operator;
-	private Long capacity;
+	private Integer capacity;
 	@Column(name = "coordinate_x")
 	private Double coordinateX;
 	@Column(name = "coordinate_y")
@@ -29,7 +29,7 @@ public class Station {
 
 	public Station(Integer fid, String id, String nameLocaleFi, String nameLocaleSe, String nameLocaleEn, 
 			String addressLocaleFi, String addressLocaleSe, String cityLocaleFi, String cityLocaleSe, 
-			String operator, Long capacity, Double coordinateX, Double coordinateY) {
+			String operator, Integer capacity, Double coordinateX, Double coordinateY) {
 		this.fid = fid;
 		this.id = id;
 		this.nameLocaleFi = nameLocaleFi;
@@ -85,7 +85,7 @@ public class Station {
 		return operator;
 	}
 
-	public Long getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
 
@@ -97,4 +97,57 @@ public class Station {
 		return coordinateY;
 	}
 
+	public void setFid(Integer fid) {
+		this.fid = fid;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setNameLocaleFi(String nameLocaleFi) {
+		this.nameLocaleFi = nameLocaleFi;
+	}
+
+	public void setNameLocaleSe(String nameLocaleSe) {
+		this.nameLocaleSe = nameLocaleSe;
+	}
+
+	public void setNameLocaleEn(String nameLocaleEn) {
+		this.nameLocaleEn = nameLocaleEn;
+	}
+
+	public void setAddressLocaleFi(String addressLocaleFi) {
+		this.addressLocaleFi = addressLocaleFi;
+	}
+
+	public void setAddressLocaleSe(String addressLocaleSe) {
+		this.addressLocaleSe = addressLocaleSe;
+	}
+
+	public void setCityLocaleFi(String cityLocaleFi) {
+		this.cityLocaleFi = cityLocaleFi;
+	}
+
+	public void setCityLocaleSe(String cityLocaleSe) {
+		this.cityLocaleSe = cityLocaleSe;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
+	public void setCoordinateX(Double coordinateX) {
+		this.coordinateX = coordinateX;
+	}
+
+	public void setCoordinateY(Double coordinateY) {
+		this.coordinateY = coordinateY;
+	}
+
+	
 }
