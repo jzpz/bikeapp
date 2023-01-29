@@ -25,8 +25,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.jp.bike.batch.listener.ImportChunkListener;
 import com.jp.bike.model.Journey;
 
+// This class handles the process for reading and importing journey files
 @Configuration
 @EnableBatchProcessing
 public class JourneyBatchConfiguration {
@@ -38,7 +40,7 @@ public class JourneyBatchConfiguration {
 		reader.setName("journeyItemReader");
 		reader.setResource(new FileSystemResource(file));
 		//reader.setRecordSeparatorPolicy(null);
-		reader.setLinesToSkip(1);
+		reader.setLinesToSkip(1); // skip first line with headings
 		reader.setLineMapper(journeyLineMapper());
 		return reader;
 	}
@@ -58,6 +60,7 @@ public class JourneyBatchConfiguration {
 		return lineMapper;
 	}
 
+	// Processor for validation
 	@Bean
 	public JourneyProcessor journeyProcessor() {
 		return new JourneyProcessor();
@@ -90,11 +93,12 @@ public class JourneyBatchConfiguration {
 			.build();
 	}
 
+	// Job that will be called from rest controller
 	@Bean
-	public Job importJourneyJob(JobRepository jobRepository, JobCompletionNotificationListener listener, Step journeyStep1) {
+	public Job importJourneyJob(JobRepository jobRepository, Step journeyStep1) {
 		return new JobBuilder("importJourneyJob", jobRepository)
 			.incrementer(new RunIdIncrementer())
-			.listener(listener)
+			.listener(new ImportChunkListener())
 			.flow(journeyStep1)
 			.end()
 			.build();
@@ -108,6 +112,7 @@ public class JourneyBatchConfiguration {
 			.reader(journeyReader)
 			.processor(journeyProcessor())
 			.writer(journeyWriter)
+			.listener(new ImportChunkListener())
 			.build();
 	}
 }

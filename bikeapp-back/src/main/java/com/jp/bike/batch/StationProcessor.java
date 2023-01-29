@@ -24,6 +24,7 @@ public class StationProcessor implements ItemProcessor<Station, Station> {
 		final Double coordinateX = station.getCoordinateX();
 		final Double coordinateY = station.getCoordinateY();
 
+		// Validation conditions
 		if(Stream.of(fid, id, nameLocaleFi, nameLocaleSe, nameLocaleEn, 
 		addressLocaleFi, coordinateX, coordinateY, capacity).anyMatch(Objects::isNull)
 		|| capacity <= 0) {

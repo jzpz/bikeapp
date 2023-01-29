@@ -2,6 +2,7 @@ package com.jp.bike.batch;
 
 import javax.sql.DataSource;
 
+import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -26,8 +27,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.jp.bike.batch.listener.ImportChunkListener;
 import com.jp.bike.model.Station;
 
+// This class handles the process for reading and importing station files
 @Configuration
 @EnableBatchProcessing
 public class StationBatchConfiguration {
@@ -38,9 +41,9 @@ public class StationBatchConfiguration {
 		FlatFileItemReader<Station> reader = new FlatFileItemReader<>();
 		reader.setName("stationItemReader");
 		reader.setResource(new FileSystemResource(file));
-		//reader.setRecordSeparatorPolicy(null);
-		reader.setLinesToSkip(1);
+		reader.setLinesToSkip(1); // skip first line with headings
 		reader.setLineMapper(stationLineMapper());
+
 		return reader;
 	}
 
@@ -59,6 +62,7 @@ public class StationBatchConfiguration {
 		return lineMapper;
 	}
 
+	// Processor for validation
 	@Bean
 	public StationProcessor stationProcessor() {
 		return new StationProcessor();
@@ -101,11 +105,11 @@ public class StationBatchConfiguration {
 			.build();
 	}
 
+	// Job that will be called from rest controller
 	@Bean
-	public Job importStationJob(JobRepository jobRepository, JobCompletionNotificationListener listener, Step stationStep1) {
+	public Job importStationJob(JobRepository jobRepository, Step stationStep1) {
 		return new JobBuilder("importStationJob", jobRepository)
 			.incrementer(new RunIdIncrementer())
-			.listener(listener)
 			.flow(stationStep1)
 			.end()
 			.build();
@@ -115,10 +119,11 @@ public class StationBatchConfiguration {
 	public Step stationStep1(ItemReader<Station> stationReader, JobRepository jobRepository,
 		PlatformTransactionManager transactionManager, JdbcBatchItemWriter<Station> stationWriter) {
 		return new StepBuilder("stationStep1", jobRepository)
-			.<Station, Station> chunk(10, transactionManager)
+			.<Station, Station> chunk(100, transactionManager)
 			.reader(stationReader)
 			.processor(stationProcessor())
 			.writer(stationWriter)
+			.listener(new ImportChunkListener())
 			.build();
 	}
 }

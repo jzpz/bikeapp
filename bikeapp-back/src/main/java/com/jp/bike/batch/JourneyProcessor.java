@@ -24,6 +24,7 @@ public class JourneyProcessor implements ItemProcessor<Journey, Journey> {
 		final Integer distanceCoveredInMeters = journey.getDistanceCoveredInMeters();
 		final Integer durationInSeconds = journey.getDurationInSeconds();
 
+		// Validation conditions
 		if(Stream.of(departureDate, returnDate, departureStationId,
 			departureStationName, returnStationId, returnStationName, 
 			distanceCoveredInMeters, durationInSeconds)

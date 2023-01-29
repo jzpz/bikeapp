@@ -15,6 +15,8 @@ public class BeanWrapperFieldSetMapperWithDataFormat<T> extends BeanWrapperField
 	@Override
 	protected void initBinder(DataBinder binder) {
 		DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_DATE_TIME;
+
+		// Handling dates
 		binder.registerCustomEditor(LocalDateTime.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String dateStr) throws IllegalArgumentException {
@@ -31,6 +33,7 @@ public class BeanWrapperFieldSetMapperWithDataFormat<T> extends BeanWrapperField
 			}
 		});
 
+		// Handling integers
 		binder.registerCustomEditor(Integer.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String intStr) throws IllegalArgumentException {
