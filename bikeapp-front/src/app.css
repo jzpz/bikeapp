@@ -199,3 +199,6 @@ div.selected-station-info:hover {
     width: 90%;
 }
 
+.modal.floating-container {
+    z-index: inherit!important;
+}

@@ -42,7 +42,7 @@ export const dateFilterState = atom({
 
 export const offCanvasState = atom({
     key: 'offCanvasState' as string,
-    default: {journeys: false, stations: false} as OffCanvasStatus,
+    default: {journeys: false, stations: false, fileUpload: false} as OffCanvasStatus,
 });
 
 export const stationInfoState = atom({

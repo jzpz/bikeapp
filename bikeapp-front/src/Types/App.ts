@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 import { Journey, JourneyOrderColumn } from "./Journey";
 import { Station, StationPopularity, StationType } from "./Station";
+
 export interface OffCanvasStatus {
     journeys: boolean,
     stations: boolean,
+    fileUpload: boolean,
 }
 
 export interface OffCanvas {
@@ -71,4 +73,15 @@ export interface JourneyListProps {
 
 export interface StationListProps {
     filterWord: string,
+}
+
+export type FileContentType = "stations" | "journeys";
+
+export interface ImportStatus {
+    writeCount?: number,
+    readCount?: number,
+    filterCount?: number,
+    importStatus?: string,
+    startTime?: string,
+    endTime?: string,
 }

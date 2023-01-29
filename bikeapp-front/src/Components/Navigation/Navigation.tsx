@@ -20,6 +20,7 @@ import FirstNavbar from "./FirstNavbar";
 import PopularStationsListItem from "./PopularStationsListItem";
 import Badge from "react-bootstrap/Badge";
 import { RiCheckboxBlankLine, RiCheckboxLine } from "react-icons/ri";
+import { IoFolderOpenOutline } from "react-icons/io5";
 
 export default function Navigation() {
 
@@ -177,6 +178,20 @@ export default function Navigation() {
                                     &nbsp;Show line
                                 </Badge>
                             </span>
+                        </Nav.Item>
+
+                        <Nav.Item style={{marginRight: 10}}>
+                            <Button 
+                                id="file-upload-modal-button"
+                                variant="secondary"
+                                className={`${offCanvas.fileUpload ? "active" : ""}`}
+                                onClick={() => setOffCanvas({...offCanvas, fileUpload: true})}
+                            >
+                                <IoFolderOpenOutline
+                                    style={{marginRight:10}}
+                                />
+                                Import Data
+                            </Button>
                         </Nav.Item>
 
                         {/* Change station button */}
