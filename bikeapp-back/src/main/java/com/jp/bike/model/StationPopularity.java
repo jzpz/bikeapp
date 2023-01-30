@@ -4,16 +4,16 @@ package com.jp.bike.model;
 // departure/return stations from a specific station or all stations
 public class StationPopularity {
 
-	private Integer id;
+	private Object id;
 	private String nameLocaleFi;
 	private String nameLocaleSe;
 	private String nameLocaleEn;
-	private Integer journeyAmount;
+	private Object journeyAmount;
 
 	public StationPopularity() {}
 
-	public StationPopularity(Integer id, String nameLocaleFi, String nameLocaleSe,
-			String nameLocaleEn, Integer journeyAmount) {
+	public StationPopularity(Object id, String nameLocaleFi, String nameLocaleSe,
+			String nameLocaleEn, Object journeyAmount) {
 		this.id = id;
 		this.journeyAmount = journeyAmount;
 		this.nameLocaleFi = nameLocaleFi;
@@ -21,11 +21,11 @@ public class StationPopularity {
 		this.nameLocaleEn = nameLocaleEn;
 	}
 
-	public Integer getId() {
+	public Object getId() {
 		return id;
 	}
 
-	public Integer getJourneyAmount() {
+	public Object getJourneyAmount() {
 		return journeyAmount;
 	}
 

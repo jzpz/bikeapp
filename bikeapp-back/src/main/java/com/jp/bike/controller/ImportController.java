@@ -60,6 +60,7 @@ public class ImportController {
 
 		try {
 			if(fileToImport.getAbsolutePath() != null) {
+				@SuppressWarnings("null") // Null type safety: addstring requires NonNull path so there is check above
 				JobExecution jobExecution = jobLauncher.run(importStationJob, new JobParametersBuilder()
 					.addString("file", fileToImport.getAbsolutePath())
 					.addDate("date", new Date()) // date is used for differentiating executions to avoid errors
@@ -101,11 +102,10 @@ public class ImportController {
 		HashMap<String, Object> status = new HashMap<String, Object>();
 
 		try {
-			String path = fileToImport.getAbsolutePath();
-			
 			if(fileToImport.getAbsolutePath() != null) {
+				@SuppressWarnings("null") // Null type safety: addstring requires NonNull path so there is check above
 				JobExecution jobExecution = jobLauncher.run(importJourneyJob, new JobParametersBuilder()
-					.addString("file", path)
+					.addString("file", fileToImport.getAbsolutePath()) // 
 					.addDate("date", new Date()) // date is used to differentiate between executions, otherwise there will be an error
 					.toJobParameters());
 

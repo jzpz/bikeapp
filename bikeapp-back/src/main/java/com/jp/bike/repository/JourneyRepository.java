@@ -10,69 +10,68 @@ import org.springframework.data.jpa.repository.Query;
 import com.jp.bike.model.Journey;
 
 public interface JourneyRepository extends JpaRepository<Journey, Integer> {
-    Journey findById(int id);
+	Journey findById(int id);
 
-    Page<Journey> findAll(
-        Pageable pageable);
+	Page<Journey> findAll(
+		Pageable pageable);
 
-    Page<Journey> findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
+	Page<Journey> findByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Page<Journey> findByDepartureStationId(
-        String departureStationId, Pageable pageable);
+	Page<Journey> findByDepartureStationId(
+		String departureStationId, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
+	Page<Journey> findByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Page<Journey> findByReturnStationId(
-        String returnStationId, Pageable pageable);
+	Page<Journey> findByReturnStationId(
+		String returnStationId, Pageable pageable);
 
-    Page<Journey> findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
+	Page<Journey> findByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdAndReturnStationId(
-        String departureStationId, String returnStationId, Pageable pageable);
+	Page<Journey> findByDepartureStationIdAndReturnStationId(
+		String departureStationId, String returnStationId, Pageable pageable);
 
-    Page<Journey> findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String departureStationId, String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
+	Page<Journey> findByDepartureStationIdAndReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String departureStationId, String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 
-    Long countByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        LocalDateTime dateFrom, LocalDateTime dateTo);
+	Long countByDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    Long countByDepartureStationId(
-        String departureStationId);
+	Long countByDepartureStationId(
+		String departureStationId);
 
-    Long countByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
+	Long countByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    Long countByReturnStationId(
-        String returnStationId);
+	Long countByReturnStationId(
+		String returnStationId);
 
-    Long countByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
+	Long countByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    String averageDistanceCoveredQuery = "SELECT AVG(distanceCoveredInMeters) FROM Journey";
+	String averageDistanceCoveredQuery = "SELECT AVG(distanceCoveredInMeters) FROM Journey";
 
-    @Query(averageDistanceCoveredQuery) 
-    Long averageDistanceCovered();
+	@Query(averageDistanceCoveredQuery) 
+	Long averageDistanceCovered();
 
-    @Query(averageDistanceCoveredQuery + " WHERE departureStationId = ?1") 
-    Long averageDistanceCoveredByDepartureStation(
-        String departureStationId);
-    
-    @Query(averageDistanceCoveredQuery + " WHERE departureStationId = ?1"
-        + " AND departureDate >= ?2 AND returnDate <= ?3 ") 
-    Long averageDistanceCoveredByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
+	@Query(averageDistanceCoveredQuery + " WHERE departureStationId = ?1") 
+	Long averageDistanceCoveredByDepartureStation(
+		String departureStationId);
+	
+	@Query(averageDistanceCoveredQuery + " WHERE departureStationId = ?1"
+		+ " AND departureDate >= ?2 AND returnDate <= ?3 ") 
+	Long averageDistanceCoveredByDepartureStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String departureStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    @Query(averageDistanceCoveredQuery + " WHERE returnStationId = ?1") 
-    Long averageDistanceCoveredByReturnStation(
-        String returnStationId);
+	@Query(averageDistanceCoveredQuery + " WHERE returnStationId = ?1") 
+	Long averageDistanceCoveredByReturnStation(
+		String returnStationId);
 
-    @Query(averageDistanceCoveredQuery + " WHERE returnStationId = ?1"
-        + " AND departureDate >= ?2 AND returnDate <= ?3 ") 
-    Long averageDistanceCoveredByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
-        String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
+	@Query(averageDistanceCoveredQuery + " WHERE returnStationId = ?1"
+		+ " AND departureDate >= ?2 AND returnDate <= ?3 ") 
+	Long averageDistanceCoveredByReturnStationIdAndDepartureDateGreaterThanEqualAndReturnDateLessThanEqual(
+		String returnStationId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
 }
-
