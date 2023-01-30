@@ -51,14 +51,11 @@ Install & setup:
 <li>Clone the repository</li>
 <li>Make sure that npm is installed</li>
 <li>Open command line in frontend directory</li>
-<li>Install packages:
-	npm i
+<li>Install packages: `npm i`
 </li>
-<li>Build the project using:
-	npm run build
+<li>Build the project using: `npm run build`
 </li>
-<li>Run the project with:
-	serve -s build
+<li>Run the project with: `serve -s build`
 </li>
 </ol>
 
@@ -75,16 +72,14 @@ By default, the project is configured to fetch data from a server that is runnin
 Database and backend setup is not required in order to use the application (but is required to use data importing). Setup can be done with these steps:
 <ol>
 <li>Install & configure database</li>
-<li>Configure data source to match your database in /bikeapp-backend/src/main/resources/application.properties</li>
+<li>Configure data source to match your database in `/bikeapp-backend/src/main/resources/application.properties`</li>
 <li>Open command line in backend directory</li>
 <li>Make sure that Java and Maven are installed</li>
-<li>Build the project with Maven: 
-	mvn package
+<li>Build the project with Maven: `mvn package`
 </li>
-<li>Run the program (required before importing data): 
-	java -jar target/bike-0.0.1-SNAPSHOT.jar
+<li>Run the program (required before importing data): `java -jar target/bike-0.0.1-SNAPSHOT.jar`
 </li>
-<li>Change the URL in bikeapp-front/src/api.ts to match the address of your local backend.</li>
+<li>Change the URL in `bikeapp-front/src/api.ts` to match the address of your local backend.</li>
 <li>Rebuild frontend</li>
 </ol>
 
@@ -104,6 +99,7 @@ Prerequisites:
 <li>Setup the frontend</li>
 </ul>
 
-Tests have been implemented as Cypress e2e tests using the actual backend for fetching. The tests cover the most important features of the app. Automatically recorded videos of tests are located in /bikeapp-front/cypress/videos/.
+Tests have been implemented as Cypress e2e tests using the actual backend for fetching. The tests cover the most important features of the app. Automatically recorded videos of tests are located in `/bikeapp-front/cypress/videos/`. Note that the tests were only tested with the full dataset.
+
 Run the tests in the frontend directory from the command line:
-	npx cypress run
+`npx cypress run`
