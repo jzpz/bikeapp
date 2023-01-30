@@ -4,16 +4,17 @@ This application allows users to view bicycle stations and journeys between thes
 
 # Technologies
 
-Frontend is made using TypeScript and React
+Frontend: TypeScript and React
 Packages used in frontend: 
 - Pigeon maps <https://pigeon-maps.js.org/> - for simple map implementation
 - Recoil <https://recoiljs.org/> (for sharing data between components in a clean way)
 - React Icons <https://react-icons.github.io/react-icons/> (Ionicons <https://ionicons.com/> and Remix icons <https://github.com/Remix-Design/RemixIcon>)
 - React bootstrap (for styling and components) - <https://react-bootstrap.github.io/>
--
+- React datepicker <https://reactdatepicker.com/>
 
-Backend: 
-Java and Spring Boot
+Backend: Java and Spring Boot
+
+Tests: Cypress
 
 I previously had no experience using TypeScript so I wanted to learn it. Other languages and frameworks were familiar but I wanted to learn more about them.
 
@@ -83,6 +84,7 @@ Database and backend setup is not required in order to use the application (but 
 	java -jar target/bike-0.0.1-SNAPSHOT.jar
 </li>
 <li>Change the URL in bikeapp-front/src/api.ts to match the address of your local backend.</li>
+<li>Rebuild frontend</li>
 </ol>
 
 # Importing data to local backend server
