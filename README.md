@@ -1,4 +1,4 @@
-# Bikeapp
+## Bikeapp
 
 This application allows users to view bicycle stations and journeys between these stations on a map. The stations and journeys are stored in a database.
 
@@ -34,70 +34,66 @@ I previously had no experience using TypeScript so I wanted to learn it. Other l
 # OS
 
 Tested operating systems:
-<ul>
-<li>Windows 10</li>
-</ul>
+
+<li>Windows 10
+
 
 # Setting up the frontend
 
 Prerequisites:
-<ul>
-<li>node.js (tested on 16.13.2)</li>
-<li>npm & npx (tested on 8.1.2)</li>
-</ul>
+
+- node.js (tested on 16.13.2)
+- npm & npx (tested on 8.1.2)
+
 
 Install & setup:
-<ol>
-<li>Clone the repository</li>
-<li>Make sure that npm is installed</li>
-<li>Open command line in frontend directory</li>
-<li>Install packages: `npm i`
-</li>
-<li>Build the project using: `npm run build`
-</li>
-<li>Run the project with: `serve -s build`
-</li>
-</ol>
+
+1. Clone the repository
+2. Make sure that npm is installed
+3. Open command line in frontend directory
+4. Install packages: `npm i`
+
+5. Build the project using: `npm run build`
+
+6. Run the project with: `serve -s build`
+
+
 
 # Setting up the database and the backend (Optional)
 
 Prerequisites:
-<ul>
-<li>Maven (tested on Maven 3.8.6)</li>
-<li>Database (tested on MySQL)</li>
-<li>Java JDK 17</li>
-</ul>
+
+- Maven (tested on Maven 3.8.6)
+- Database (tested on MySQL)
+- Java JDK 17
+
 
 By default, the project is configured to fetch data from a server that is running the backend (<https://api.jesse.ovh>). 
 Database and backend setup is not required in order to use the application (but is required to use data importing). Setup can be done with these steps:
-<ol>
-<li>Install & configure database</li>
-<li>Configure data source to match your database in `/bikeapp-backend/src/main/resources/application.properties`</li>
-<li>Open command line in backend directory</li>
-<li>Make sure that Java and Maven are installed</li>
-<li>Build the project with Maven: `mvn package`
-</li>
-<li>Run the program (required before importing data): `java -jar target/bike-0.0.1-SNAPSHOT.jar`
-</li>
-<li>Change the URL in `bikeapp-front/src/api.ts` to match the address of your local backend.</li>
-<li>Rebuild frontend</li>
-</ol>
+
+1. Install & configure database
+2. Configure data source to match your database in `/bikeapp-backend/src/main/resources/application.properties`
+3. Open command line in backend directory
+4. Make sure that Java and Maven are installed
+5. Build the project with Maven: `mvn package`
+
+6. Run the program (required before importing data): `java -jar target/bike-0.0.1-SNAPSHOT.jar`
+
+7. Change the URL in `bikeapp-front/src/api.ts` to match the address of your local backend.
+8. Rebuild frontend
+
 
 # Importing data to local backend server
 
-<ol>
-<li>Open the program in browser and make sure that frontend and backend are working (map will not show before stations are imported)</li>
-<li>Click "Import Data" on the navigation menu</li>
-<li>Select the CSV file you want to import and select either "Journey data" or "Station data" according to file contents</li>
-<li>Click "Import" and wait for status message. It can take several minutes to import large datasets. Import progress can be seen in backend command line.</li>
-</ol>
+1. Open the program in browser and make sure that frontend and backend are working (map will not show before stations are imported)
+2. Click "Import Data" on the navigation menu
+3. Select the CSV file you want to import and select either "Journey data" or "Station data" according to file contents
+4. Click "Import" and wait for status message. It can take several minutes to import large datasets. Import progress can be seen in backend command line.
 
 # Running tests
 
 Prerequisites:
-<ul>
-<li>Setup the frontend</li>
-</ul>
+- Setup the frontend
 
 Tests have been implemented as Cypress e2e tests using the actual backend for fetching. The tests cover the most important features of the app. Automatically recorded videos of tests are located in `/bikeapp-front/cypress/videos/`. Note that the tests were only tested with the full dataset.
 
