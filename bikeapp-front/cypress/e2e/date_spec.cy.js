@@ -26,7 +26,7 @@ describe('Test select date', () => {
         
         // Check that journey listing works
         cy.get('[data-cy="view-journeys"]').click();
-        cy.wait('@getJourneysByDate').its('response.statusCode').should('eq', 204);
+        cy.wait('@getJourneysByDate').its('response.statusCode').should('eq', 200);
     })
 });
 
