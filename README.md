@@ -95,7 +95,7 @@ Database and backend setup is not required in order to use the application (but 
 Prerequisites:
 - Setup the frontend
 
-Tests have been implemented as Cypress e2e tests using the actual backend for fetching. The tests cover the most important features of the app. Automatically recorded videos of tests are located in `/bikeapp-front/cypress/videos/`. Note that the tests were only tested with the full dataset.
+Tests have been implemented as Cypress e2e tests using the actual backend for fetching. The tests cover the most important features of the app. Automatically recorded videos of tests are located in `/bikeapp-front/cypress/videos/`. Note that the tests were only tested with the full dataset. It's recommended to use the server as backend when testing.
 
 Run the tests in the frontend directory from the command line:
 `npx cypress run`
