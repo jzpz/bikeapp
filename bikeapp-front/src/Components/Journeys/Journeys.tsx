@@ -10,7 +10,7 @@ import { StationType } from '../../Types/Station';
 import OrderDirectionButton from '../OrderDirectionButton';
 import PaginationMenu from '../PaginationMenu';
 import OrderJourneysDropdown from './OrderJourneysDropdown';
-import Button from 'react-bootstrap/esm/Button';
+import Button from 'react-bootstrap/Button';
 import StationName from '../StationName';
 import { getPageNum } from '../../Functions/getPageNum';
 import JourneyList from './JourneyList';

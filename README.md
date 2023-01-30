@@ -1,5 +1,22 @@
 # Bikeapp
 
+This application allows users to view bicycle stations and journeys between these stations on a map. The stations and journeys are stored in a database.
+
+# Technologies
+
+Frontend is made using TypeScript and React
+Packages used in frontend: 
+- Pigeon maps <https://pigeon-maps.js.org/> - for simple map implementation
+- Recoil <https://recoiljs.org/> (for sharing data between components in a clean way)
+- React Icons <https://react-icons.github.io/react-icons/> (Ionicons <https://ionicons.com/> and Remix icons <https://github.com/Remix-Design/RemixIcon>)
+- React bootstrap (for styling and components) - <https://react-bootstrap.github.io/>
+-
+
+Backend: 
+Java and Spring Boot
+
+I previously had no experience using TypeScript so I wanted to learn it. Other languages and frameworks were familiar but I wanted to learn more about them.
+
 # Features
 
 - Journey listing with filtering and ordering
@@ -74,7 +91,7 @@ Database and backend setup is not required in order to use the application (but 
 <li>Open the program in browser and make sure that frontend and backend are working (map will not show before stations are imported)</li>
 <li>Click "Import Data" on the navigation menu</li>
 <li>Select the CSV file you want to import and select either "Journey data" or "Station data" according to file contents</li>
-<li>Click "Import" and wait for status message. It can take several minutes to import large datasets.</li>
+<li>Click "Import" and wait for status message. It can take several minutes to import large datasets. Import progress can be seen in backend command line.</li>
 </ol>
 
 # Running tests
