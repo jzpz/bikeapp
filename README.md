@@ -55,7 +55,7 @@ Install & setup:
 
 5. Build the project using: `npm run build`
 
-6. Run the project with: `serve -s build`
+6. Run the project with: `npx serve`
 
 
 
