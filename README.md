@@ -1,4 +1,6 @@
-## Bikeapp
+# Bikeapp
+
+## Live demo: <https://bgj424.github.io/bikefront/>
 
 This application allows users to view bicycle stations and journeys between these stations on a map. The stations and journeys are stored in a database.
 
